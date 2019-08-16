@@ -1,0 +1,24 @@
+.homeContainer{
+  width: 100%;
+  height: 540px;
+  min-width: 1200px;
+  background-color: rgb(245,245,245);
+  h1{
+    text-align: center;
+    padding-top: 35px;
+  }
+  .tab{
+    width: 70%;
+    margin-top: 50px;
+    margin-left: 15%;
+    display: flex;
+    justify-content: center;
+    span{
+      padding: 0 24px;
+      &:hover{
+        color:#31c27c;
+        cursor: pointer;
+      }
+    }
+  }
+}
