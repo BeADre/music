@@ -1,5 +1,5 @@
 import initState from "../state"
-import { reducerAction } from "../actions"
+import { reducerAction } from "../actions/home"
 
 
 export default function (state = initState,action) {

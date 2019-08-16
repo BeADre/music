@@ -1,5 +1,5 @@
 // import test from "../../request/test"
-import {sagaAction} from "../actions"
+import {sagaAction} from "../actions/home"
 import {call, put,takeEvery} from "redux-saga/effects"
 
 
