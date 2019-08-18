@@ -1,4 +1,4 @@
-import React, {useState, userEffect} from "react"
+import React from "react"
 import {BrowserRouter, NavLink, Route, Switch, Redirect} from "react-router-dom";
 import "./index.scss"
 import Router from "../router"

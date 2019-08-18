@@ -1,23 +1,136 @@
-.homeContainer{
+.homeContainer {
+  $main-width: 70%;
+  $main-left: 15%;
+
   width: 100%;
   height: 540px;
   min-width: 1200px;
-  background-color: rgb(245,245,245);
-  h1{
+  background-color: rgb(245, 245, 245);
+  h1 {
     text-align: center;
     padding-top: 35px;
+    letter-spacing: 10px;
   }
-  .tab{
-    width: 70%;
-    margin-top: 50px;
-    margin-left: 15%;
+  .tab {
+    width: $main-width;
     display: flex;
     justify-content: center;
-    span{
+    margin: {
+      top: 30px;
+      left: $main-left;
+    }
+  ;
+    span {
+      min-width: 78px;
       padding: 0 24px;
-      &:hover{
-        color:#31c27c;
+      &:hover {
+        color: #31c27c;
         cursor: pointer;
+      }
+    }
+  }
+  .slide-container{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    &:hover{
+      .prev-button{
+        left: 0;
+      }
+      .next-button{
+        right: 0;
+      }
+    }
+    .prev-button,.next-button{
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 80px;
+      height: 110px;
+      background: rgb(240,240,240);
+      cursor: pointer;
+      transition: 0.5s;
+      &:hover{
+        background: rgb(225,225,225);
+      }
+      span{
+        font-size: 50px;
+      }
+
+    }
+    .prev-button{
+      left: -110px;;
+    }
+    .next-button{
+      right: -110px;
+    }
+    .slide {
+      width: $main-width;
+      margin: {
+        top: 30px;
+        left: $main-left;
+      }
+    ;
+      display: flex;
+      justify-content: space-between;
+      .slideContent {
+        .slide-keep {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 1;
+          cursor: pointer;
+          transition: 0.5s;
+          span {
+            font-size: 40px;
+            color: rgb(240, 240, 240);
+            opacity: 0;
+            transition: 0.5s;
+          }
+        }
+        width: 18%;
+        .slideContent-top, .slideContent-bot {
+          width: 100%;
+          position: relative;
+          overflow: hidden;
+          a {
+            width: 100%;
+            min-height: 50px;
+            display: block;
+          }
+          img {
+            width: 100%;
+            cursor: pointer;
+            transition: 0.5s;
+          }
+        }
+        .slideContent-top:hover{
+          .slide-keep{
+            background: rgba(0, 0, 0, 0.2);
+            span {
+              opacity: 1;
+              font-size: 60px;
+            }
+          }
+          img{
+            transform: scale(1.05);
+          }
+        }
+        .slideContent-bot {
+          margin-top: 5%;
+          font-size: 14px;
+          p {
+            color: #999;
+          }
+        }
       }
     }
   }
