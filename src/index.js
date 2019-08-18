@@ -4,8 +4,8 @@ import Main from "./pages"
 import { createStore, applyMiddleware } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 import { Provider } from "react-redux"
-import reducer from './store/reducers'
-import { testSaga } from './store/sagas'
+import reducer from './store/processor/reducer'
+import rootSaga from './store/processor/sagas'
 import * as serviceWorker from './serviceWorker';
 
 
@@ -14,7 +14,7 @@ const store = createStore(
   reducer,
   applyMiddleware(sagaMiddleware)
 )
-sagaMiddleware.run(testSaga)
+sagaMiddleware.run(rootSaga)
 
 
 ReactDOM.render(

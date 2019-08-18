@@ -1,24 +1,79 @@
-import React,{ useState,useEffect } from "react"
+import React, {useState, useEffect} from "react"
+import { Carousel } from 'antd';
+import {connect} from "react-redux"
 import "./index.scss"
-const Home = () => {
-  useEffect(() => {
 
-  })
+const Home = ({dispatch, tabState,playlistState}) => {
+  const {playTab = []} = tabState;
+  const {playlist  = []} = playlistState;
+  console.log(playlist)
+  const [tabColorIndex, setTabColorIndex] = useState(0);
+  const [cat, setCat] = useState("");
+  useEffect(() => {
+    dispatch({
+      type: "home/getPlaylistTab"
+    })
+  }, [])
+
+  useEffect(() => {
+    dispatch({
+      type: "home/getPlaylist",
+      payload: {
+        cat
+      }
+    })
+  }, [cat])
+  const getPlaylist = (i,name) => {
+    setTabColorIndex(i)
+    setCat(name)
+  }
+
   return (
     <div className="homeContainer">
       <h1>歌单推荐</h1>
       <div className="tab">
-        <span>为你推荐</span>
-        <span>官方歌单</span>
-        <span>情歌</span>
-        <span>网络歌曲</span>
-        <span>经典</span>
-        <span>KTV热歌</span>
+        {playTab.map((value, index) =>
+          <span
+            key={value.id || index}
+            onClick={() => getPlaylist(index,value.name)}
+            style={{color: index === tabColorIndex ? "#31c27c" : "#000"}}
+          >
+            {value.name || value.title}
+          </span>)
+        }
+      </div>
+      <div className="slide-container" style={{height:"410px"}}>
+        <div className="prev-button">
+          <span className="iconfont icon-shangyiye"/>
+        </div>
+        <div className="next-button">
+          <span className="iconfont icon-xiayiye"/>
+        </div>
+       
+
+        <div className="slide">
+          {playlist.splice(0,5).map(value=>(
+            <div  key={value.id} className="slideContent">
+              <div className="slideContent-top">
+                <div className="slide-keep">
+                  <span className="iconfont icon-ziyuan"> </span>
+                </div>
+                <img src={value.coverImgUrl} alt=""/>
+              </div>
+              <div className="slideContent-bot">
+                <a href="">{value.name}</a>
+                <p>播放量：{(value.playCount/10000).toFixed(1)}万</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
       </div>
     </div>
   )
 }
 
-const mapState = ()=>{}
+const mapState = ({getPlaylistTab_Reducer: tabState,getPlaylist_Reducer:playlistState}) => ({tabState,playlistState})
+//const mapState = (state) => (state)
 
-export default Home
+export default connect(mapState)(Home)
