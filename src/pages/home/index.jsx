@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react"
+import React, {useState, useEffect,createRef} from "react"
 import { Carousel } from 'antd';
 import {connect} from "react-redux"
 import "./index.scss"
@@ -6,7 +6,7 @@ import "./index.scss"
 const Home = ({dispatch, tabState,playlistState}) => {
   const {playTab = []} = tabState;
   const {playlist  = []} = playlistState;
-  console.log(playlist)
+  const chooseIndex = createRef();
   const [tabColorIndex, setTabColorIndex] = useState(0);
   const [cat, setCat] = useState("");
   useEffect(() => {
@@ -28,6 +28,7 @@ const Home = ({dispatch, tabState,playlistState}) => {
     setCat(name)
   }
 
+
   return (
     <div className="homeContainer">
       <h1>歌单推荐</h1>
@@ -44,30 +45,46 @@ const Home = ({dispatch, tabState,playlistState}) => {
       </div>
       <div className="slide-container" style={{height:"410px"}}>
         <div className="prev-button">
-          <span className="iconfont icon-shangyiye"/>
+          <span className="iconfont icon-shangyiye" onClick={() => chooseIndex.current.prev()}/>
         </div>
         <div className="next-button">
-          <span className="iconfont icon-xiayiye"/>
+          <span className="iconfont icon-xiayiye" onClick={() => chooseIndex.current.next()}/>
         </div>
-       
 
-        <div className="slide">
-          {playlist.splice(0,5).map(value=>(
-            <div  key={value.id} className="slideContent">
-              <div className="slideContent-top">
-                <div className="slide-keep">
-                  <span className="iconfont icon-ziyuan"> </span>
+        <Carousel  ref={chooseIndex}>
+          <div className="slide">
+            {playlist.slice(0,5).map(value=>(
+              <div  key={value.id} className="slideContent">
+                <div className="slideContent-top">
+                  <div className="slide-keep">
+                    <span className="iconfont icon-ziyuan"> </span>
+                  </div>
+                  <img src={value.coverImgUrl} alt=""/>
                 </div>
-                <img src={value.coverImgUrl} alt=""/>
+                <div className="slideContent-bot">
+                  <a href="">{value.name}</a>
+                  <p>播放量：{(value.playCount/10000).toFixed(1)}万</p>
+                </div>
               </div>
-              <div className="slideContent-bot">
-                <a href="">{value.name}</a>
-                <p>播放量：{(value.playCount/10000).toFixed(1)}万</p>
+            ))}
+          </div>
+          <div className="slide">
+            {playlist.slice(5,10).map(value=>(
+              <div  key={value.id} className="slideContent">
+                <div className="slideContent-top">
+                  <div className="slide-keep">
+                    <span className="iconfont icon-ziyuan"> </span>
+                  </div>
+                  <img src={value.coverImgUrl} alt=""/>
+                </div>
+                <div className="slideContent-bot">
+                  <a href="">{value.name}</a>
+                  <p>播放量：{(value.playCount/10000).toFixed(1)}万</p>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-
+            ))}
+          </div>
+        </Carousel>
       </div>
     </div>
   )
