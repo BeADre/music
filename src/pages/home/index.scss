@@ -29,6 +29,19 @@
       }
     }
   }
+  .ant-carousel{
+    width: 70%;
+    margin-left: 15%;
+    .slick-dots-bottom{
+      bottom: 0;
+    }
+    .slick-dots li button{
+      background: rgb(140, 134, 134);
+    }
+    .ant-carousel .slick-dots li.slick-active button {
+      background: rgb(146, 142, 142);
+    }
+  }
   .slide-container{
     width: 100%;
     display: flex;
@@ -53,6 +66,7 @@
       background: rgb(240,240,240);
       cursor: pointer;
       transition: 0.5s;
+      z-index: 10;
       &:hover{
         background: rgb(225,225,225);
       }
@@ -71,10 +85,9 @@
       width: $main-width;
       margin: {
         top: 30px;
-        left: $main-left;
       }
     ;
-      display: flex;
+      display: flex !important;;
       justify-content: space-between;
       .slideContent {
         .slide-keep {
