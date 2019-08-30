@@ -7,11 +7,18 @@ export function getPlaylistTabReq() {
   return axios.getData(API.homeApi.playlistTab)
 }
 
-export function getPlaylistReq({cat}) {
+export function getPlaylistReq({limit,order,cat}) {
   const params = {
-    limit: 10,
-    order:"hot",
+    limit,
+    order,
     cat
   }
   return axios.getData(API.homeApi.playlist,params)
+}
+
+export function getNewSongReq({limit,order,cat}) {
+  const params = {
+    type:cat
+  }
+  return axios.getData(API.homeApi.newSong,params)
 }

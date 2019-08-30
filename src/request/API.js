@@ -1,6 +1,7 @@
 const homeApi = {
   playlistTab: "/playlist/hot",
-  playlist: "/top/playlist"
+  playlist: "/top/playlist",
+  newSong: "/top/song"
 }
 const aboutApi = {
 

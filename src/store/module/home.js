@@ -1,5 +1,5 @@
 import {call, put} from "redux-saga/effects"
-import {getPlaylistTabReq,getPlaylistReq} from "../../request/home"
+import {getPlaylistTabReq,getPlaylistReq,getNewSongReq} from "../../request/home"
 
 
 export default {
@@ -17,6 +17,12 @@ export default {
       if (data) {
         yield put({type: "home/getPlaylist_Reducer", payload: {playlist:data.data.playlists}})
       }
+    },
+    getNewSong: function* ({payload}) {
+      const data = yield call(getNewSongReq,payload)
+      if (data) {
+        yield put({type: "home/getNewSong_Reducer", payload: {playlist:data.data.playlists}})
+      }
     }
   },
   reducer: {
@@ -26,7 +32,10 @@ export default {
 
     getPlaylist_Reducer(state, {payload}) {
       return {...state, ...payload}
-    }
+    },
+    getNewSong_Reducer(state, {payload}) {
+      return {...state, ...payload}
+    },
   },
 }
 
