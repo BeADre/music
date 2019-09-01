@@ -21,7 +21,7 @@ export default {
     getNewSong: function* ({payload}) {
       const data = yield call(getNewSongReq,payload)
       if (data) {
-        yield put({type: "home/getNewSong_Reducer", payload: {playlist:data.data.playlists}})
+        yield put({type: "home/getNewSong_Reducer", payload: {newSong:data.data.data}})
       }
     }
   },
