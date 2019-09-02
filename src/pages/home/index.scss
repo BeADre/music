@@ -103,6 +103,7 @@
       display: flex !important;;
       justify-content: space-between;
       .slideContent,.slideContent2 {
+        margin-left: 1px;
         .slide-keep {
           position: absolute;
           left: 0;
@@ -160,6 +161,7 @@
         padding: 10px 0;
         margin: 15px 0;
         border-bottom: 1px solid #eee;
+        margin-left: 1px;
         .slide-keep {
           span {
             font-size: 30px;
