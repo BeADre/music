@@ -13,7 +13,6 @@ Object.keys(sagaModule).forEach(value => {
   const initState = sagaModule[value].state;
   const effect = Object.keys(sagaModule[value].effect).reduce((effectObj, funcName) => {
       return [...effectObj, ...[takeEvery(`${value}/${funcName}`, sagaModule[value].effect[funcName])]]
-    //return [...effectObj]
   }, []);
 
   const reducer = Object.keys(sagaModule[value].reducer).reduce((reducerObj, funcName) => {

@@ -1,5 +1,5 @@
 import {call, put} from "redux-saga/effects"
-import {getPlaylistTabReq,getPlaylistReq,getNewSongReq} from "../../request/home"
+import {getPlaylistTabReq,getPlaylistReq,getNewSongReq,getNewPlateReq,getMvReq} from "../../request/home"
 
 
 export default {
@@ -23,9 +23,23 @@ export default {
       if (data) {
         yield put({type: "home/getNewSong_Reducer", payload: {newSong:data.data.data}})
       }
-    }
+    },
+    getNewPlate: function* ({payload}) {
+      const data = yield call(getNewPlateReq,payload)
+      if (data) {
+        yield put({type: "home/getNewPlate_Reducer", payload: {newPlate:data.data.albums}})
+      }
+    },
+    getMv: function* ({payload}) {
+      const data = yield call(getMvReq,payload)
+      if (data) {
+        yield put({type: "home/getMv_Reducer", payload: {mv:data.data.data}})
+      }
+    },
+
   },
   reducer: {
+
     getPlaylistTab_Reducer(state, {payload}) {
       return {...state, ...payload}
     },
@@ -33,7 +47,16 @@ export default {
     getPlaylist_Reducer(state, {payload}) {
       return {...state, ...payload}
     },
+
     getNewSong_Reducer(state, {payload}) {
+      return {...state, ...payload}
+    },
+
+    getNewPlate_Reducer(state, {payload}) {
+      return {...state, ...payload}
+    },
+
+    getMv_Reducer(state, {payload}) {
       return {...state, ...payload}
     },
   },
