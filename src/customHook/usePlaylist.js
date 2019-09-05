@@ -2,7 +2,7 @@ import {useEffect} from "react"
 
 
 const usePlaylist = (props) => {
-  const {index, cat, limit, order,dispatch} = props
+  const {index, cat, limit, order,dispatch,} = props
   useEffect(() => {
     if (index === 2) {
       dispatch({
@@ -10,6 +10,13 @@ const usePlaylist = (props) => {
         payload: {
           cat,
           limit
+        }
+      })
+    } else if(index === 3){
+      dispatch({
+        type: "home/getMv",
+        payload: {
+          cat,
         }
       })
     } else {
