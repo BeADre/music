@@ -293,6 +293,5 @@ const mapState = ({
                     getNewPlate_Reducer: newPlateState,
                     getMv_Reducer: mvState
                   }) => ({tabState, playlistState, newSongState, newPlateState, mvState})
-//const mapState = (state) => (state)
 
 export default connect(mapState)(Home)

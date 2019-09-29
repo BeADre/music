@@ -6,6 +6,7 @@ import playlist from "../pages/playlist"
 import radio from "../pages/radio"
 import MV from "../pages/MV"
 import album from "../pages/album"
+import play from "../pages/play"
 
 export default [
   {path:"/home",component: Home, title: "首页"},
@@ -16,4 +17,6 @@ export default [
   {path:"/radio",component: radio, title: "电台"},
   {path:"/MV",component: MV, title: "MV"},
   {path:"/album",component: album, title: "数字专辑"},
+  {path:"/playMusic",component: play, title: "播放页", hidden:true},
+
 ]
