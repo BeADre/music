@@ -5,35 +5,35 @@ import {getPlaylistTabReq,getPlaylistReq,getNewSongReq,getNewPlateReq,getMvReq} 
 export default {
   state: {},
   effect: {
-    getPlaylistTab: function* () {
-      const data = yield call(getPlaylistTabReq)
+    *getPlaylistTab() {
+      const data = yield call(getPlaylistTabReq);
       if (data) {
-        data.data.tags.unshift({name:"",title:"全部"})
+        data.data.tags.unshift({name:"",title:"全部"});
         yield put({type: "home/getPlaylistTab_Reducer", payload: {playTab:data.data.tags}});
       }
     },
-    getPlaylist: function* ({payload}) {
-      const data = yield call(getPlaylistReq,payload)
+    *getPlaylist({payload}) {
+      const data = yield call(getPlaylistReq,payload);
       if (data) {
-        yield put({type: "home/getPlaylist_Reducer", payload: {playlist:data.data.playlists}})
+        yield put({type: "home/getPlaylist_Reducer", payload: {playlist:data.data.playlists}});
       }
     },
-    getNewSong: function* ({payload}) {
-      const data = yield call(getNewSongReq,payload)
+    *getNewSong({payload}) {
+      const data = yield call(getNewSongReq,payload);
       if (data) {
-        yield put({type: "home/getNewSong_Reducer", payload: {newSong:data.data.data}})
+        yield put({type: "home/getNewSong_Reducer", payload: {newSong:data.data.data}});
       }
     },
-    getNewPlate: function* ({payload}) {
-      const data = yield call(getNewPlateReq,payload)
+    *getNewPlate({payload}) {
+      const data = yield call(getNewPlateReq,payload);
       if (data) {
-        yield put({type: "home/getNewPlate_Reducer", payload: {newPlate:data.data.albums}})
+        yield put({type: "home/getNewPlate_Reducer", payload: {newPlate:data.data.albums}});
       }
     },
-    getMv: function* ({payload}) {
-      const data = yield call(getMvReq,payload)
+    *getMv({payload}) {
+      const data = yield call(getMvReq,payload);
       if (data) {
-        yield put({type: "home/getMv_Reducer", payload: {mv:data.data.data}})
+        yield put({type: "home/getMv_Reducer", payload: {mv:data.data.data}});
       }
     },
 

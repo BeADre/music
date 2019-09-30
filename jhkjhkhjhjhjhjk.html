@@ -1,0 +1,118 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+    <title>LRC</title>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
+    </script>
+    <style>
+        div{
+            width:340px;
+            height:500px;
+            margin:0 auto;
+            overflow:hidden;
+        }
+        ul{
+            transition-duration: 600ms;
+        }
+        ul, li{
+            list-style:none;
+            padding: 0;
+            margin: 0;
+        }
+        li.on{
+            color: red;
+        }
+        p{
+            overflow: hidden;
+            text-overflow: ellipsis;
+            height: 16px;
+            line-height: 16px;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            display: -webkit-box;
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 16px;
+        }
+        audio{
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <ul id="lrclist" style="transform: translateY(250px);"><!-- 保证歌词在正中间 -->
+
+    </ul>
+</div>
+<audio id="audio" src="https://music.163.com/song/media/outer/url?id=347230.mp3" controls="controls" autoplay="true"></audio>
+
+<script>
+  const tetx = "[00:00.000] 作曲 : 黄家驹\n[00:00.666] 作词 : 黄家驹\n[00:02.000] 编曲：Beyond/梁邦彦\n[00:03.000] 监制：Beyond/梁邦彦\n[00:18.466] 今天我 寒夜里看雪飘过\n[00:25.110] 怀着冷却了的心窝漂远方\n[00:30.950] 风雨里追赶 雾里分不清影踪\n[00:37.229] 天空海阔你与我\n[00:40.291] 可会变（谁没在变）\n[00:43.440] 多少次 迎着冷眼与嘲笑\n[00:50.050] 从没有放弃过心中的理想\n[00:55.907] 一刹那恍惚 若有所失的感觉\n[01:02.133] 不知不觉已变淡\n[01:05.243] 心里爱（谁明白我）\n[01:08.801] 原谅我这一生不羁放纵爱自由\n[01:15.799] 也会怕有一天会跌倒\n[01:22.008] 背弃了理想 谁人都可以\n[01:28.276] 哪会怕有一天只你共我\n[01:34.102]\n[01:42.695] 今天我 寒夜里看雪飘过\n[01:49.284] 怀着冷却了的心窝漂远方\n[01:55.189] 风雨里追赶 雾里分不清影踪\n[02:01.405] 天空海阔你与我\n[02:04.535] 可会变（谁没在变）\n[02:08.014] 原谅我这一生不羁放纵爱自由\n[02:15.040] 也会怕有一天会跌倒\n[02:21.279] 背弃了理想 谁人都可以\n[02:27.531] 哪会怕有一天只你共我\n[02:33.633]\n[03:08.454] 仍然自由自我 永远高唱我歌\n[03:15.064] 走遍千里\n[03:19.739] 原谅我这一生不羁放纵爱自由\n[03:26.734] 也会怕有一天会跌倒\n[03:33.005] 背弃了理想 谁人都可以\n[03:39.257] 哪会怕有一天只你共我\n[03:45.496] 背弃了理想 谁人都可以\n[03:51.756] 哪会怕有一天只你共我\n[03:57.201] 原谅我这一生不羁放纵爱自由\n[04:04.204] 也会怕有一天会跌倒\n[04:10.456] 背弃了理想 谁人都可以\n[04:16.647] 哪会怕有一天只你共我\n[04:22.828]\n"
+
+
+  let arr = tetx.split("\n").filter(v => !!v).map(value => {
+    var arr = value.split("] ");
+    if(arr.length === 2){
+      arr[0] = arr[0] + "]"
+    }else {
+      arr[1] = ""
+    }
+    return arr
+  })
+
+
+  var lrcJSON = Object.fromEntries(arr);
+
+
+  var lrcTime = [];//歌词对应的时间数组
+  var ul = $("#lrclist")[0];//获取ul
+
+  var i = 0;
+  $.each(lrcJSON, function(key, value) {//遍历lrc
+    lrcTime[i++] = parseFloat(key.substr(1,3)) * 60 + parseFloat(key.substring(4,10));//00:00.000转化为00.000格式
+    ul.innerHTML += "<li><p>"+lrcJSON[key]+"</p></li>";//ul里填充歌词
+  });
+  lrcTime[lrcTime.length] = lrcTime[lrcTime.length-1] + 3;//如不另加一个结束时间，到最后歌词滚动不到最后一句
+
+
+  var $li = $("#lrclist>li");//获取所有li
+
+  var currentLine = 0;//当前播放到哪一句了
+  var currentTime;//当前播放的时间
+  var audio = document.getElementById("audio");
+  var ppxx;//保存ul的translateY值
+
+  audio.ontimeupdate = function() {//audio时间改变事件
+    currentTime = audio.currentTime;
+    for (j=currentLine, len=lrcTime.length; j<len; j++){
+      if (currentTime<lrcTime[j+1] && currentTime>lrcTime[j]){
+        currentLine =  j;
+        ppxx = 250-(currentLine*32);
+        ul.style.transform = "translateY("+ppxx+"px)";
+        $li.get(currentLine-1).className="";
+        console.log("on"+currentLine);
+        $li.get(currentLine).className="on";
+        break;
+      }
+    }
+  };
+
+  audio.onseeked = function() {//audio进度更改后事件
+    currentTime = audio.currentTime;
+    console.log("  off"+currentLine);
+    $li.get(currentLine).className="";
+    for (k=0, len=lrcTime.length; k<len; k++){
+      if (currentTime<lrcTime[k+1] && currentTime<lrcTime[k]){
+        currentLine =  k;
+        break;
+      }
+    }
+  };
+
+</script>
+</body>
+</html>

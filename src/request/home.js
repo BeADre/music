@@ -1,7 +1,6 @@
-import { axios } from "castle-haozijunqaq-utils"
+import  axios  from "./index"
 import API from "./API"
 
-axios.setBaseUrl("http://localhost:3000")
 
 export function getPlaylistTabReq() {
   return axios.getData(API.homeApi.playlistTab)
