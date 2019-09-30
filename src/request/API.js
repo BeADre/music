@@ -9,7 +9,14 @@ const aboutApi = {
 
 }
 
+const playMusicApi = {
+  songDetail: "/song/detail",
+  lyric: "/lyric"
+}
+
+
 export default {
   homeApi,
-  aboutApi
+  aboutApi,
+  playMusicApi
 }
