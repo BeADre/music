@@ -2,10 +2,11 @@ import React, {useState, useEffect, useRef, Fragment} from "react"
 import {Carousel,Icon} from "antd"
 import usePlaylist from "../../customHook/usePlaylist"
 import {connect} from "react-redux"
+import utils from "../../utils"
 import {newSongTab, mvTab} from "../../staticData/home"
 import "./index.scss"
 
-const Home = ({dispatch, tabState, playlistState, newSongState, newPlateState, mvState}) => {
+const Home = ({dispatch, history, tabState, playlistState, newSongState, newPlateState, mvState}) => {
   const {playTab = []} = tabState;
   const {playlist = []} = playlistState;
   const {newSong = []} = newSongState;
@@ -51,6 +52,10 @@ const Home = ({dispatch, tabState, playlistState, newSongState, newPlateState, m
     setCatName(name)
   }
 
+  const goToPlayMusic = id => {
+    history.push(`/playMusic?ids=${id}`);
+  }
+
   const changeCarousel = ref => {
     return (
       <Fragment>
@@ -92,7 +97,7 @@ const Home = ({dispatch, tabState, playlistState, newSongState, newPlateState, m
       <div className="slide">
         {newSong.slice(start, end).map((value) =>
           <div className="slideContent2" key={value.id}>
-            <div className="slideContent-left">
+            <div className="slideContent-left" onClick={()=>{goToPlayMusic(value.id)}}>
               <div className="slide-keep">
                 <span className="iconfont icon-ziyuan"> </span>
               </div>
@@ -112,11 +117,10 @@ const Home = ({dispatch, tabState, playlistState, newSongState, newPlateState, m
                   )}
                 </p>
               </div>
-              <div className="song-time">{unitTime(value.duration)}</div>
+              <div className="song-time">{utils.unitTime(value.duration)}</div>
             </div>
           </div>
         )}
-
       </div>
     )
   }
@@ -176,15 +180,6 @@ const Home = ({dispatch, tabState, playlistState, newSongState, newPlateState, m
         )}
       </div>
     )
-  }
-
-  // 歌曲时长的时间戳转化函数
-  const unitTime = time => {
-    let minute = new Date(time).getMinutes();
-    let second = new Date(time).getSeconds();
-    minute = minute < 10 ? `0${minute}` : `${minute}`;
-    second = second < 10 ? `0${second}` : `${second}`;
-    return `${minute}:${second}`
   }
 
   const unitCount = count => {

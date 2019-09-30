@@ -12,7 +12,6 @@ export default {
     },
     * getLyric({payload}) {
       const data = yield call(getLyricReq, payload);
-      console.log(data)
       if (data) {
         yield put({type: "playmusic/getLyric_Reducer", payload: { lyric: data.data.lrc.lyric }});
       }

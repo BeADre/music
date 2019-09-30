@@ -29,7 +29,7 @@
   }
   .lyrics-display-box{
     width: 70%;
-    height: 50%;
+    height: 500px;
     overflow: hidden;
     box-sizing: content-box;
     margin: 0 0 0 15%;
@@ -43,6 +43,8 @@
     .lyrics-content{
       width: 90%;
       margin-left: 5%;
+      transform: translateY(250px);
+      transition-duration: 600ms;
       color: white;
       font-size: 30px;
       p{
@@ -108,3 +110,7 @@
     }
   }
 }
+.on{
+  color: #1DA57A
+}
+
