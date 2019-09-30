@@ -1,16 +1,15 @@
-import React from "react"
-import {BrowserRouter, NavLink, Route, Switch, Redirect} from "react-router-dom";
+import React,{Fragment} from "react"
+import { NavLink, Route, Switch, Redirect, withRouter} from "react-router-dom";
 import "./index.scss"
 import Router from "../router"
 import {Input} from 'antd';
 
 const {Search} = Input;
 
-const Index = () => {
-  const {pathname} = window.location;
-
+const Index = ({ location = {} }) => {
+  const {pathname} = location;
   return (
-    <BrowserRouter>
+    <Fragment>
       {pathname.includes("/playMusic") ? null :
         <div className="main-tab">
           <ul>
@@ -31,7 +30,7 @@ const Index = () => {
         <Route exact path="/" render={() => <Redirect to="/home"/>}/>
         {Router.map(value => <Route path={value.path} key={value.title} exact component={value.component}/>)}
       </Switch>
-    </BrowserRouter>
+    </Fragment>
   )
 }
-export default Index
+export default withRouter(Index)

@@ -1,11 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Main from "./pages"
-import { createStore, applyMiddleware } from 'redux'
+import {createStore, applyMiddleware} from 'redux'
 import createSagaMiddleware from 'redux-saga'
-import { Provider } from "react-redux"
+import {Provider} from "react-redux"
 import reducer from './store/processor/reducer'
 import rootSaga from './store/processor/sagas'
+import {BrowserRouter} from "react-router-dom";
 import * as serviceWorker from './serviceWorker';
 
 
@@ -19,7 +20,9 @@ sagaMiddleware.run(rootSaga)
 
 ReactDOM.render(
   <Provider store={store}>
-    <Main/>
+    <BrowserRouter>
+      <Main/>
+    </BrowserRouter>
   </Provider>,
   document.getElementById('root')
 );
