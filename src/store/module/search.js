@@ -1,5 +1,5 @@
 import {call, put} from "redux-saga/effects"
-import {hotListReq} from "../../request/search"
+import {hotListReq,searchReq} from "../../request/search"
 
 export default {
   state: {
@@ -11,6 +11,7 @@ export default {
       total: 0,
       pageSize: 20,
     },
+    isLoading: false
   },
   effect: {
     * hotList() {
@@ -20,10 +21,43 @@ export default {
         yield put({type: "search/hotList_Reducer", payload: {hots}});
       }
     },
+    * search({payload}) {
+      yield put({type:"search/changeLoading", payload:{isLoading: true }});
+      const data = yield call(searchReq, payload);
+      if (data) {
+        yield put({
+          type: "search/search_Reducer",
+          payload: {
+            list: data.data.result.songs,
+            pagination: {
+              current: payload.offset + 1 || 1,
+              pageSize:payload.limit || 20,
+              total: data.data.result.songCount,
+            }
+          }
+        });
+        yield put({type:"search/changeLoading", payload:{isLoading: false }});
+      }
+    },
   },
   reducer: {
+    changeLoading(state,{ payload }){
+
+      return {...state, ...payload}
+    },
     hotList_Reducer(state, {payload}) {
       return {...state, ...payload}
+    },
+    search_Reducer(state, {payload}) {
+      const { list, pagination } = payload
+      return {
+        ...state,
+        list,
+        pagination: {
+          ...state.pagination,
+          ...pagination,
+        },
+      }
     },
 
   }

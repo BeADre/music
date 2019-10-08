@@ -1,29 +1,51 @@
 import React, {useState, useEffect} from "react"
-import {Input, Tabs, Table } from "antd";
+import {Input, Tabs, Table,Spin } from "antd";
 import {connect} from "react-redux"
 import {searchTab} from "../../staticData/search"
 import utils from "../../utils"
 import "./index.scss"
 
 const { TabPane } = Tabs;
-
 const Search = ({search, dispatch}) => {
-  const {hots = [],pagination} = search
-
-  const initSearch = window.location.search.split("=")[1];
-  const [searchContent, setSearch] = useState(initSearch);
+  const {hots = [], pagination, list = [], isLoading} = search
+  const initSearch = decodeURI(window.location.search.split("=")[1]);
+  const [keywords, setKeywords] = useState(initSearch);
+  const [limit, setLimit] = useState(20);
+  const [offset, setOffset] = useState(0);
+  const [type, setType] = useState(1);
+  const [iptValue, setIptValue] = useState(initSearch);
 
   useEffect(() => {
     dispatch({
       type: "search/hotList"
     });
   }, []);
+  useEffect(() => {
+    dispatch({
+      type: "search/search",
+      payload: {
+        keywords,
+        limit,
+        offset,
+        type
+      }
+    })
+  }, [keywords,limit,offset,type]);
 
-  const changeTab = activeKey => {
-    console.log(activeKey)
-  }
+  const hotListClick = title => {
+    setLimit(20);
+    setOffset(0);
+    setType(1);
+    setKeywords(title);
+    setIptValue(title);
+  };
+  const changePagination = pagination => {
+    const {current, pageSize} = pagination;
+    setLimit(pageSize);
+    setOffset(current - 1);
+  };
 
-  const tabPane1 = () => {
+  const tabPanel1 = () => {
     const columns = [
       {
         title: "歌曲",
@@ -34,7 +56,7 @@ const Search = ({search, dispatch}) => {
         dataIndex: "artists",
         render: text => {
           return <div>
-            {text.map((v,i) =>{return i === text.length - 1 ? <span>{v.name}</span>:<span>{v.name} /</span>})}
+            {text.map((v,i) =>{return i === text.length - 1 ? <span key={v.id}>{v.name}</span>:<span key={v.id}>{v.name} /</span>})}
           </div>
         }
       },
@@ -49,38 +71,42 @@ const Search = ({search, dispatch}) => {
       },
     ];
     return (
-      <Table
-        pagination={false}
-        onChange={_pagination => this.getHighestScoreReq(undefined, undefined, _pagination)}
-        rowKey={rowData => rowData._id}
-        columns={columns}
-        dataSource={[]}
-      />
+      <Spin spinning={isLoading}>
+        <Table
+          pagination={pagination}
+          onChange={pagination => changePagination(pagination)}
+          rowKey={rowData => rowData.id}
+          columns={columns}
+          dataSource={list}
+        />
+      </Spin>
     )
-  }
-
+  };
+  const tabPanelObj = {
+    tabPanel1
+  };
+  const searchHandle = (value) => {
+    setKeywords(value);
+    setIptValue(value)
+  };
   return (
     <div className="search-container">
       <div className="banner">
         <div className="search-content">
           <Input.Search
             placeholder="搜索音乐、歌单、MV"
-            defaultValue={searchContent}
+            value={iptValue}
+            onChange={(e)=>setIptValue(e.target.value)}
             style={{
               height: "50px",
               fontSize: "16px"
             }}
-            onSearch={value => setSearch(value)}
+            onSearch={value => searchHandle(value)}
           />
           <div className="search-hot">
             <span>热门搜索：</span>
             <p>
-              {/*{hots.slice(0,5).map(value=> <a key={value.first}>{value.first}</a>)}*/}
-              <a>该死的温柔</a>
-              <a>不能说的秘密</a>
-              <a>盗将行</a>
-              <a>学到老爱到老</a>
-              <a>林俊杰</a>
+              {hots.slice(0,5).map(value=> <span onClick={()=>hotListClick(value.first)} key={value.first}>{value.first}</span>)}
             </p>
 
           </div>
@@ -90,10 +116,10 @@ const Search = ({search, dispatch}) => {
         <Tabs
           size={"large"}
           defaultActiveKey="1"
-          onChange={activeKey => changeTab(activeKey)}>
+          onChange={activeKey => setType(activeKey)}>
           {searchTab.map(value =>
              <TabPane tab={value.name} key={value.id}>
-              Content of Tab Pane {value.id}
+               {tabPanelObj[`tabPanel1`]()}
             </TabPane>
           )}
         </Tabs>

@@ -21,27 +21,8 @@ body::-webkit-scrollbar-track {
   border-radius: 10px;
   background   : #ededed;
 }
-ul{
-  width: 40%;
-  margin-left: 15%;
-  display: flex;
-  justify-content: space-around;
-  height: 52px;
-  padding: 0;
-}
-li{
-  list-style: none;
-  display: inline-block;
-  position: relative;
-  line-height: 52px;
-}
 a{
   color: #000;
-  text-decoration: none;
-}
-
-li:hover a{
-  color:#31c27c
 }
 .main-tab{
   width: 100%;
@@ -49,6 +30,29 @@ li:hover a{
   height: 60px;
   line-height: 60px;
   display: flex;
+  ul{
+    width: 40%;
+    margin-left: 15%;
+    display: flex;
+    justify-content: space-around;
+    height: 52px;
+    padding: 0;
+    li{
+      list-style: none;
+      display: inline-block;
+      position: relative;
+      line-height: 52px;
+      a{
+        color: #000;
+        text-decoration: none;
+      }
+      &:hover{
+        a{
+          color:#31c27c
+        }
+      }
+    }
+  }
   .search{
     width: 12%;
     min-width: 100px;

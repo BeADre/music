@@ -15,7 +15,8 @@ const playMusicApi = {
 }
 
 const searchApi = {
-  hotList: "/search/hot"
+  hotList: "/search/hot",
+  search: "/search"
 }
 
 export default {
