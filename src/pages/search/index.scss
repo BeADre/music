@@ -1,6 +1,11 @@
 .search-container{
   width: 100vw;
   min-width: 1200px;
+  .ant-table-pagination {
+    float: none!important;
+    display: table;
+    margin: 16px auto !important;
+  }
   .banner{
     height: 250px;
     width: 100%;
@@ -27,9 +32,10 @@
         justify-content: center;
         p{
           width: 70%;
-          a{
+          span{
             margin-right: 5%;
             color: white;
+            cursor: pointer;
             &:hover{
               color: #31c27c;
             }
