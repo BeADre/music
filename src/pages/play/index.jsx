@@ -77,7 +77,8 @@ const changeTime = (value, audio) =>{
   audio.current.currentTime = parseInt(minUnitTime * value)
 };
 
-const Play = ({ dispatch,songDetail, lyricObj }) => {
+const Play = ({ dispatch, playmusic }) => {
+  const {songDetail = {},lyric = ""} = playmusic
   const [ isPause, setPause ] = useState(false); // 控制播放器是否暂停的state
   const [ isMute, setMute ] = useState(false); // 控制播放器是否静音的state
   const [ activeLine, setActiveLine ] = useState("lyric0"); // 当前正在播放的歌词的类名
@@ -87,7 +88,6 @@ const Play = ({ dispatch,songDetail, lyricObj }) => {
 
   const id = window.location.search.split("=")[1];
   const {al = {}, ar = []} = songDetail;
-  const {lyric} = lyricObj;
   const lrcTimeArr  = [];
   const minUnitTime = audio.current ? audio.current.duration / 100 : 0; // 第一次渲染时audio标签并未绑定上
 
@@ -145,7 +145,10 @@ const Play = ({ dispatch,songDetail, lyricObj }) => {
         <div className="time-container">
           <span>{utils.formatTime(currentTime)} / {utils.unitTime(songDetail.dt)}</span>
         </div>
-        <Icon type="download" />
+        <a  className="download-tag"
+            href={`https://music.163.com/song/media/outer/url?id=${id}.mp3`}>
+          <Icon type="download" />
+        </a>
         {isMute ?
           <i className="iconfont icon-jingyin" onClick={()=>musicControl(audio, setMute, "mute")}/>:
           <i className="iconfont icon-shengyin" onClick={()=>musicControl(audio, setMute, "mute")}/>
@@ -162,8 +165,6 @@ const Play = ({ dispatch,songDetail, lyricObj }) => {
   )
 };
 
-const mapState = ({
-                    songDetail_Reducer: songDetail = {},
-                    getLyric_Reducer: lyricObj = {}
-                  })=>({songDetail,lyricObj})
+const mapState = (state) => (state);
+
 export default connect(mapState)(Play);

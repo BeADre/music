@@ -2,7 +2,7 @@
   width: 100vw;
   min-width: 1200px;
   padding: 1px;
-  height: 100vh;
+  min-height: 100vh;
   background: rgb(27,27,28);
   .artist-info-container{
     display: flex;
@@ -73,7 +73,7 @@
     }
     .anticon-download{
       font-size: 30px;
-      margin-right: 30px;
+      margin-right: 0;
     }
     :nth-child(2){
       font-size: 50px;
@@ -91,11 +91,17 @@
         margin: 14px 6px 14px;
       }
     }
+    .download-tag{
+      margin-right: 30px;
+      color: #d2d2d2;
+      display: flex;
+    }
     .time-container{
       height: 100%;
       display: flex;
       align-items: center;
       margin: 0 30px 0 15px;
+      min-width: 110px;
       span{
         font-size: 18px;
       }

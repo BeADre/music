@@ -7,7 +7,7 @@ export default {
     * songDetail({payload}) {
       const data = yield call(songDetailReq, payload);
       if (data) {
-        yield put({type: "playmusic/songDetail_Reducer", payload: data.data.songs[0]});
+        yield put({type: "playmusic/songDetail_Reducer", payload: {songDetail:data.data.songs[0]}});
       }
     },
     * getLyric({payload}) {

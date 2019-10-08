@@ -14,9 +14,13 @@ const playMusicApi = {
   lyric: "/lyric"
 }
 
+const searchApi = {
+  hotList: "/search/hot"
+}
 
 export default {
   homeApi,
   aboutApi,
-  playMusicApi
+  playMusicApi,
+  searchApi
 }

@@ -6,12 +6,8 @@ import utils from "../../utils"
 import {newSongTab, mvTab} from "../../staticData/home"
 import "./index.scss"
 
-const Home = ({dispatch, history, tabState, playlistState, newSongState, newPlateState, mvState}) => {
-  const {playTab = []} = tabState;
-  const {playlist = []} = playlistState;
-  const {newSong = []} = newSongState;
-  const {newPlate = []} = newPlateState;
-  const {mv = []} = mvState;
+const Home = ({home,history,dispatch}) => {
+  const {playTab = [], playlist = [], newSong= [], newPlate = [], mv = []} = home
   const choosePlaylist = useRef(null);
   const chooseNewSong = useRef(null);
   const chooseNewPlate = useRef(null);
@@ -26,7 +22,14 @@ const Home = ({dispatch, history, tabState, playlistState, newSongState, newPlat
   useEffect(() => {
     dispatch({
       type: "home/getPlaylistTab"
-    })
+    });
+    dispatch({
+      type: "home/getNewPlate",
+      payload: {
+        offset: 0,
+        limit: 50
+      }
+    });
   }, [])
 
   // 自定义hook，切换不同的tab时请求数据
@@ -35,16 +38,6 @@ const Home = ({dispatch, history, tabState, playlistState, newSongState, newPlat
   usePlaylist({cat: newSongCat, index: 2, dispatch})
 
   usePlaylist({cat: mvCat, index: 3, dispatch})
-
-  useEffect(() => {
-    dispatch({
-      type: "home/getNewPlate",
-      payload: {
-        offset: 0,
-        limit: 50
-      }
-    })
-  }, [])
 
   // 改变state从而触发自定义HOOK请求数据
   const getPlaylist = (setColorName, setCatName, i, name) => {
@@ -83,7 +76,7 @@ const Home = ({dispatch, history, tabState, playlistState, newSongState, newPlat
             </div>
             <div className="slideContent-bot">
               <a href="">{value.name}</a>
-              <p>播放量：{unitCount(value.playCount)}</p>
+              <p>播放量：{utils.unitCount(value.playCount)}</p>
             </div>
           </div>
         ))}
@@ -173,22 +166,13 @@ const Home = ({dispatch, history, tabState, playlistState, newSongState, newPlat
               <p className="section-four-art">{value.artistName}</p>
               <p>
                 <Icon type="video-camera" />
-                <span style={{marginLeft:"5px"}}>{unitCount(value.playCount)}</span>
+                <span style={{marginLeft:"5px"}}>{utils.unitCount(value.playCount)}</span>
               </p>
             </div>
           </div>
         )}
       </div>
     )
-  }
-
-  const unitCount = count => {
-    const len = `${count}`.length;
-    switch (true) {
-      case len < 5: return count;
-      case 5 <= len <= 7: return `${(count/10000).toFixed(1)}万`;
-      case 7 < len : return `${(count/10000).toFixed()}万`
-    }
   }
 
   return (
@@ -200,7 +184,7 @@ const Home = ({dispatch, history, tabState, playlistState, newSongState, newPlat
             <span
               key={value.id || index}
               onClick={() => getPlaylist(setTabColorIndexPlaylist, setPlaylistCat, index, value.name)}
-              style={{color: index === tabColorIndexPlaylist ? "#31c27c" : "#000"}}
+              style={{color: index === tabColorIndexPlaylist ? "#31c27c" : ""}}
             >
             {value.name || value.title}
           </span>)
@@ -222,7 +206,7 @@ const Home = ({dispatch, history, tabState, playlistState, newSongState, newPlat
             <span
               key={value.id || index}
               onClick={() => getPlaylist(setTabColorIndexNewSong, setNewSongCat, index, value.id)}
-              style={{color: index === tabColorIndexNewSong ? "#31c27c" : "#000"}}
+              style={{color: index === tabColorIndexNewSong ? "#31c27c" : ""}}
             >
             {value.name}
           </span>)
@@ -260,7 +244,7 @@ const Home = ({dispatch, history, tabState, playlistState, newSongState, newPlat
             <span
               key={value.id || index}
               onClick={() => getPlaylist(setTabColorIndexMV, setMVCat, index, value.name)}
-              style={{color: index === tabColorIndexMV ? "#31c27c" : "#000"}}
+              style={{color: index === tabColorIndexMV ? "#31c27c" : ""}}
             >
             {value.name}
           </span>)
@@ -281,12 +265,6 @@ const Home = ({dispatch, history, tabState, playlistState, newSongState, newPlat
   )
 }
 
-const mapState = ({
-                    getPlaylistTab_Reducer: tabState,
-                    getPlaylist_Reducer: playlistState,
-                    getNewSong_Reducer: newSongState,
-                    getNewPlate_Reducer: newPlateState,
-                    getMv_Reducer: mvState
-                  }) => ({tabState, playlistState, newSongState, newPlateState, mvState})
+const mapState = (state) => (state);
 
-export default connect(mapState)(Home)
+export default connect(mapState)(Home);
