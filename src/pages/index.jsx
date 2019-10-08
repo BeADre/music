@@ -6,11 +6,22 @@ import {Input} from 'antd';
 
 const {Search} = Input;
 
-const Index = ({ location = {} }) => {
+const searchHandel = (value,history) => {
+  if(!value)return false
+  history.push(`/search?s=${value}`);
+}
+
+const Index = ({ location = {},history }) => {
+  const hiddenRouterArr = Router.reduce((pre,cur) => {
+    if(cur.hidden){
+      pre.push(cur.path);
+    }
+    return pre
+  },[]);
   const {pathname} = location;
   return (
     <Fragment>
-      {pathname.includes("/playMusic") ? null :
+      {hiddenRouterArr.includes(pathname) ? null :
         <div className="main-tab">
           <ul>
             {Router.map(value => {
@@ -22,7 +33,7 @@ const Index = ({ location = {} }) => {
           <div className="search">
             <Search
               placeholder="搜索"
-              onSearch={value => console.log(value)}
+              onSearch={value => searchHandel(value,history)}
             />
           </div>
         </div>}

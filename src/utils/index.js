@@ -1,5 +1,6 @@
 // 歌曲时长的时间戳转化函数
 const unitTime = time => {
+  if(!time) return `00:00`
   let minute = new Date(time).getMinutes();
   let second = new Date(time).getSeconds();
   minute = minute < 10 ? `0${minute}` : `${minute}`;
@@ -19,7 +20,18 @@ const formatTime = time => {
   return `${minute}:${second}`;
 }
 
+// 播放量转化函数
+const unitCount = count => {
+  const len = `${count}`.length;
+  switch (true) {
+    case len < 5: return count;
+    case 5 <= len <= 7: return `${(count/10000).toFixed(1)}万`;
+    case 7 < len : return `${(count/10000).toFixed()}万`
+  }
+};
+
 export default {
   unitTime,
-  formatTime
+  formatTime,
+  unitCount
 }

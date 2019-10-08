@@ -15,14 +15,17 @@ Object.keys(sagaModule).forEach(value => {
       return [...effectObj, ...[takeEvery(`${value}/${funcName}`, sagaModule[value].effect[funcName])]]
   }, []);
 
-  const reducer = Object.keys(sagaModule[value].reducer).reduce((reducerObj, funcName) => {
-    const preReducer = sagaModule[value].reducer[funcName];
-    reducerObj[funcName] = (state = initState, action) => {
-      if (action.type === `${value}/${funcName}`) return preReducer(state, action);
-      else return state
+  const reducer = {};
+  const reducerObj = sagaModule[value].reducer
+  const reducerNameArr = Object.keys(reducerObj);
+  reducer[value] = function (state = initState, action) {
+    for (let i = 0; i < reducerNameArr.length; i++){
+      if (action.type === `${value}/${reducerNameArr[i]}`){
+        return reducerObj[reducerNameArr[i]](state, action)
+      }
     }
-    return reducerObj;
-  }, {});
+    return state;
+  }
 
   sagaModule[value] = {...sagaModule[value], ...{effect, reducer}};
 })

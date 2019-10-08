@@ -1,0 +1,45 @@
+.search-container{
+  width: 100vw;
+  min-width: 1200px;
+  .banner{
+    height: 250px;
+    width: 100%;
+    background: url("../../asset/bg_search.jpg") no-repeat;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .search-content{
+      width: 40%;
+      height: 120px;
+      input{
+        font-size: 15px;
+      }
+      i{
+        &:hover{
+          color: #31c27c;
+        }
+      }
+      .search-hot{
+        margin-top: 20px;
+        color: white;
+        display: flex;
+        justify-content: center;
+        p{
+          width: 70%;
+          a{
+            margin-right: 5%;
+            color: white;
+            &:hover{
+              color: #31c27c;
+            }
+          }
+        }
+      }
+    }
+  }
+  .search-main-content{
+    width: 70%;
+    margin-left: 15%;
+  }
+}
