@@ -9,6 +9,7 @@ import album from "../pages/album"
 import play from "../pages/play"
 import search from "../pages/search"
 
+// hidden为true时为编程式导航
 export default [
   {path:"/home",component: Home, title: "首页"},
   {path:"/singer",component: singer, title: "歌手"},
