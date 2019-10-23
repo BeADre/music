@@ -1,9 +1,9 @@
 import {all} from "redux-saga/effects"
-import sagaModule from "./index"
+import storeModule from "./index"
 
-
-const saga = Object.keys(sagaModule).reduce((effectArr,moduleName) => {
-  const singleModuleEffectArr = sagaModule[moduleName].effect;
+// 取出所有的saga将其一并注册
+const saga = Object.keys(storeModule).reduce((effectArr,moduleName) => {
+  const singleModuleEffectArr = storeModule[moduleName].effect;
   return [...effectArr,...singleModuleEffectArr];
 },[]);
 

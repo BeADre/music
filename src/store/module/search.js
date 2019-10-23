@@ -18,11 +18,11 @@ export default {
       const data = yield call(hotListReq);
       if (data) {
         const { hots = [] } = data.data.result;
-        yield put({type: "search/hotList_Reducer", payload: {hots}});
+        yield put({type: "search/changeState", payload: {hots}});
       }
     },
     * search({payload}) {
-      yield put({type:"search/changeLoading", payload:{isLoading: true }});
+      yield put({type:"search/changeState", payload:{isLoading: true }});
       const data = yield call(searchReq, payload);
       if (data) {
         yield put({
@@ -41,11 +41,7 @@ export default {
     },
   },
   reducer: {
-    changeLoading(state,{ payload }){
-
-      return {...state, ...payload}
-    },
-    hotList_Reducer(state, {payload}) {
+    changeState(state, {payload}){
       return {...state, ...payload}
     },
     search_Reducer(state, {payload}) {

@@ -66,12 +66,14 @@ const musicControl = (audio, setState, controlType) => {
   }
 };
 
+// 改变音量大小
 const changeVoice = (value, audio, setMute) =>{
   audio.current.volume = value / 100;
   audio.current.muted = false;
   setMute(false)
 };
 
+// 改变播放时间
 const changeTime = (value, audio) =>{
   const minUnitTime = audio.current.duration / 100;
   audio.current.currentTime = parseInt(minUnitTime * value)

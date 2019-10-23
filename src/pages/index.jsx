@@ -5,19 +5,19 @@ import Router from "../router"
 import {Input} from 'antd';
 
 const {Search} = Input;
-
 const searchHandel = (value,history) => {
   if(!value)return false
   history.push(`/search?s=${value}`);
 }
 
+const hiddenRouterArr = Router.reduce((pre,cur) => {
+  if(cur.hidden){
+    pre.push(cur.path);
+  }
+  return pre
+},[]);
+
 const Index = ({ location = {},history }) => {
-  const hiddenRouterArr = Router.reduce((pre,cur) => {
-    if(cur.hidden){
-      pre.push(cur.path);
-    }
-    return pre
-  },[]);
   const {pathname} = location;
   return (
     <Fragment>
@@ -38,7 +38,7 @@ const Index = ({ location = {},history }) => {
           </div>
         </div>}
       <Switch>
-        <Route exact path="/" render={() => <Redirect to="/home"/>}/>
+        <Route exact path="/" render={() => <Redirect to="/home" />}/>
         {Router.map(value => <Route path={value.path} key={value.title} exact component={value.component}/>)}
       </Switch>
     </Fragment>
