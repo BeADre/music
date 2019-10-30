@@ -49,3 +49,12 @@
     margin-left: 15%;
   }
 }
+.hover-column{
+  cursor: pointer;
+  &:hover{
+    color: #31c27c;
+  }
+}
+.ant-table-tbody > tr > td{
+  border: none;
+}

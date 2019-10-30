@@ -24,19 +24,25 @@ export default {
     * search({payload}) {
       yield put({type:"search/changeState", payload:{isLoading: true }});
       const data = yield call(searchReq, payload);
+      let dataName;
+      let countName;
+      switch (payload.type) {
+        case 1 : dataName = "songs";countName = "songCount"; break
+        case 10: dataName = "albums"; countName = "albumCount"; break
+      }
       if (data) {
         yield put({
           type: "search/search_Reducer",
           payload: {
-            list: data.data.result.songs,
+            list: data.data.result[dataName],
             pagination: {
               current: payload.offset + 1 || 1,
-              pageSize:payload.limit || 20,
-              total: data.data.result.songCount,
+              pageSize:payload.limit || 10,
+              total: data.data.result[countName],
             }
           }
         });
-        yield put({type:"search/changeLoading", payload:{isLoading: false }});
+        yield put({type:"search/changeState", payload:{isLoading: false }});
       }
     },
   },
