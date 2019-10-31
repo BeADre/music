@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react"
-import {Input, Tabs, Table,Spin } from "antd";
+import {Input, Tabs, Table,Spin,Avatar } from "antd";
 import {connect} from "react-redux"
 import {searchTab} from "../../staticData/search"
 import moment from "moment"
@@ -40,15 +40,21 @@ const Search = ({search, dispatch}) => {
     setKeywords(title);
     setIptValue(title);
   };
+
   const changePagination = pagination => {
     const {current, pageSize} = pagination;
     setLimit(pageSize);
     setOffset(current - 1);
   };
 
+  const changeTabs = activeKey =>{
+    setType(+activeKey);
+    setLimit(10)
+    setOffset(0)
+  };
+
   const tabPanel1 = (type) => {
     let  columns;
-    console.log(type)
     if(type === 1){
       columns =  [
         {
@@ -81,14 +87,19 @@ const Search = ({search, dispatch}) => {
         {
           title: "专辑",
           dataIndex: "name",
-          render: text => <span className="hover-column">{text}</span>
+          render: (text,record) => {
+            return <div className="hover-column">
+              <Avatar shape="square" src={record.picUrl}/>
+              <span style={{marginLeft: 10}}>{text}</span>
+            </div>
+          }
         },
         {
           title: "歌手",
           dataIndex: "artists",
           render: text => {
             return <div>
-              {text.map((v,i) =>{return i === text.length - 1 ?
+              {(text || []).map((v,i) =>{return i === text.length - 1 ?
                 <span className="hover-column" key={v.id}>{v.name}</span>:<span className="hover-column" key={v.id}>{v.name} /</span>})}
             </div>
           }
@@ -97,6 +108,33 @@ const Search = ({search, dispatch}) => {
           title: "发行时间",
           dataIndex: "publishTime",
           render: text => <span>{moment(text).format('YYYY-MM-DD')}</span>
+        }
+      ];
+    }else if(type === 1000){
+      columns =  [
+        {
+          title: "歌单",
+          dataIndex: "name",
+          render: (text,record) => {
+            return <div className="hover-column">
+              <Avatar shape="square" src={record.coverImgUrl}/>
+              <span style={{marginLeft: 10}}>{text}</span>
+            </div>
+          }
+        },
+        {
+          title: "创建人",
+          dataIndex: "creator.nickname",
+          render: text => {
+            return <div>
+                <span className="hover-column">{text}</span>
+            </div>
+          }
+        },
+        {
+          title: "收听",
+          dataIndex: "playCount",
+          render: text => <span>{utils.unitCount(text)}</span>
         }
       ];
     }
@@ -112,9 +150,6 @@ const Search = ({search, dispatch}) => {
         />
       </Spin>
     )
-  };
-  const tabPanelObj = {
-    tabPanel1
   };
   const searchHandle = (value) => {
     setKeywords(value);
@@ -147,7 +182,7 @@ const Search = ({search, dispatch}) => {
         <Tabs
           size={"large"}
           defaultActiveKey="1"
-          onChange={activeKey => setType(+activeKey)}>
+          onChange={(activeKey)=>changeTabs(activeKey)}>
           {searchTab.map(value =>
              <TabPane tab={value.name} key={value.id}>
                {tabPanel1(type)}
