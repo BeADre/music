@@ -8,6 +8,7 @@ import "./index.scss"
 
 const { TabPane } = Tabs;
 const Search = ({search, dispatch}) => {
+  console.log(1111)
   const {hots = [], pagination, list = [], isLoading} = search
   const initSearch = decodeURI(window.location.search.split("=")[1]);
   const [keywords, setKeywords] = useState(initSearch);
