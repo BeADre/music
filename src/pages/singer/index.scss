@@ -2,21 +2,30 @@
   width: 100vw;
   min-width: 1200px;
   .singer-container{
-    width: 70%;
-    margin-left: 15%;
-    h3{
-      margin: 20px 0 30px 2%;
-      span{
-       background: #31c27c;
-       color: white;
-       padding: 8px;
-       letter-spacing: 1px;
-       font-size: 14px;
-     }
+    width: 100%;
+    h1{
+      margin: 20px 0;
+      width: 70%;
+      margin-left: 15%;
+      text-align: center;
+    }
+    .slide-container{
+      width: 100%;
+      display: flex;
+      align-items: center;
+      background: -webkit-linear-gradient(whitesmoke, #fff);
+      padding: 30px 0;
+      &:hover{
+        .prev-button{
+          left: 0;
+        }
+        .next-button{
+          right: 0;
+        }
+      }
     }
     .hot-singer-container{
-      display: flex;
-      width: 100%;
+      display: flex !important;;
       justify-content: space-between;
       flex-wrap: wrap;
       .hot-singer-content{
@@ -25,8 +34,9 @@
         text-align: center;
         img{
           width: 60%;
+          margin-left: 20%;
           border-radius: 50%;
-
+          cursor: pointer;
         }
         p{
           cursor: pointer;
@@ -34,6 +44,60 @@
           &:hover{
             color: #31c27c;
           }
+        }
+      }
+    }
+    .ant-carousel{
+      width: 70%;
+      margin-left: 15%;
+      .slick-dots-bottom{
+        bottom: 0;
+      }
+      .slick-dots li button{
+        background: rgb(140, 134, 134);
+      }
+      .ant-carousel .slick-dots li.slick-active button {
+        background: rgb(146, 142, 142);
+      }
+    }
+  }
+  .singer-classify{
+    width: 70%;
+    margin-left: 15%;
+    .singer-type-container{
+      margin-top: 20px;
+    }
+    .title{
+      background: #31c27c;
+      color: white;
+      padding: 10px 5px;
+      min-width: 115px;
+      text-align-last: justify;
+      display: inline-block;
+    }
+    .letter,.singer{
+      padding: 0 15px;
+      margin-top: 5px;
+      cursor: pointer;
+      &:hover{
+        color: #31c27c;
+      }
+    }
+  }
+  .singer-name-list{
+    width: 70%;
+    margin-left: 15%;
+    padding: 30px 0 40px 0;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    div{
+      width: 18%;
+      margin-top: 15px;
+      span{
+        &:hover{
+          color: #31c27c;
+          cursor: pointer;
         }
       }
     }

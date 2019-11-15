@@ -15,7 +15,6 @@ export const playerTab = [
   {name: "华语组合", id: 1003},
   {name: "欧美男歌手", id: 2001},
   {name: "欧美女歌手", id: 2002},
-  {name: "欧美男歌手", id: 2001},
   {name: "欧美组合", id: 2003},
   {name: "日本男歌手", id: 6001},
   {name: "日本女歌手", id: 6002},
