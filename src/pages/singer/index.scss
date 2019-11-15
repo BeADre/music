@@ -1,0 +1,42 @@
+.singer-main{
+  width: 100vw;
+  min-width: 1200px;
+  .singer-container{
+    width: 70%;
+    margin-left: 15%;
+    h3{
+      margin: 20px 0 30px 2%;
+      span{
+       background: #31c27c;
+       color: white;
+       padding: 8px;
+       letter-spacing: 1px;
+       font-size: 14px;
+     }
+    }
+    .hot-singer-container{
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      .hot-singer-content{
+        width: 18%;
+        margin-bottom: 40px;
+        text-align: center;
+        img{
+          width: 60%;
+          border-radius: 50%;
+
+        }
+        p{
+          cursor: pointer;
+          margin-top: 15px;
+          &:hover{
+            color: #31c27c;
+          }
+        }
+      }
+    }
+  }
+}
+

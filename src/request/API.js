@@ -19,9 +19,15 @@ const searchApi = {
   search: "/search"
 }
 
+const singerApi = {
+  hotSinger: "/top/artists",
+  singer: "/artist/list"
+}
+
 export default {
   homeApi,
   aboutApi,
   playMusicApi,
-  searchApi
+  searchApi,
+  singerApi,
 }
