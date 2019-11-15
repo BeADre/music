@@ -9,7 +9,7 @@ export default {
       showTotal: total => `共 ${total} 条`,
       current: 1,
       total: 0,
-      pageSize: 20,
+      pageSize: 10,
     },
     isLoading: false
   },
