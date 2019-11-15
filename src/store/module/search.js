@@ -23,7 +23,6 @@ export default {
     },
     * search({payload}) {
       yield put({type:"search/changeState", payload:{isLoading: true }});
-      debugger
       const data = yield call(searchReq, payload);
       let dataName;
       let countName;
@@ -31,6 +30,7 @@ export default {
         case 1 : dataName = "songs";countName = "songCount"; break
         case 10: dataName = "albums"; countName = "albumCount"; break
         case 1000: dataName = "playlists"; countName = "playlistCount"; break
+        case 1004: dataName = "mvs"; countName = "mvCount"; break
       }
       if (data) {
         yield put({

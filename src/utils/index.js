@@ -1,4 +1,6 @@
 // 歌曲时长的时间戳转化函数
+import React from "react";
+
 const unitTime = time => {
   if(!time) return `00:00`
   let minute = new Date(time).getMinutes();
@@ -30,8 +32,16 @@ const unitCount = count => {
   }
 };
 
+const keywordFormat = (str = "", keyword) => {
+  return str.includes(keyword) ?
+    <span>{str.slice(0,str.indexOf(keyword))}
+      <span style={{color: "#31c27c"}}>{keyword}</span>
+      {str.slice(str.indexOf(keyword) + keyword.length)}</span> : str
+}
+
 export default {
   unitTime,
   formatTime,
-  unitCount
+  unitCount,
+  keywordFormat
 }

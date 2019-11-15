@@ -70,7 +70,7 @@ const Home = ({home,history,dispatch}) => {
           <div key={value.id} className="slideContent">
             <div className="slideContent-top">
               <div className="slide-keep">
-                <span className="iconfont icon-ziyuan"> </span>
+                <span className="iconfont icon-ziyuan" />
               </div>
               <img src={value.coverImgUrl} alt=""/>
             </div>
@@ -92,7 +92,7 @@ const Home = ({home,history,dispatch}) => {
           <div className="slideContent2" key={value.id}>
             <div className="slideContent-left" onClick={()=>{goToPlayMusic(value.id)}}>
               <div className="slide-keep">
-                <span className="iconfont icon-ziyuan"> </span>
+                <span className="iconfont icon-ziyuan" />
               </div>
               <img src={value.album.picUrl} alt=""/>
             </div>
@@ -126,7 +126,7 @@ const Home = ({home,history,dispatch}) => {
           <div key={value.id} className="slideContent" style={{marginBottom: "20px"}}>
             <div className="slideContent-top">
               <div className="slide-keep">
-                <span className="iconfont icon-ziyuan"> </span>
+                <span className="iconfont icon-ziyuan" />
               </div>
               <img src={value.picUrl} alt=""/>
             </div>
@@ -155,7 +155,7 @@ const Home = ({home,history,dispatch}) => {
           <div className="slideContent" key={value.id} style={{marginBottom: "20px"}}>
             <div className="slideContent-top">
               <div className="slide-keep">
-                <span className="iconfont icon-ziyuan"> </span>
+                <span className="iconfont icon-ziyuan" />
               </div>
               <img src={value.cover} alt=""/>
             </div>
