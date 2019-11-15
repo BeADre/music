@@ -1,0 +1,25 @@
+.prev-button,.next-button{
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 110px;
+  background: rgb(240,240,240);
+  cursor: pointer;
+  transition: 0.5s;
+  z-index: 10;
+  &:hover{
+    background: rgb(225,225,225);
+  }
+  span{
+    font-size: 50px;
+  }
+
+}
+.prev-button{
+  left: -110px;;
+}
+.next-button{
+  right: -110px;
+}
