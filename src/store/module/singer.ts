@@ -7,7 +7,7 @@ export default {
     * hotSinger() {
       const data = yield call(hotSingerReq);
       if (data) {
-        const {artists: hotSinger = []} = data.data
+        const {artists: hotSinger = []} = data.data;
         yield put({
           type: "singer/changeState",
           payload: {
@@ -16,7 +16,7 @@ export default {
         });
       }
     },
-    * singerList({payload}) {
+    * singerList({payload}:any) {
       const data = yield call(singerListReq, payload);
       if (data) {
         yield put({
@@ -29,7 +29,7 @@ export default {
     },
   },
   reducer: {
-    changeState(state, {payload}) {
+    changeState(state:any, {payload}:any) {
       return {...state, ...payload}
     },
   }
