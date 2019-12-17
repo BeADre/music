@@ -4,25 +4,25 @@ const homeApi = {
   newSong: "/top/song",
   newPlate: "/top/album",
   mv: "/mv/all"
-}
+};
 const aboutApi = {
 
-}
+};
 
 const playMusicApi = {
   songDetail: "/song/detail",
   lyric: "/lyric"
-}
+};
 
 const searchApi = {
   hotList: "/search/hot",
   search: "/search"
-}
+};
 
 const singerApi = {
   hotSinger: "/top/artists",
   singer: "/artist/list"
-}
+};
 
 export default {
   homeApi,

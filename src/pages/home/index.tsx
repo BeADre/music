@@ -6,20 +6,20 @@ import {newSongTab, mvTab} from "../../staticData/home";
 import ChangeCarousel from "../../component/ChangeCarousel";
 import "./index.scss"
 
-const Home = ({home, history, dispatch}) => {
-  const {playTab = [], playlist = [], newSong = [], newPlate = [], mv = []} = home
+const Home = ({home = {}, history, dispatch}: any) => {
+  const {playTab = [], playlist = [], newSong = [], newPlate = [], mv = []} = home;
   const choosePlaylist = useRef(null);
   const chooseNewSong = useRef(null);
   const chooseNewPlate = useRef(null);
   const chooseMV = useRef(null);
-  const [state, setState] = useState({
+  const [state, setState]: any = useState({
     tabColorIndexPlaylist: 0,
     tabColorIndexNewSong: 0,
     tabColorIndexMV: 0,
     newSongCat: 0,
     playlistCat: "",
     mvCat: "全部",
-  })
+  });
 
   useEffect(() => {
     dispatch({
@@ -32,7 +32,7 @@ const Home = ({home, history, dispatch}) => {
         limit: 50
       }
     });
-  }, [])
+  }, []);
   useEffect(() => {
     dispatch({
       type: "home/getPlaylist",
@@ -42,7 +42,7 @@ const Home = ({home, history, dispatch}) => {
         limit: 10
       }
     })
-  }, [state.playlistCat])
+  }, [state.playlistCat]);
   useEffect(() => {
     dispatch({
       type: "home/getNewSong",
@@ -50,7 +50,7 @@ const Home = ({home, history, dispatch}) => {
         cat: state.newSongCat,
       }
     })
-  }, [state.newSongCat])
+  }, [state.newSongCat]);
   useEffect(() => {
     dispatch({
       type: "home/getMv",
@@ -58,9 +58,9 @@ const Home = ({home, history, dispatch}) => {
         cat: state.mvCat,
       }
     })
-  }, [state.mvCat])
+  }, [state.mvCat]);
 
-  const getPlaylist = (colorName, catName, i, name) => {
+  const getPlaylist = (colorName: string, catName: string, i: number, name: string): void => {
     setState({
       ...state,
       ...{
@@ -68,9 +68,9 @@ const Home = ({home, history, dispatch}) => {
         [catName]: name
       }
     })
-  }
+  };
 
-  const tab = (tabName, stateProps, valueProps) => {
+  const tab = (tabName: Array<any>, stateProps: Array<string>, valueProps?: any) => {
     return <div className="tab">
       {tabName.map((value, index) =>
         <span
@@ -82,7 +82,7 @@ const Home = ({home, history, dispatch}) => {
           </span>)
       }
     </div>
-  }
+  };
 
   // 第一部分遍历的歌单推荐内容
   const playTabCarousel = () => {
@@ -90,7 +90,7 @@ const Home = ({home, history, dispatch}) => {
     const slideElementArr = [];
     let key = 1;
     while (copyPlaylist.length) {
-      key++
+      key++;
       slideElementArr.push(
         <div className="slide" key={key}>
           {copyPlaylist.splice(0, 5).map(value => (
@@ -111,7 +111,7 @@ const Home = ({home, history, dispatch}) => {
       )
     }
     return slideElementArr
-  }
+  };
 
   // 第二部分遍历的新歌内容
   const newSongCarousel = () => {
@@ -119,7 +119,7 @@ const Home = ({home, history, dispatch}) => {
     const slideElementArr = [];
     let key = 1;
     while (copyNewSong.length) {
-      key++
+      key++;
       slideElementArr.push(
         <div className="slide" key={key}>
           {copyNewSong.splice(0, 9).map((value) =>
@@ -138,7 +138,7 @@ const Home = ({home, history, dispatch}) => {
                     <a href="#" title={value.name}>{value.name}</a>
                   </p>
                   <p>
-                    {value.artists.map((artist, index) =>
+                    {value.artists.map((artist: any, index: number) =>
                       <Fragment key={artist.id}>
                         <a href="">{artist.name}</a>
                         {index === value.artists.length - 1 ? "" : <span>&nbsp;&nbsp;/&nbsp;&nbsp;</span>}
@@ -154,7 +154,7 @@ const Home = ({home, history, dispatch}) => {
       )
     }
     return slideElementArr
-  }
+  };
 
   // 第三部分遍历的歌单推荐内容
   const newPlateCarousel = () => {
@@ -162,7 +162,7 @@ const Home = ({home, history, dispatch}) => {
     const slideElementArr = [];
     let key = 1;
     while (copyNewPlate.length) {
-      key++
+      key++;
       slideElementArr.push(
         <div className="slide" key={key}>
           {copyNewPlate.splice(0, 10).map(value => (
@@ -176,7 +176,7 @@ const Home = ({home, history, dispatch}) => {
               <div className="slideContent-bot">
                 <a href="" title={value.name} className="section-three-name">{value.name}</a>
                 <div className="section-three-art">
-                  {value.artists.map((artist, index) =>
+                  {value.artists.map((artist: any, index: number) =>
                     <Fragment key={artist.id}>
                       <p>{artist.name}</p>
                       {index === value.artists.length - 1 ? "" : <span>&nbsp;&nbsp;/&nbsp;&nbsp;</span>}
@@ -190,7 +190,7 @@ const Home = ({home, history, dispatch}) => {
       )
     }
     return slideElementArr
-  }
+  };
 
   // 第四部分遍历的歌单推荐内容
   const mvCarousel = () => {
@@ -198,7 +198,7 @@ const Home = ({home, history, dispatch}) => {
     const slideElementArr = [];
     let key = 1;
     while (copyMv.length) {
-      key++
+      key++;
       slideElementArr.push(<div className="slide" key={key}>
         {copyMv.splice(0, 10).map(value =>
           <div className="slideContent" key={value.id} style={{marginBottom: "20px"}}>
@@ -223,9 +223,9 @@ const Home = ({home, history, dispatch}) => {
       </div>)
     }
     return slideElementArr
-  }
+  };
 
-  const slideContainer = (refEle, mapFn) => {
+  const slideContainer = (refEle: any, mapFn: any) => {
     return <div className="slide-container">
       <ChangeCarousel refEle={refEle}/>
       <Carousel ref={refEle}>
@@ -233,7 +233,7 @@ const Home = ({home, history, dispatch}) => {
       </Carousel>
     </div>
 
-  }
+  };
   return (
     <div className="home-container">
       <div className="recommend-playlist">
@@ -260,8 +260,8 @@ const Home = ({home, history, dispatch}) => {
       </div>
     </div>
   )
-}
+};
 
-const mapState = (state) => (state);
+const mapState = (state: any) => (state);
 
 export default connect(mapState)(Home);

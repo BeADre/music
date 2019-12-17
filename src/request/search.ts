@@ -5,6 +5,6 @@ export function hotListReq() {
   return axios.getData(API.searchApi.hotList)
 }
 
-export function searchReq(data) {
+export function searchReq(data:any) {
   return axios.getData(API.searchApi.search,data)
 }

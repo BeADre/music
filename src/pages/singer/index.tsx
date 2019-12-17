@@ -5,7 +5,7 @@ import {connect} from "react-redux";
 import {letterArr, playerTab} from "../../staticData/singer";
 import "./index.scss";
 
-const Singer = ({dispatch, singer}) => {
+const Singer = ({dispatch, singer = {}}:any) => {
   const {hotSinger = [], list = []} = singer;
   const [letter, setLetter] = useState("");
   const [type, setType] = useState(1001);
@@ -24,14 +24,14 @@ const Singer = ({dispatch, singer}) => {
         initial: letter
       }
     })
-  }, [letter, type])
+  }, [letter, type]);
 
   const hotSingerCarousel = () => {
     const copyHotSinger = [...hotSinger];
     const slideElementArr = [];
     let key = 1;
     while (copyHotSinger.length) {
-      key++
+      key++;
       slideElementArr.push(
         <div className="hot-singer-container" key={key}>
           {copyHotSinger.splice(0, 10).map(value => (
@@ -44,7 +44,7 @@ const Singer = ({dispatch, singer}) => {
       )
     }
     return slideElementArr
-  }
+  };
 
   return (
     <div className="singer-main">
@@ -76,13 +76,13 @@ const Singer = ({dispatch, singer}) => {
           </div>
         </div>
         <div className="singer-name-list">
-          {list.map(value => <div key={value.id}><span>{value.name}</span></div>)}
+          {list.map((value:any) => <div key={value.id}><span>{value.name}</span></div>)}
         </div>
       </div>
     </div>
   )
-}
+};
 
-const mapState = (state) => (state);
+const mapState = (state:any) => (state);
 
 export default connect(mapState)(Singer)

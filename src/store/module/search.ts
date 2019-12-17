@@ -6,7 +6,7 @@ export default {
     pagination: {
       showSizeChanger: true,
       showQuickJumper: true,
-      showTotal: total => `共 ${total} 条`,
+      showTotal: (total: number) => `共 ${total} 条`,
       current: 1,
       total: 0,
       pageSize: 10,
@@ -21,24 +21,24 @@ export default {
         yield put({type: "search/changeState", payload: {hots}});
       }
     },
-    * search({payload}) {
+    * search({payload}: any) {
       yield put({type: "search/changeState", payload: {isLoading: true}});
       const data = yield call(searchReq, payload);
-      let dataName;
-      let countName;
+      let dataName: string = "";
+      let countName: string = "";
       switch (payload.type) {
         case 1 :
           dataName = "songs";
           countName = "songCount";
-          break
+          break;
         case 10:
           dataName = "albums";
           countName = "albumCount";
-          break
+          break;
         case 1000:
           dataName = "playlists";
           countName = "playlistCount";
-          break
+          break;
         case 1004:
           dataName = "mvs";
           countName = "mvCount";
@@ -61,11 +61,11 @@ export default {
     },
   },
   reducer: {
-    changeState(state, {payload}) {
+    changeState(state: any, {payload}: any) {
       return {...state, ...payload}
     },
-    search_Reducer(state, {payload}) {
-      const {list, pagination} = payload
+    search_Reducer(state: any, {payload}: any) {
+      const {list, pagination} = payload;
       return {
         ...state,
         list,

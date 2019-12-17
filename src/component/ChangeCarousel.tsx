@@ -1,7 +1,7 @@
 import React from "react";
 import "./index.scss";
 
-export default function ({refEle}) {
+export default function ({refEle}: any) {
   return (
     <>
       <div className="prev-button" onClick={() => refEle.current.prev()}>

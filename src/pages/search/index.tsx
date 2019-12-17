@@ -1,14 +1,14 @@
 import React, {useState, useEffect} from "react"
-import {Input, Tabs, Table,Spin,Avatar,Pagination,Icon } from "antd";
+import {Input, Tabs, Table, Spin, Avatar, Pagination, Icon} from "antd";
 import {connect} from "react-redux"
 import {searchTab} from "../../staticData/search"
 import moment from "moment"
 import utils from "../../utils"
 import "./index.scss"
 
-const { TabPane } = Tabs;
-const Search = ({search, dispatch, history}) => {
-  const {hots = [], pagination, list = [], isLoading} = search
+const {TabPane} = Tabs;
+const Search = ({search = {}, dispatch, history}: any) => {
+  const {hots = [], pagination, list = [], isLoading} = search;
   const initSearch = decodeURI(window.location.search.split("=")[1]);
   const [keywords, setKeywords] = useState(initSearch);
   const [limit, setLimit] = useState(10);
@@ -31,9 +31,9 @@ const Search = ({search, dispatch, history}) => {
         type
       }
     })
-  }, [keywords,limit,offset,type]);
+  }, [keywords, limit, offset, type]);
 
-  const hotListClick = title => {
+  const hotListClick = (title: string): void => {
     setLimit(10);
     setOffset(0);
     setType(1);
@@ -41,71 +41,80 @@ const Search = ({search, dispatch, history}) => {
     setIptValue(title);
   };
 
-  const changePagination = (pagination,isMv) => {
-    if(!isMv){
+  const changePagination = (pagination: any, isMv?: boolean): void => {
+    if (!isMv) {
       const {current, pageSize} = pagination;
       setLimit(pageSize);
       setOffset(current - 1);
-    }else {
+    } else {
       setLimit(12);
       setOffset(pagination - 1);
     }
   };
 
-  const changeTabs = activeKey =>{
+  const changeTabs = (activeKey: string | number) => {
     const limitNum = +activeKey === 1004 ? 12 : 10;
     setType(+activeKey);
     setLimit(limitNum);
     setOffset(0);
   };
 
-  const tabPanel1 = (type) => {
-    let  columns;
-    if(type === 1){
-      columns =  [
+  const tabPanel1 = (type: number) => {
+    let columns;
+    if (type === 1) {
+      columns = [
         {
           title: "歌曲",
           dataIndex: "name",
-          render: text => <span className="hover-column" onClick={() => {setIptValue(text);setKeywords(text)}}>
-            {utils.keywordFormat(text,keywords)}
+          render: (text: any) => <span className="hover-column" onClick={() => {
+            setIptValue(text);
+            setKeywords(text)
+          }}>
+            {utils.keywordFormat(text, keywords)}
           </span>
         },
         {
           title: "歌手",
           dataIndex: "artists",
-          render: text => {
+          render: (text: any) => {
             return <div>
-              {text.map((v,i) =>{return i === text.length - 1 ?
-                <span className="hover-column" key={v.id} onClick={()=>hotListClick(v.name)}>
-                   {utils.keywordFormat(v.name,keywords)}
-                </span>:
-                <span
-                  onClick={()=>hotListClick(v.name)}
-                  className="hover-column" key={v.id}>{utils.keywordFormat(v.name,keywords)} /</span>})}
+              {text.map((v: any, i: number) => {
+                return i === text.length - 1 ?
+                  <span className="hover-column" key={v.id} onClick={() => hotListClick(v.name)}>
+                   {utils.keywordFormat(v.name, keywords)}
+                </span> :
+                  <span
+                    onClick={() => hotListClick(v.name)}
+                    className="hover-column" key={v.id}>{utils.keywordFormat(v.name, keywords)} /</span>
+              })}
             </div>
           }
         },
         {
           title: "专辑",
           dataIndex: "album.name",
-          render: text => <span className="hover-column"
-                                onClick={() => {setIptValue(text);setType(10);setKeywords(text)}}>{text}</span>
-        },{
+          render: (text: any) => <span className="hover-column"
+                                       onClick={() => {
+                                         setIptValue(text);
+                                         setType(10);
+                                         setKeywords(text)
+                                       }}>{text}</span>
+        }, {
           title: "时长",
           dataIndex: "duration",
-          render: text => <span>{utils.unitTime(text)}</span>
+          render: (text: any) => <span>{utils.unitTime(text)}</span>
         },
       ];
-    }else if(type === 10){
-      columns =  [
+    } else if (type === 10) {
+      columns = [
         {
           title: "专辑",
           dataIndex: "name",
-          render: (text,record) => {
+          render: (text: any, record: any) => {
             return <div className="hover-column">
               <Avatar shape="square" src={record.picUrl}/>
               <span style={{marginLeft: 10}}>
-                {utils.keywordFormat(text,keywords)}
+                {utils.keywordFormat(text, keywords)}
               </span>
             </div>
           }
@@ -113,34 +122,36 @@ const Search = ({search, dispatch, history}) => {
         {
           title: "歌手",
           dataIndex: "artists",
-          render: text => {
+          render: (text: any) => {
             return <div>
-              {(text || []).map((v,i) =>{return i === text.length - 1 ?
-                <span key={v.id}>
-                 {utils.keywordFormat(v.name,keywords)}
-                </span>:
-                <span className="hover-column" key={v.id}>
-                  {utils.keywordFormat(v.name,keywords)} /
-                </span>})}
+              {(text || []).map((v: any, i: number) => {
+                return i === text.length - 1 ?
+                  <span key={v.id}>
+                 {utils.keywordFormat(v.name, keywords)}
+                </span> :
+                  <span className="hover-column" key={v.id}>
+                  {utils.keywordFormat(v.name, keywords)} /
+                </span>
+              })}
             </div>
           }
         },
         {
           title: "发行时间",
           dataIndex: "publishTime",
-          render: text => <span>{moment(text).format('YYYY-MM-DD')}</span>
+          render: (text: any) => <span>{moment(text).format('YYYY-MM-DD')}</span>
         }
       ];
-    }else if(type === 1000){
-      columns =  [
+    } else if (type === 1000) {
+      columns = [
         {
           title: "歌单",
           dataIndex: "name",
-          render: (text,record) => {
+          render: (text: any, record: any) => {
             return <div className="hover-column">
               <Avatar shape="square" src={record.coverImgUrl}/>
               <span style={{marginLeft: 10}}>
-                {utils.keywordFormat(text,keywords)}
+                {utils.keywordFormat(text, keywords)}
               </span>
             </div>
           }
@@ -152,7 +163,7 @@ const Search = ({search, dispatch, history}) => {
         {
           title: "收听",
           dataIndex: "playCount",
-          render: text => <span>{utils.unitCount(text)}</span>
+          render: (text: any) => <span>{utils.unitCount(text)}</span>
         }
       ];
     }
@@ -170,7 +181,7 @@ const Search = ({search, dispatch, history}) => {
     )
   };
 
-  const searchHandle = (value) => {
+  const searchHandle = (value: string) => {
     setLimit(10);
     setOffset(0);
     setType(1);
@@ -179,11 +190,11 @@ const Search = ({search, dispatch, history}) => {
   };
 
   const mvContent = () => {
-    return list.map(mv => {
+    return list.map((mv: any) => {
       return <div className="search-content-mv" key={mv.id}>
         <div className="slideContent-top">
           <div className="slide-keep">
-            <span className="iconfont icon-ziyuan" />
+            <span className="iconfont icon-ziyuan"/>
           </div>
           <img src={mv.cover} alt=""/>
         </div>
@@ -193,7 +204,7 @@ const Search = ({search, dispatch, history}) => {
         </div>
       </div>
     })
-  }
+  };
 
   return (
     <div className="search-container">
@@ -202,7 +213,7 @@ const Search = ({search, dispatch, history}) => {
           <Input.Search
             placeholder="搜索音乐、歌单、MV"
             value={iptValue}
-            onChange={(e)=>setIptValue(e.target.value)}
+            onChange={(e) => setIptValue(e.target.value)}
             style={{
               height: "50px",
               fontSize: "16px"
@@ -212,37 +223,38 @@ const Search = ({search, dispatch, history}) => {
           <div className="search-hot">
             <span>热门搜索：</span>
             <p>
-              {hots.slice(0,5).map(value=> <span onClick={()=>hotListClick(value.first)} key={value.first}>{value.first}</span>)}
+              {hots.slice(0, 5).map((value: any) => <span onClick={() => hotListClick(value.first)}
+                                                          key={value.first}>{value.first}</span>)}
             </p>
 
           </div>
         </div>
-        <Icon type="left" className="return-home" onClick={ () => history.push(`/home`)}/>
+        <Icon type="left" className="return-home" onClick={() => history.push(`/home`)}/>
       </div>
       <div className="search-main-content">
         <Tabs
           size={"large"}
           defaultActiveKey="1"
           activeKey={`${type}`}
-          onChange={(activeKey)=>changeTabs(activeKey)}>
-          {searchTab.map(value =>
-             <TabPane tab={value.name} key={value.id}>
-               {type === 1004 ?
-                 <div style={{display: "flex",alignItems: "center",flexDirection: "column"}}>
-                   <div className="search-container-mv">
-                     {mvContent()}
-                   </div>
-                   <Pagination {...pagination} style={{padding: "30px 0 50px 0"}} showSizeChanger={false}
-                               onChange={(pageNumber) => changePagination(pageNumber, true)} />
-                 </div>:tabPanel1(type)}
+          onChange={(activeKey) => changeTabs(activeKey)}>
+          {searchTab.map((value: any) =>
+            <TabPane tab={value.name} key={value.id}>
+              {type === 1004 ?
+                <div style={{display: "flex", alignItems: "center", flexDirection: "column"}}>
+                  <div className="search-container-mv">
+                    {mvContent()}
+                  </div>
+                  <Pagination {...pagination} style={{padding: "30px 0 50px 0"}} showSizeChanger={false}
+                              onChange={(pageNumber) => changePagination(pageNumber, true)}/>
+                </div> : tabPanel1(type)}
             </TabPane>
           )}
         </Tabs>
       </div>
     </div>
   )
-}
+};
 
-const mapState = (state) => (state);
+const mapState = (state: any) => (state);
 
 export default connect(mapState)(Search)
