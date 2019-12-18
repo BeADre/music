@@ -1,4 +1,6 @@
-export const letterArr = function () {
+import InterfaceTab from "./interfaceTab"
+
+export const letterArr = (): Array<string> => {
   let count1 = 0
   const arr = []
 
@@ -9,7 +11,7 @@ export const letterArr = function () {
   return arr
 }
 
-export const playerTab = [
+export const playerTab: Array<InterfaceTab> = [
   {name: "华语男歌手", id: 1001},
   {name: "华语女歌手", id: 1002},
   {name: "华语组合", id: 1003},
