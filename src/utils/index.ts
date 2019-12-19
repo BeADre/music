@@ -37,16 +37,8 @@ const unitCount = (count: number): string | number => {
   }
 };
 
-const keywordFormat = (str = "", keyword: string) => {
-  return str.includes(keyword) ?
-    <span>{str.slice(0, str.indexOf(keyword))}
-      <span style={{color: "#31c27c"}}>{keyword}</span>
-      {str.slice(str.indexOf(keyword) + keyword.length)}</span> : str
-}
-
 export default {
   unitTime,
   formatTime,
   unitCount,
-  keywordFormat
 }
