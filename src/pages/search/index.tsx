@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react"
 import {Input, Tabs, Table, Spin, Avatar, Pagination, Icon} from "antd";
 import {connect} from "react-redux"
 import {searchTab} from "../../staticData/search"
+import KeywordFormat from "../../component/KeywordFormat"
 import moment from "moment"
 import utils from "../../utils"
 import "./index.scss"
@@ -66,11 +67,11 @@ const Search = ({search = {}, dispatch, history}: any) => {
         {
           title: "歌曲",
           dataIndex: "name",
-          render: (text: any) => <span className="hover-column" onClick={() => {
+          render: (text: string) => <span className="hover-column" onClick={() => {
             setIptValue(text);
             setKeywords(text)
           }}>
-            {utils.keywordFormat(text, keywords)}
+            <KeywordFormat text={text} keywords={keywords} />
           </span>
         },
         {
@@ -81,11 +82,14 @@ const Search = ({search = {}, dispatch, history}: any) => {
               {text.map((v: any, i: number) => {
                 return i === text.length - 1 ?
                   <span className="hover-column" key={v.id} onClick={() => hotListClick(v.name)}>
-                   {utils.keywordFormat(v.name, keywords)}
+                    <KeywordFormat text={v.name} keywords={keywords} />
                 </span> :
                   <span
                     onClick={() => hotListClick(v.name)}
-                    className="hover-column" key={v.id}>{utils.keywordFormat(v.name, keywords)} /</span>
+                    className="hover-column" key={v.id}
+                  >
+                    <KeywordFormat text={v.name} keywords={keywords} /> /
+                  </span>
               })}
             </div>
           }
@@ -114,7 +118,7 @@ const Search = ({search = {}, dispatch, history}: any) => {
             return <div className="hover-column">
               <Avatar shape="square" src={record.picUrl}/>
               <span style={{marginLeft: 10}}>
-                {utils.keywordFormat(text, keywords)}
+                <KeywordFormat text={text} keywords={keywords} />
               </span>
             </div>
           }
@@ -127,10 +131,10 @@ const Search = ({search = {}, dispatch, history}: any) => {
               {(text || []).map((v: any, i: number) => {
                 return i === text.length - 1 ?
                   <span key={v.id}>
-                 {utils.keywordFormat(v.name, keywords)}
+                    <KeywordFormat text={v.name} keywords={keywords} />
                 </span> :
                   <span className="hover-column" key={v.id}>
-                  {utils.keywordFormat(v.name, keywords)} /
+                    <KeywordFormat text={v.name} keywords={keywords} /> /
                 </span>
               })}
             </div>
@@ -151,7 +155,7 @@ const Search = ({search = {}, dispatch, history}: any) => {
             return <div className="hover-column">
               <Avatar shape="square" src={record.coverImgUrl}/>
               <span style={{marginLeft: 10}}>
-                {utils.keywordFormat(text, keywords)}
+                <KeywordFormat text={text} keywords={keywords} />
               </span>
             </div>
           }
@@ -200,7 +204,9 @@ const Search = ({search = {}, dispatch, history}: any) => {
         </div>
         <div className="slideContent-bot">
           <a href="">{mv.name}</a>
-          <p>{utils.keywordFormat(mv.artistName, keywords)}</p>
+          <p>
+            <KeywordFormat text={mv.artistName} keywords={keywords} />
+          </p>
         </div>
       </div>
     })
