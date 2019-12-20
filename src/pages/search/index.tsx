@@ -71,7 +71,7 @@ const Search = ({search = {}, dispatch, history}: any) => {
             setIptValue(text);
             setKeywords(text)
           }}>
-            <KeywordFormat text={text} keywords={keywords} />
+            <KeywordFormat text={text} keywords={keywords}/>
           </span>
         },
         {
@@ -82,13 +82,13 @@ const Search = ({search = {}, dispatch, history}: any) => {
               {text.map((v: any, i: number) => {
                 return i === text.length - 1 ?
                   <span className="hover-column" key={v.id} onClick={() => hotListClick(v.name)}>
-                    <KeywordFormat text={v.name} keywords={keywords} />
+                    <KeywordFormat text={v.name} keywords={keywords}/>
                 </span> :
                   <span
                     onClick={() => hotListClick(v.name)}
                     className="hover-column" key={v.id}
                   >
-                    <KeywordFormat text={v.name} keywords={keywords} /> /
+                    <KeywordFormat text={v.name} keywords={keywords}/> /
                   </span>
               })}
             </div>
@@ -118,7 +118,7 @@ const Search = ({search = {}, dispatch, history}: any) => {
             return <div className="hover-column">
               <Avatar shape="square" src={record.picUrl}/>
               <span style={{marginLeft: 10}}>
-                <KeywordFormat text={text} keywords={keywords} />
+                <KeywordFormat text={text} keywords={keywords}/>
               </span>
             </div>
           }
@@ -131,10 +131,10 @@ const Search = ({search = {}, dispatch, history}: any) => {
               {(text || []).map((v: any, i: number) => {
                 return i === text.length - 1 ?
                   <span key={v.id}>
-                    <KeywordFormat text={v.name} keywords={keywords} />
+                    <KeywordFormat text={v.name} keywords={keywords}/>
                 </span> :
                   <span className="hover-column" key={v.id}>
-                    <KeywordFormat text={v.name} keywords={keywords} /> /
+                    <KeywordFormat text={v.name} keywords={keywords}/> /
                 </span>
               })}
             </div>
@@ -155,7 +155,7 @@ const Search = ({search = {}, dispatch, history}: any) => {
             return <div className="hover-column">
               <Avatar shape="square" src={record.coverImgUrl}/>
               <span style={{marginLeft: 10}}>
-                <KeywordFormat text={text} keywords={keywords} />
+                <KeywordFormat text={text} keywords={keywords}/>
               </span>
             </div>
           }
@@ -205,7 +205,7 @@ const Search = ({search = {}, dispatch, history}: any) => {
         <div className="slideContent-bot">
           <a href="">{mv.name}</a>
           <p>
-            <KeywordFormat text={mv.artistName} keywords={keywords} />
+            <KeywordFormat text={mv.artistName} keywords={keywords}/>
           </p>
         </div>
       </div>
