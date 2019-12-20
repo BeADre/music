@@ -1,9 +1,9 @@
-import {lazy, ReactNode} from "react"
+import {lazy, FunctionComponent} from "react"
 
 // hidden为true时为编程式导航
 interface Router {
   path: string,
-  component: ReactNode,
+  component: FunctionComponent,
   title: string,
   hidden?: boolean
 }

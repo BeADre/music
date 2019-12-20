@@ -1,12 +1,10 @@
 import InterfaceTab from "./interfaceTab"
 
 export const letterArr = (): Array<string> => {
-  let count1 = 0
   const arr = []
 
   for (let i = 65; i < 91; i++) {
     arr.push(String.fromCharCode(i))
-    count1++
   }
   return arr
 }

@@ -8,10 +8,10 @@ import "./index.scss"
 
 const Home = ({home = {}, history, dispatch}: any) => {
   const {playTab = [], playlist = [], newSong = [], newPlate = [], mv = []} = home;
-  const choosePlaylist = useRef(null);
-  const chooseNewSong = useRef(null);
-  const chooseNewPlate = useRef(null);
-  const chooseMV = useRef(null);
+  const choosePlaylist = useRef<HTMLElement | null>(null);
+  const chooseNewSong = useRef<HTMLElement | null>(null);
+  const chooseNewPlate = useRef<HTMLElement | null>(null);
+  const chooseMV = useRef<HTMLElement | null>(null);
   const [state, setState]: any = useState({
     tabColorIndexPlaylist: 0,
     tabColorIndexNewSong: 0,
@@ -225,7 +225,7 @@ const Home = ({home = {}, history, dispatch}: any) => {
     return slideElementArr
   };
 
-  const slideContainer = (refEle: any, mapFn: any) => {
+  const slideContainer = (refEle: any, mapFn: Function) => {
     return <div className="slide-container">
       <ChangeCarousel refEle={refEle}/>
       <Carousel ref={refEle}>

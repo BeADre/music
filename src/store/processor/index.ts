@@ -1,7 +1,7 @@
 import {takeEvery} from "redux-saga/effects";
 
 
-const modulesFiles = require.context("../module/", false, /\.js$/); // 读取所有模块
+const modulesFiles = require.context("../module/", false, /\.ts$/); // 读取所有模块
 // keys {Function} -返回匹配成功模块的名字组成的数组
 const storeModule: any = modulesFiles.keys().reduce((accumulator: any, filename: string): object => {
   const moduleName = filename.replace(/^\.\/(.*)\.\w+$/, '$1');

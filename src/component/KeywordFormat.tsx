@@ -5,7 +5,7 @@ type Props = {
   keywords: string;
 };
 
-const KeywordFormat: React.FunctionComponent<Props> = ({text = "", keywords = ""}) => {
+const KeywordFormat = ({text = "", keywords = ""}: Props) => {
   return text.includes(keywords) ?
     <span>{text.slice(0, text.indexOf(keywords))}
       <span style={{color: "#31c27c"}}>{keywords}</span>

@@ -1,5 +1,4 @@
 // 歌曲时长的时间戳转化函数
-import React from "react";
 
 const unitTime = (time: any): string => {
   if (!time) return `00:00`
