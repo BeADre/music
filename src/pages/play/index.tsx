@@ -86,7 +86,7 @@ const changeTime = (value: any, audio: any): void => {
   audio.current.currentTime = parseInt(`${minUnitTime * value}`)
 };
 
-const Play = ({dispatch, playmusic = {}}: any) => {
+const Play = ({dispatch, playmusic = {}, history}: any) => {
   const {songDetail = {}, lyric = ""} = playmusic;
   const [isPause, setPause] = useState(false); // 控制播放器是否暂停的state
   const [isMute, setMute] = useState(false); // 控制播放器是否静音的state
@@ -120,6 +120,7 @@ const Play = ({dispatch, playmusic = {}}: any) => {
   return (
     <div className="play-container">
       <div className="artist-info-container">
+        <Icon type="left" className="return" onClick={history.goBack}/>
         <div className="img">
           <img src={al.picUrl || ""} alt=""/>
         </div>

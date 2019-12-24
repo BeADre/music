@@ -34,6 +34,7 @@ const Home = ({home = {}, history, dispatch}: any) => {
     });
   }, []);
   useEffect(() => {
+    console.log(233)
     dispatch({
       type: "home/getPlaylist",
       payload: {
@@ -70,12 +71,12 @@ const Home = ({home = {}, history, dispatch}: any) => {
     })
   };
 
-  const tab = (tabName: Array<any>, stateProps: Array<string>, valueProps?: any) => {
+  const tab = (tabName: Array<any>, stateProps: Array<string>) => {
     return <div className="tab">
       {tabName.map((value, index) =>
         <span
           key={value.id || index}
-          onClick={() => getPlaylist(stateProps[0], stateProps[1], index, value[valueProps])}
+          onClick={() => getPlaylist(stateProps[0], stateProps[1], index, value[stateProps[2]])}
           style={{color: index === state[stateProps[0]] ? "#31c27c" : ""}}
         >
             {value.name || value.title}
@@ -93,8 +94,8 @@ const Home = ({home = {}, history, dispatch}: any) => {
       key++;
       slideElementArr.push(
         <div className="slide" key={key}>
-          {copyPlaylist.splice(0, 5).map(value => (
-            <div key={value.id} className="slideContent">
+          {copyPlaylist.splice(0, 5).map((value,index) => (
+            <div key={index} className="slideContent">
               <div className="slideContent-top">
                 <div className="slide-keep">
                   <span className="iconfont icon-ziyuan"/>
