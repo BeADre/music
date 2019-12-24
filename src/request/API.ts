@@ -11,7 +11,9 @@ const aboutApi = {
 
 const playMusicApi = {
   songDetail: "/song/detail",
-  lyric: "/lyric"
+  lyric: "/lyric",
+  playlistDetail: "/playlist/detail",
+  checkMusic: "/check/music",
 };
 
 const searchApi = {
