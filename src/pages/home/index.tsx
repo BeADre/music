@@ -34,7 +34,6 @@ const Home = ({home = {}, history, dispatch}: any) => {
     });
   }, []);
   useEffect(() => {
-    console.log(233)
     dispatch({
       type: "home/getPlaylist",
       payload: {
@@ -85,6 +84,16 @@ const Home = ({home = {}, history, dispatch}: any) => {
     </div>
   };
 
+  const jumpToPlay = (id: string, isSong: boolean) :void => {
+    history.push({
+      pathname: "/playMusic",
+      state: {
+        isSong,
+        id
+      }
+    })
+  }
+
   // 第一部分遍历的歌单推荐内容
   const playTabCarousel = () => {
     const copyPlaylist = [...playlist];
@@ -94,16 +103,16 @@ const Home = ({home = {}, history, dispatch}: any) => {
       key++;
       slideElementArr.push(
         <div className="slide" key={key}>
-          {copyPlaylist.splice(0, 5).map((value,index) => (
+          {copyPlaylist.splice(0, 5).map((value, index) => (
             <div key={index} className="slideContent">
-              <div className="slideContent-top">
+              <div className="slideContent-top" onClick={()=>jumpToPlay(value.id, false)}>
                 <div className="slide-keep">
                   <span className="iconfont icon-ziyuan"/>
                 </div>
                 <img src={value.coverImgUrl} alt=""/>
               </div>
               <div className="slideContent-bot">
-                <a href="">{value.name}</a>
+                <span>{value.name}</span>
                 <p>播放量：{utils.unitCount(value.playCount)}</p>
               </div>
             </div>
@@ -125,9 +134,7 @@ const Home = ({home = {}, history, dispatch}: any) => {
         <div className="slide" key={key}>
           {copyNewSong.splice(0, 9).map((value) =>
             <div className="slideContent2" key={value.id}>
-              <div className="slideContent-left" onClick={() => {
-                history.push(`/playMusic?ids=${value.id}`)
-              }}>
+              <div className="slideContent-left" onClick={() => jumpToPlay(value.id, true)}>
                 <div className="slide-keep">
                   <span className="iconfont icon-ziyuan"/>
                 </div>
