@@ -92,7 +92,7 @@ const Home = ({home = {}, history, dispatch}: any) => {
         id
       }
     })
-  }
+  };
 
   // 第一部分遍历的歌单推荐内容
   const playTabCarousel = () => {
