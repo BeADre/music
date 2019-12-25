@@ -1,4 +1,5 @@
-import {call, put, fork} from "redux-saga/effects"
+import {call, put} from "redux-saga/effects"
+import {message} from "antd";
 import {songDetailReq, getLyricReq, getDetailReq, checkReq} from "../../request/playmusic"
 
 type Action = {
@@ -22,7 +23,7 @@ export default {
     * getLyric({payload}: Action) {
       const data = yield call(getLyricReq, payload);
       if (data) {
-        yield put({type: "playmusic/changeState", payload: {lyric: data.data.lrc.lyric}});
+        yield put({type: "playmusic/changeState", payload: {lyric: data.data.lrc ? data.data.lrc.lyric : ""}});
       }
     },
     * check({payload, setState}: Action) {
@@ -37,6 +38,8 @@ export default {
         const playlist = data.data.playlist.tracks;
         if (playlist.length) {
           setState(playlist[0].id)
+        }else {
+          message.error("无法获取当前歌单歌曲")
         }
         yield put({type: "playmusic/changeState", payload: {playlist}});
       }
