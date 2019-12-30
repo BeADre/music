@@ -19,7 +19,7 @@ const Play = ({dispatch, playmusic = {}, history}: any) => {
   const audio = useRef<HTMLAudioElement>(null); // audio标签
   const lyricContent = useRef<HTMLDivElement>(null); // 歌词容器
 
-  const {id, isSong} = history.location.state;
+  const {id, isSong, isAlbum} = history.location.state;
   const {al = {}, ar = []} = songDetail;
   const lrcTimeArr: Array<number> = []; // 存放歌词时间的数组
   const minUnitTime = audio.current ? audio.current.duration / 100 : 0; // 第一次渲染时audio标签并未绑定上
@@ -43,7 +43,15 @@ const Play = ({dispatch, playmusic = {}, history}: any) => {
     if (audio.current) audio.current.volume = 0.5; // 设置初始播放器音量为50
     if (isSong) {
       setSongId(id);
-    } else {
+    }else if(isAlbum){
+      dispatch({
+        type: "playmusic/albumList",
+        payload: {
+          id
+        },
+        setState: setSongId
+      })
+    }else {
       dispatch({
         type: "playmusic/playlistDetail",
         payload: {
