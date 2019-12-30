@@ -24,13 +24,13 @@ const Index = ({location = {}, history}: any) => {
     <Suspense fallback={<div>loading.....</div>}>
       {hiddenRouterArr.includes(pathname) ? null :
         <div className="main-tab">
-          <ul>
-            {Router.map(value => {
-              return value.hidden ? null : <li key={value.title}>
-                <NavLink exact to={value.path} activeStyle={{color: "#31c27c"}}>{value.title}</NavLink>
-              </li>
-            })}
-          </ul>
+          {/*<ul>*/}
+          {/*  {Router.map(value => {*/}
+          {/*    return value.hidden ? null : <li key={value.title}>*/}
+          {/*      <NavLink exact to={value.path} activeStyle={{color: "#31c27c"}}>{value.title}</NavLink>*/}
+          {/*    </li>*/}
+          {/*  })}*/}
+          {/*</ul>*/}
           <div className="search">
             <Search
               placeholder="搜索"

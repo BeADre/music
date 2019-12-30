@@ -84,10 +84,11 @@ const Home = ({home = {}, history, dispatch}: any) => {
     </div>
   };
 
-  const jumpToPlay = (id: string, isSong: boolean) :void => {
+  const jumpToPlay = (id: string, isSong: boolean, isAlbum?: boolean): void => {
     history.push({
       pathname: "/playMusic",
       state: {
+        isAlbum,
         isSong,
         id
       }
@@ -105,7 +106,7 @@ const Home = ({home = {}, history, dispatch}: any) => {
         <div className="slide" key={key}>
           {copyPlaylist.splice(0, 5).map((value, index) => (
             <div key={index} className="slideContent">
-              <div className="slideContent-top" onClick={()=>jumpToPlay(value.id, false)}>
+              <div className="slideContent-top" onClick={() => jumpToPlay(value.id, false)}>
                 <div className="slide-keep">
                   <span className="iconfont icon-ziyuan"/>
                 </div>
@@ -143,7 +144,7 @@ const Home = ({home = {}, history, dispatch}: any) => {
               <div className="slideContent-right">
                 <div className="right-detail">
                   <p>
-                    <a href="#" title={value.name}>{value.name}</a>
+                    <span onClick={() => jumpToPlay(value.id, true)}>{value.name}</span>
                   </p>
                   <p>
                     {value.artists.map((artist: any, index: number) =>
@@ -175,19 +176,23 @@ const Home = ({home = {}, history, dispatch}: any) => {
         <div className="slide" key={key}>
           {copyNewPlate.splice(0, 10).map(value => (
             <div key={value.id} className="slideContent" style={{marginBottom: "20px"}}>
-              <div className="slideContent-top">
+              <div className="slideContent-top" onClick={() => jumpToPlay(value.id, false, true)}>
                 <div className="slide-keep">
                   <span className="iconfont icon-ziyuan"/>
                 </div>
                 <img src={value.picUrl} alt=""/>
               </div>
               <div className="slideContent-bot">
-                <a href="" title={value.name} className="section-three-name">{value.name}</a>
+                <span
+                  onClick={() => jumpToPlay(value.id, false, true)}
+                  className="section-three-name"
+                >
+                  {value.name}
+                </span>
                 <div className="section-three-art">
                   {value.artists.map((artist: any, index: number) =>
                     <Fragment key={artist.id}>
-                      <p>{artist.name}</p>
-                      {index === value.artists.length - 1 ? "" : <span>&nbsp;&nbsp;/&nbsp;&nbsp;</span>}
+                      {index === value.artists.length - 1 ? <p>{artist.name}</p> : <p>{artist.name}/</p>}
                     </Fragment>
                   )}
                 </div>
@@ -217,13 +222,20 @@ const Home = ({home = {}, history, dispatch}: any) => {
               <img src={value.cover} alt=""/>
             </div>
             <div className="slideContent-bot">
-              <a href=""
-                 title={value.name}
-                 className="section-four-name">{value.name}</a>
+              <span className="section-four-name">{value.name}</span>
               <p className="section-four-art">{value.artistName}</p>
-              <p>
+              <p style={{marginTop: 20}}>
                 <Icon type="video-camera"/>
-                <span style={{marginLeft: "5px"}}>{utils.unitCount(value.playCount)}</span>
+                <span
+                  style={{
+                    marginLeft: "5px",
+                    display: "inline",
+                    cursor: "auto",
+                    color: "#999"
+                  }}
+                >
+                  {utils.unitCount(value.playCount)}
+                </span>
               </p>
             </div>
           </div>

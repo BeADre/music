@@ -14,6 +14,7 @@ const playMusicApi = {
   lyric: "/lyric",
   playlistDetail: "/playlist/detail",
   checkMusic: "/check/music",
+  albumList: "/album",
 };
 
 const searchApi = {

@@ -34,6 +34,13 @@ export function checkReq({id}: Partial<Params>) {
   return axios.getData(API.playMusicApi.checkMusic, params)
 }
 
+export function getAlbumList({id}: Partial<Params>) {
+  const params = {
+    id
+  };
+  return axios.getData(API.playMusicApi.albumList, params)
+}
+
 
 
 

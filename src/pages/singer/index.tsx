@@ -5,7 +5,7 @@ import {connect} from "react-redux";
 import {letterArr, playerTab} from "../../staticData/singer";
 import "./index.scss";
 
-const Singer = ({dispatch, singer = {}}:any) => {
+const Singer = ({dispatch, singer = {}}: any) => {
   const {hotSinger = [], list = []} = singer;
   const [letter, setLetter] = useState("");
   const [type, setType] = useState(1001);
@@ -76,13 +76,13 @@ const Singer = ({dispatch, singer = {}}:any) => {
           </div>
         </div>
         <div className="singer-name-list">
-          {list.map((value:any) => <div key={value.id}><span>{value.name}</span></div>)}
+          {list.map((value: any) => <div key={value.id}><span>{value.name}</span></div>)}
         </div>
       </div>
     </div>
   )
 };
 
-const mapState = (state:any) => (state);
+const mapState = (state: any) => (state);
 
 export default connect(mapState)(Singer)
