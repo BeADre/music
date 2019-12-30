@@ -9,11 +9,11 @@ const Play = ({dispatch, playmusic = {}, history}: any) => {
   const [controlProps, setControlProps] = useState({
     isPause: false, // 是否暂停
     isMute: false // 是否静音
-  })
+  });
   const [songProps, setSongProps] = useState({
     activeLine: "lyric0", //  当前正在播放的歌词的类名(行数)
     currentTime: 0, // 当前播放时间
-  })
+  });
   const [songId, setSongId] = useState(""); // 播放歌曲的ID
   const [hasCopyright, setHasCopyright] = useState(undefined); // 播放歌曲是否有版权
   const audio = useRef<HTMLAudioElement>(null); // audio标签
@@ -59,13 +59,15 @@ const Play = ({dispatch, playmusic = {}, history}: any) => {
       message.error("亲爱的,暂无版权");
     }
     if (songId) {
-      dispatch({
-        type: "playmusic/check",
-        payload: {
-          id: songId
-        },
-        setState: setHasCopyright
-      });
+      if (hasCopyright === undefined) {
+        dispatch({
+          type: "playmusic/check",
+          payload: {
+            id: songId
+          },
+          setState: setHasCopyright
+        });
+      }
       if (hasCopyright) {
         dispatch({
           type: "playmusic/songDetail",
@@ -144,12 +146,20 @@ const Play = ({dispatch, playmusic = {}, history}: any) => {
       message.error("亲爱的,暂无版权");
       return false
     }
-    const minUnitTime: number = (current as HTMLAudioElement).duration / 100;
+    let minUnitTime: number = (current as HTMLAudioElement).duration / 100;
+    if (isNaN(minUnitTime)) minUnitTime = 0;
     (current as HTMLAudioElement).currentTime = parseInt(`${minUnitTime * value}`)
   };
 
   // 切换下一曲
-  const checkSong = (order: string): void => {
+  const checkSong = (order: string): void | false => {
+    if (isSong) {
+      setSongProps({...songProps, ...{currentTime: 0}});
+      const {current} = audio;
+      (current as HTMLAudioElement).currentTime = 0;
+      (current as HTMLAudioElement).play();
+      return false
+    }
     const playIndex = playlist.findIndex((value: any) => value.id === songId);
     if (order === "next") {
       if (playIndex === playlist.length - 1) {
@@ -166,7 +176,7 @@ const Play = ({dispatch, playmusic = {}, history}: any) => {
     }
 
   };
-  
+
 
   return (
     <div className="play-container">
@@ -199,6 +209,7 @@ const Play = ({dispatch, playmusic = {}, history}: any) => {
         <Icon type="step-forward" onClick={() => checkSong("next")}/>
         <div className="slider-container">
           <Slider defaultValue={0}
+                  disabled={hasCopyright === false}
                   value={Math.ceil(songProps.currentTime / minUnitTime)}
                   tooltipVisible={false}
                   onChange={value => changeTime(value as number)}/>
@@ -215,14 +226,19 @@ const Play = ({dispatch, playmusic = {}, history}: any) => {
         </div>
       </div>
       <audio src={`https://music.163.com/song/media/outer/url?id=${songId}.mp3`}
-             autoPlay
+             autoPlay={true}
              ref={audio}
              onEnded={() => checkSong("next")}
              onTimeUpdate={e => timeUpdate(e)}/>
       <div className="songList">
         <div style={{height: 84}}/>
         {playlist.map((value: any, index: number) =>
-          <div className="songItem" key={value.id} onClick={() => setSongId(value.id)}>
+          <div className="songItem" key={value.id}
+               onClick={() => {
+                 setSongId(value.id);
+                 setSongProps({...songProps, ...{currentTime: 0}})
+               }}
+          >
             <div className="songItemLeft">
               <span style={{width: 33}}>{index + 1}</span>
               <div className="leftName">
@@ -241,7 +257,7 @@ const Play = ({dispatch, playmusic = {}, history}: any) => {
                 style={{marginRight: 10, visibility: songId === value.id ? "visible" : "hidden"}}
                 alt=""
               />
-              <Icon type="delete" className="songItemDelete"/>
+              {/*<Icon type="delete" className="songItemDelete"/>*/}
             </div>
           </div>
         )}
