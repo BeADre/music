@@ -115,7 +115,6 @@ const Play = ({dispatch, playmusic = {}, history}: any) => {
   };
 
   /**
-   *
    * @param controlType {String} 需要改变的control类型
    * @param hasCopyright {boolean} 歌曲是否授权
    */
@@ -129,11 +128,6 @@ const Play = ({dispatch, playmusic = {}, history}: any) => {
       (current as HTMLAudioElement).paused ? (current as HTMLAudioElement).play() : (current as HTMLAudioElement).pause();
       setControlProps({...controlProps, ...{isPause: (current as HTMLAudioElement).paused}})
     } else {
-      if ((current as HTMLAudioElement).muted) {
-        (current as HTMLAudioElement).volume = 0.5
-      } else {
-        (current as HTMLAudioElement).volume = 0
-      }
       (current as HTMLAudioElement).muted = !(current as HTMLAudioElement).muted;
       setControlProps({...controlProps, ...{isMute: (current as HTMLAudioElement).muted}})
     }
