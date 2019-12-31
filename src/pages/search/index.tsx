@@ -6,7 +6,6 @@ import KeywordFormat from "../../component/KeywordFormat"
 import moment from "moment"
 import utils from "../../utils"
 import "./index.scss"
-import {object} from "prop-types";
 
 const {TabPane} = Tabs;
 const Search = ({search = {}, dispatch, history}: any) => {
@@ -67,10 +66,6 @@ const Search = ({search = {}, dispatch, history}: any) => {
     });
   };
 
-  const jumpToPlay = (text: string): void => {
-
-  }
-
   const tabPanel1 = (type: number) => {
     let columns;
     if (type === 1) {
@@ -86,7 +81,7 @@ const Search = ({search = {}, dispatch, history}: any) => {
         {
           title: "歌手",
           dataIndex: "artists",
-          render: (text: any) => {
+          render: (text: Array<any>) => {
             return <div>
               {text.map((v: any, i: number) => {
                 return i === text.length - 1 ?
@@ -120,7 +115,7 @@ const Search = ({search = {}, dispatch, history}: any) => {
         }, {
           title: "时长",
           dataIndex: "duration",
-          render: (text: any) => <span>{utils.unitTime(text)}</span>
+          render: (text: number) => <span>{utils.unitTime(text)}</span>
         },
       ];
     } else if (type === 10) {
@@ -128,19 +123,21 @@ const Search = ({search = {}, dispatch, history}: any) => {
         {
           title: "专辑",
           dataIndex: "name",
-          render: (text: any, record: any) => {
-            return <div className="hover-column">
-              <Avatar shape="square" src={record.picUrl}/>
-              <span style={{marginLeft: 10}}>
-                <KeywordFormat text={text} keywords={keywordsState.keywords}/>
-              </span>
-            </div>
+          render: (text: string, record: any) => {
+            return (
+              <div className="hover-column" onClick={() => utils.jumpToPlay(history, record.id, false, true)}>
+                <Avatar shape="square" src={record.picUrl}/>
+                <span style={{marginLeft: 10}}>
+                  <KeywordFormat text={text} keywords={keywordsState.keywords}/>
+                </span>
+              </div>
+            )
           }
         },
         {
           title: "歌手",
           dataIndex: "artists",
-          render: (text: any) => {
+          render: (text: Array<any>) => {
             return <div>
               {(text || []).map((v: any, i: number) => {
                 return i === text.length - 1 ?
@@ -157,7 +154,7 @@ const Search = ({search = {}, dispatch, history}: any) => {
         {
           title: "发行时间",
           dataIndex: "publishTime",
-          render: (text: any) => <span>{moment(text).format('YYYY-MM-DD')}</span>
+          render: (text: number) => <span>{moment(text).format('YYYY-MM-DD')}</span>
         }
       ];
     } else if (type === 1000) {
@@ -165,7 +162,7 @@ const Search = ({search = {}, dispatch, history}: any) => {
         {
           title: "歌单",
           dataIndex: "name",
-          render: (text: any, record: any) => {
+          render: (text: string, record: any) => {
             return <div className="hover-column">
               <Avatar shape="square" src={record.coverImgUrl}/>
               <span style={{marginLeft: 10}}>
@@ -181,7 +178,7 @@ const Search = ({search = {}, dispatch, history}: any) => {
         {
           title: "收听",
           dataIndex: "playCount",
-          render: (text: any) => <span>{utils.unitCount(text)}</span>
+          render: (text: number) => <span>{utils.unitCount(text)}</span>
         }
       ];
     }
@@ -221,7 +218,7 @@ const Search = ({search = {}, dispatch, history}: any) => {
           <img src={mv.cover} alt=""/>
         </div>
         <div className="slideContent-bot">
-          <a href="">{mv.name}</a>
+          <a>{mv.name}</a>
           <p>
             <KeywordFormat text={mv.artistName || ""} keywords={keywordsState.keywords}/>
           </p>

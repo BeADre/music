@@ -1,18 +1,18 @@
 import { History, LocationState } from "history"
 
 // 歌曲时长的时间戳转化函数
-const unitTime = (time: any): string => {
-  if (!time) return `00:00`
+const unitTime = (time: number): string => {
+  if (!time) return `00:00`;
   let minute: string | number = new Date(time).getMinutes();
   let second: string | number = new Date(time).getSeconds();
   minute = minute < 10 ? `0${minute}` : `${minute}`;
   second = second < 10 ? `0${second}` : `${second}`;
   return `${minute}:${second}`
-}
+};
 
 // 当前歌曲时长的秒数转换
-const formatTime = (time: any): string => {
-  let integerTime = parseInt(time);
+const formatTime = (time: number | string): string => {
+  let integerTime = parseInt(time as string);
   let minute: string | number = Math.floor(integerTime / 60);
   // 取得秒对60的余数，既得到秒数
   let second: string | number = integerTime % 60;
@@ -20,7 +20,7 @@ const formatTime = (time: any): string => {
   minute = minute < 10 ? `0${minute}` : minute;
   second = second < 10 ? `0${second}` : second;
   return `${minute}:${second}`;
-}
+};
 
 // 播放量转化函数
 const unitCount = (count: number): string | number => {

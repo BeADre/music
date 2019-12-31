@@ -1,13 +1,13 @@
 import InterfaceTab from "./interfaceTab"
 
 export const letterArr = (): Array<string> => {
-  const arr = []
+  const arr = [];
 
   for (let i = 65; i < 91; i++) {
     arr.push(String.fromCharCode(i))
   }
-  return arr
-}
+  return arr;
+};
 
 export const playerTab: Array<InterfaceTab> = [
   {name: "华语男歌手", id: 1001},
@@ -26,4 +26,4 @@ export const playerTab: Array<InterfaceTab> = [
   {name: "其他女歌手", id: 4002},
   {name: "其他组合", id: 4003},
   {name: "入驻歌手", id: 5001},
-]
+];

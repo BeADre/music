@@ -1,181 +1,201 @@
-.play-container{
-  width: 100vw;
-  min-width: 1200px;
-  padding: 1px;
-  min-height: 100vh;
-  background: rgb(27,27,28);
+.play-main-container{
+  background-color: rgb(82, 56, 79);
   position: relative;
-  .artist-info-container{
-    display: flex;
+  .play-container{
+    width: 100vw;
+    min-width: 1200px;
+    padding: 1px;
+    min-height: 100vh;
+    background: rgba(27,27,28,.3);
+    z-index: 2;
     position: relative;
-    .return{
-      position: absolute;
-      color: rgb(210,210,210);
-      font-size: 26px;
-      left: 2%;
-      top: 15%;
-      cursor: pointer;
-      &:hover{
-        color: white;
-      }
-    }
-    .img{
-      overflow: hidden;
-      border-radius: 50%;
-      margin: 50px 0 0 100px;
-      animation:rotateAni 18s linear infinite;
-      img{
-        width: 150px;
-        height: 150px;
-      }
-    }
-    @keyframes rotateAni
-    {
-      from {transform:rotate(0);}
-      to {transform:rotate(360deg);}
-    }
-    .info{
-      margin: 65px 0 0 15px;
-      h3,h2{
-        color: #d2d2d2;
-      }
-    }
-  }
-  .lyrics-display-box{
-    width: 70%;
-    height: 500px;
-    overflow: hidden;
-    box-sizing: content-box;
-    margin: 0 0 0 15%;
-    mask-image: linear-gradient(
-                    to bottom,rgba(255,255,255,0) 0,
-                    rgba(255,255,255,.6) 15%,
-                    rgba(255,255,255,1) 25%,
-                    rgba(255,255,255,1) 75%,
-                    rgba(255,255,255,.6) 85%,
-                    rgba(255,255,255,0) 100%);
-    .lyrics-content{
-      width: 90%;
-      margin-left: 5%;
-      transform: translateY(250px);
-      transition-duration: 600ms;
-      color: white;
-      font-size: 30px;
-      p{
-        text-align: center;
-      }
-    }
-  }
-  .player{
-    margin-top: 5%;
-    width: 86%;
-    margin-left: 7%;
-    font-size: 40px;
-    color: rgb(210,210,210);
-    display: flex;
-    align-items: center;
-    height: 60px;
-    i{
-      cursor: pointer;
-      margin-right: 15px;
-      &:hover{
-        color: white;
-      }
-    }
-    .anticon-step-backward{
-      margin-left: 1.5%;
-    }
-    .anticon-download{
-      font-size: 30px;
-      margin-right: 0;
-    }
-    :nth-child(2){
-      font-size: 50px;
-    }
-    :nth-child(3){
-      margin-right: 50px;
-    }
-    .slider-container,.voice-container{
-      width: 60%;
-      height: 100%;
+    .artist-info-container{
       display: flex;
-      flex-direction: column;
-      justify-content: center;
-      .ant-slider{
-        margin: 14px 6px 14px;
-      }
-    }
-    .download-tag{
-      margin-right: 30px;
-      color: #d2d2d2;
-      display: flex;
-    }
-    .time-container{
-      height: 100%;
-      display: flex;
-      align-items: center;
-      margin: 0 30px 0 15px;
-      min-width: 110px;
-      span{
-        font-size: 18px;
-      }
-    }
-    .icon-shengyin,.icon-jingyin{
-      font-size: 30px;
-      margin-right: 5px;
-    }
-
-    .voice-container{
-      width: 10%;
-    }
-  }
-  .songList{
-    -webkit-mask-image: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0.6) 15%, white 25%, white 75%, rgba(255, 255, 255, 0.6) 85%, rgba(255, 255, 255, 0) 100%);
-    position: absolute;
-    height: 500px;
-    color: #b9b8b8;
-    width: 350px;
-    right: 0;
-    top: 180px;
-    overflow-y: auto;
-    .songItem{
-      display: flex;
-      align-items: center;
-      margin: 15px 0;
-      cursor: pointer;
-      .songItemLeft{
-        display: flex;
-        align-items: center;
-        .leftName{
-          display: flex;
-          flex-direction: column;
-          width: 200px;
-          span{
-            font-size: 12px;
-            &:first-child{
-              font-size: 16px;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              white-space: nowrap;
-              color: white;
-            }
-          }
+      position: relative;
+      .return{
+        position: absolute;
+        color: rgb(210,210,210);
+        font-size: 26px;
+        left: 2%;
+        top: 15%;
+        cursor: pointer;
+        &:hover{
+          color: white;
         }
       }
-      .songItemDelete{
-        cursor: pointer;
-        :hover{
+      .img{
+        overflow: hidden;
+        border-radius: 50%;
+        margin: 50px 0 0 100px;
+        animation:rotateAni 18s linear infinite;
+        img{
+          width: 150px;
+          height: 150px;
+        }
+      }
+      @keyframes rotateAni
+      {
+        from {transform:rotate(0);}
+        to {transform:rotate(360deg);}
+      }
+      .info{
+        margin: 65px 0 0 15px;
+        h3,h2{
           color: white;
         }
       }
     }
-  }
-  .songList::-webkit-scrollbar {
-    display: none;
-  }
+    .lyrics-display-box{
+      width: 70%;
+      height: 500px;
+      overflow: hidden;
+      box-sizing: content-box;
+      margin: 0 0 0 15%;
+      mask-image: linear-gradient(
+                      to bottom,rgba(255,255,255,0) 0,
+                      rgba(255,255,255,.6) 15%,
+                      rgba(255,255,255,1) 25%,
+                      rgba(255,255,255,1) 75%,
+                      rgba(255,255,255,.6) 85%,
+                      rgba(255,255,255,0) 100%);
+      .lyrics-content{
+        width: 90%;
+        margin-left: 5%;
+        transform: translateY(250px);
+        transition-duration: 600ms;
+        color: white;
+        font-size: 30px;
+        p{
+          text-align: center;
+        }
+      }
+    }
+    .player{
+      margin-top: 5%;
+      width: 86%;
+      margin-left: 7%;
+      font-size: 40px;
+      color: rgb(210,210,210);
+      display: flex;
+      align-items: center;
+      height: 60px;
+      i{
+        cursor: pointer;
+        margin-right: 15px;
+        &:hover{
+          color: white;
+        }
+      }
+      .anticon-step-backward{
+        margin-left: 1.5%;
+      }
+      .anticon-download{
+        font-size: 30px;
+        margin-right: 0;
+      }
+      :nth-child(2){
+        font-size: 50px;
+      }
+      :nth-child(3){
+        margin-right: 50px;
+      }
+      .slider-container,.voice-container{
+        width: 60%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        .ant-slider{
+          margin: 14px 6px 14px;
+        }
+      }
+      .download-tag{
+        margin-right: 30px;
+        color: #d2d2d2;
+        display: flex;
+      }
+      .time-container{
+        height: 100%;
+        display: flex;
+        align-items: center;
+        margin: 0 30px 0 15px;
+        min-width: 110px;
+        span{
+          font-size: 18px;
+        }
+      }
+      .icon-shengyin,.icon-jingyin{
+        font-size: 30px;
+        margin-right: 5px;
+      }
 
+      .voice-container{
+        width: 10%;
+      }
+    }
+    .songList{
+      -webkit-mask-image: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0.6) 15%, white 25%, white 75%, rgba(255, 255, 255, 0.6) 85%, rgba(255, 255, 255, 0) 100%);
+      position: absolute;
+      height: 500px;
+      color: #b9b8b8;
+      width: 350px;
+      right: 0;
+      top: 180px;
+      overflow-y: auto;
+      .songItem{
+        display: flex;
+        align-items: center;
+        margin: 15px 0;
+        cursor: pointer;
+        .songItemLeft{
+          display: flex;
+          align-items: center;
+          .leftName{
+            display: flex;
+            flex-direction: column;
+            width: 200px;
+            span{
+              font-size: 12px;
+              &:first-child{
+                font-size: 16px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                color: white;
+              }
+            }
+          }
+        }
+        .songItemDelete{
+          cursor: pointer;
+          :hover{
+            color: white;
+          }
+        }
+      }
+    }
+    .songList::-webkit-scrollbar {
+      display: none;
+    }
+
+  }
+  .bg-play{
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50%;
+    filter: blur(65px);
+    opacity: .6;
+    width: 100%;
+    height: 100vh;
+    transform: translateZ(0);
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1;
+  }
+  .on{
+    color: #1DA57A
+  }
 }
-.on{
-  color: #1DA57A
-}
+
 

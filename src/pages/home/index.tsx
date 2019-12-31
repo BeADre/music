@@ -138,7 +138,7 @@ const Home = ({home = {}, history, dispatch}: any) => {
                   <p>
                     {value.artists.map((artist: any, index: number) =>
                       <Fragment key={artist.id}>
-                        <a href="">{artist.name}</a>
+                        <a>{artist.name}</a>
                         {index === value.artists.length - 1 ? "" : <span>&nbsp;&nbsp;/&nbsp;&nbsp;</span>}
                       </Fragment>
                     )}
