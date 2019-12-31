@@ -2,13 +2,13 @@ import React, {Suspense} from "react"
 import {NavLink, Route, Switch, Redirect, withRouter} from "react-router-dom";
 import "./index.scss"
 import Router from "../router"
-import {Input} from 'antd';
+import {Input, Spin} from 'antd';
 
 const {Search} = Input;
 const searchHandel = (value: string, history: Array<string>) => {
-  if (!value) return false
+  if (!value) return false;
   history.push(`/search?s=${value}`);
-}
+};
 
 const hiddenRouterArr = Router.reduce((pre: Array<string | undefined>, cur) => {
   if (cur.hidden) {
@@ -21,7 +21,19 @@ const Index = ({location = {}, history}: any) => {
   const {pathname} = location;
   return (
 
-    <Suspense fallback={<div>loading.....</div>}>
+    <Suspense
+      fallback={
+        <div style={{
+          width:"100%",
+          height:"100vh",
+          display:"flex",
+          justifyContent:"center",
+          alignItems:"center"
+        }}>
+          <Spin size="large" />
+        </div>
+      }
+    >
       {hiddenRouterArr.includes(pathname) ? null :
         <div className="main-tab">
           {/*<ul>*/}
@@ -45,5 +57,5 @@ const Index = ({location = {}, history}: any) => {
     </Suspense>
 
   )
-}
+};
 export default withRouter(Index)

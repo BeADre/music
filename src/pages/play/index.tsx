@@ -43,7 +43,7 @@ const Play = ({dispatch, playmusic = {}, history}: any) => {
     if (audio.current) audio.current.volume = 0.5; // 设置初始播放器音量为50
     if (isSong) {
       setSongId(id);
-    }else if(isAlbum){
+    } else if (isAlbum) {
       dispatch({
         type: "playmusic/albumList",
         payload: {
@@ -51,7 +51,7 @@ const Play = ({dispatch, playmusic = {}, history}: any) => {
         },
         setState: setSongId
       })
-    }else {
+    } else {
       dispatch({
         type: "playmusic/playlistDetail",
         payload: {
@@ -76,21 +76,20 @@ const Play = ({dispatch, playmusic = {}, history}: any) => {
           setState: setHasCopyright
         });
       }
-      if (hasCopyright) {
-        dispatch({
-          type: "playmusic/songDetail",
-          payload: {
-            ids: songId
-          }
-        });
-        // 请求歌词
-        dispatch({
-          type: "playmusic/getLyric",
-          payload: {
-            id: songId
-          }
-        });
-      }
+
+      dispatch({
+        type: "playmusic/songDetail",
+        payload: {
+          ids: songId
+        }
+      });
+      // 请求歌词
+      dispatch({
+        type: "playmusic/getLyric",
+        payload: {
+          id: songId
+        }
+      });
     }
   }, [songId, hasCopyright]);
 
@@ -181,91 +180,95 @@ const Play = ({dispatch, playmusic = {}, history}: any) => {
 
 
   return (
-    <div className="play-container">
-      <div className="artist-info-container">
-        <Icon type="left" className="return" onClick={history.goBack}/>
-        <div className="img">
-          <img src={al.picUrl || ""} alt=""/>
+    <div className="play-main-container">
+      <div className="play-container">
+        <div className="artist-info-container">
+          <Icon type="left" className="return" onClick={history.goBack}/>
+          <div className="img">
+            <img src={al.picUrl || ""} alt=""/>
+          </div>
+          <div className="info">
+            <h2>{songDetail.name}</h2>
+            <h3>
+              {ar.map((value: any, index: number) =>
+                // 判断是否为最后一个歌手
+                (index + 1) === ar.length ?
+                  <span key={value.id}>{value.name}</span> :
+                  <span key={value.id}>{value.name}/</span>)}
+            </h3>
+          </div>
         </div>
-        <div className="info">
-          <h2>{songDetail.name}</h2>
-          <h3>
-            {ar.map((value: any, index: number) =>
-              // 判断是否为最后一个歌手
-              (index + 1) === ar.length ?
-                <span key={value.id}>{value.name}</span> :
-                <span key={value.id}>{value.name}/</span>)}
-          </h3>
+        <div className="lyrics-display-box">
+          <div className="lyrics-content" ref={lyricContent}>
+            {formatLyric()}
+          </div>
         </div>
-      </div>
-      <div className="lyrics-display-box">
-        <div className="lyrics-content" ref={lyricContent}>
-          {formatLyric()}
+        <div className="player">
+          <Icon type="step-backward" onClick={() => checkSong("last")}/>
+          {(controlProps.isPause || !hasCopyright) ?
+            <Icon type="caret-right" onClick={() => musicControl("pause", hasCopyright)}/> :
+            <Icon type="pause" onClick={() => musicControl("pause", hasCopyright)}/>}
+          <Icon type="step-forward" onClick={() => checkSong("next")}/>
+          <div className="slider-container">
+            <Slider defaultValue={0}
+                    disabled={hasCopyright === false}
+                    value={Math.ceil(songProps.currentTime / minUnitTime)}
+                    tooltipVisible={false}
+                    onChange={value => changeTime(value as number)}/>
+          </div>
+          <div className="time-container">
+            <span>{utils.formatTime(songProps.currentTime)} / {utils.unitTime(songDetail.dt)}</span>
+          </div>
+          {controlProps.isMute ?
+            <i className="iconfont icon-jingyin" onClick={() => musicControl("mute")}/> :
+            <i className="iconfont icon-shengyin" onClick={() => musicControl("mute")}/>
+          }
+          <div className="voice-container">
+            <Slider defaultValue={50} disabled={false} onChange={value => changeVoice(value as number)}/>
+          </div>
         </div>
-      </div>
-      <div className="player">
-        <Icon type="step-backward" onClick={() => checkSong("last")}/>
-        {(controlProps.isPause || !hasCopyright) ?
-          <Icon type="caret-right" onClick={() => musicControl("pause", hasCopyright)}/> :
-          <Icon type="pause" onClick={() => musicControl("pause", hasCopyright)}/>}
-        <Icon type="step-forward" onClick={() => checkSong("next")}/>
-        <div className="slider-container">
-          <Slider defaultValue={0}
-                  disabled={hasCopyright === false}
-                  value={Math.ceil(songProps.currentTime / minUnitTime)}
-                  tooltipVisible={false}
-                  onChange={value => changeTime(value as number)}/>
-        </div>
-        <div className="time-container">
-          <span>{utils.formatTime(songProps.currentTime)} / {utils.unitTime(songDetail.dt)}</span>
-        </div>
-        {controlProps.isMute ?
-          <i className="iconfont icon-jingyin" onClick={() => musicControl("mute")}/> :
-          <i className="iconfont icon-shengyin" onClick={() => musicControl("mute")}/>
-        }
-        <div className="voice-container">
-          <Slider defaultValue={50} disabled={false} onChange={value => changeVoice(value as number)}/>
-        </div>
-      </div>
-      <audio src={`https://music.163.com/song/media/outer/url?id=${songId}.mp3`}
-             autoPlay={true}
-             ref={audio}
-             onEnded={() => checkSong("next")}
-             onTimeUpdate={e => timeUpdate(e)}/>
-      <div className="songList">
-        <div style={{height: 84}}/>
-        {playlist.map((value: any, index: number) =>
-          <div className="songItem" key={value.id}
-               onClick={() => {
-                 setSongId(value.id);
-                 setSongProps({...songProps, ...{currentTime: 0}})
-               }}
-          >
-            <div className="songItemLeft">
-              <span style={{width: 33}}>{index + 1}</span>
-              <div className="leftName">
-                <span style={{color: songId === value.id ? "#31c27c" : "white"}}>{value.name}</span>
-                <span>{value.ar.map((value1: any, index1: number) =>
-                  // 判断是否为最后一个歌手
-                  (index1 + 1) === value.ar.length ?
-                    <span key={value1.id} style={{fontSize: 12, color: "#b9b8b8"}}>{value1.name}</span> :
-                    <span key={value1.id} style={{fontSize: 12, color: "#b9b8b8"}}>{value1.name}/</span>)}</span>
+        <audio src={`https://music.163.com/song/media/outer/url?id=${songId}.mp3`}
+               autoPlay={true}
+               ref={audio}
+               onEnded={() => checkSong("next")}
+               onTimeUpdate={e => timeUpdate(e)}/>
+        {isSong ? null : <div className="songList">
+          <div style={{height: 84}}/>
+          {playlist.map((value: any, index: number) =>
+            <div className="songItem" key={value.id}
+                 onClick={() => {
+                   setSongId(value.id);
+                   setSongProps({...songProps, ...{currentTime: 0}})
+                 }}
+            >
+              <div className="songItemLeft">
+                <span style={{width: 33}}>{index + 1}</span>
+                <div className="leftName">
+                  <span style={{color: songId === value.id ? "#31c27c" : "white"}}>{value.name}</span>
+                  <span>{value.ar.map((value1: any, index1: number) =>
+                    // 判断是否为最后一个歌手
+                    (index1 + 1) === value.ar.length ?
+                      <span key={value1.id} style={{fontSize: 12, color: "#b9b8b8"}}>{value1.name}</span> :
+                      <span key={value1.id} style={{fontSize: 12, color: "#b9b8b8"}}>{value1.name}/</span>)}</span>
+                </div>
+              </div>
+              <div style={{marginLeft: 20}}>
+
+                <img
+                  src={require("../../asset/wave.gif")}
+                  style={{marginRight: 10, visibility: songId === value.id ? "visible" : "hidden"}}
+                  alt=""
+                />
+                {/*<Icon type="delete" className="songItemDelete"/>*/}
               </div>
             </div>
-            <div style={{marginLeft: 20}}>
-
-              <img
-                src={require("../../asset/wave.gif")}
-                style={{marginRight: 10, visibility: songId === value.id ? "visible" : "hidden"}}
-                alt=""
-              />
-              {/*<Icon type="delete" className="songItemDelete"/>*/}
-            </div>
-          </div>
-        )}
-        <div style={{height: 84}}/>
+          )}
+          <div style={{height: 84}}/>
+        </div>}
       </div>
+      <div className="bg-play" style={{backgroundImage: `url(${al.picUrl})`}}/>
     </div>
+
   )
 };
 

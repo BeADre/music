@@ -17,6 +17,6 @@ const ChangeCarousel =  ({refEle}: Props) => {
       </div>
     </>
   )
-}
+};
 
 export default ChangeCarousel

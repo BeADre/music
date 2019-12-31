@@ -13,6 +13,6 @@ const KeywordFormat = ({text = "", keywords = ""}: Props) => {
       {text.slice(text.indexOf(keywords) + keywords.length)}
     </span> :
     <span>{text}</span>
-}
+};
 
 export default KeywordFormat

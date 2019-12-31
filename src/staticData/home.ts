@@ -6,7 +6,7 @@ export const newSongTab: Array<InterfaceTab> = [
   {name: "欧美", id: 96},
   {name: "日本", id: 8},
   {name: "韩国", id: 16},
-]
+];
 
 export const mvTab: Array<InterfaceTab> = [
   {name: "全部", id: 0},
@@ -15,5 +15,5 @@ export const mvTab: Array<InterfaceTab> = [
   {name: "欧美", id: 96},
   {name: "日本", id: 8},
   {name: "韩国", id: 16},
-]
+];
 
