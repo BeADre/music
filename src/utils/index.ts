@@ -1,5 +1,6 @@
-// 歌曲时长的时间戳转化函数
+import { History, LocationState } from "history"
 
+// 歌曲时长的时间戳转化函数
 const unitTime = (time: any): string => {
   if (!time) return `00:00`
   let minute: string | number = new Date(time).getMinutes();
@@ -36,8 +37,22 @@ const unitCount = (count: number): string | number => {
   }
 };
 
+// 跳转到播放页
+
+const jumpToPlay = (history: History<LocationState>, id: string, isSong: boolean, isAlbum?: boolean): void => {
+  history.push({
+    pathname: "/playMusic",
+    state: {
+      isAlbum,
+      isSong,
+      id
+    }
+  })
+};
+
 export default {
   unitTime,
   formatTime,
   unitCount,
+  jumpToPlay
 }
