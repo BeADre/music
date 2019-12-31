@@ -6,16 +6,21 @@ import KeywordFormat from "../../component/KeywordFormat"
 import moment from "moment"
 import utils from "../../utils"
 import "./index.scss"
+import {object} from "prop-types";
 
 const {TabPane} = Tabs;
 const Search = ({search = {}, dispatch, history}: any) => {
   const {hots = [], pagination, list = [], isLoading} = search;
   const initSearch = decodeURI(window.location.search.split("=")[1]);
-  const [keywords, setKeywords] = useState(initSearch);
-  const [limit, setLimit] = useState(10);
-  const [offset, setOffset] = useState(0);
-  const [type, setType] = useState(1);
-  const [iptValue, setIptValue] = useState(initSearch);
+  const [keywordsState, setKeywordsState] = useState({
+    keywords: initSearch,
+    iptValue: initSearch
+  });
+  const [state, setState] = useState({
+    limit: 10,
+    offset: 0,
+    type: 1,
+  });
 
   useEffect(() => {
     dispatch({
@@ -26,39 +31,45 @@ const Search = ({search = {}, dispatch, history}: any) => {
     dispatch({
       type: "search/search",
       payload: {
-        keywords,
-        limit,
-        offset,
-        type
+        keywords: keywordsState.keywords,
+        ...state
       }
     })
-  }, [keywords, limit, offset, type]);
+  }, [keywordsState.keywords, state.limit, state.offset, state.type]);
 
   const hotListClick = (title: string): void => {
-    setLimit(10);
-    setOffset(0);
-    setType(1);
-    setKeywords(title);
-    setIptValue(title);
+    setState({
+      limit: 10,
+      offset: 0,
+      type: 1
+    });
+    setKeywordsState({
+      keywords: title,
+      iptValue: title
+    })
   };
 
   const changePagination = (pagination: any, isMv?: boolean): void => {
     if (!isMv) {
       const {current, pageSize} = pagination;
-      setLimit(pageSize);
-      setOffset(current - 1);
+      setState({...state, ...{limit: pageSize, offset: current - 1}});
     } else {
-      setLimit(12);
-      setOffset(pagination - 1);
+      setState({...state, ...{limit: 12, offset: pagination - 1}});
     }
   };
 
   const changeTabs = (activeKey: string | number) => {
     const limitNum = +activeKey === 1004 ? 12 : 10;
-    setType(+activeKey);
-    setLimit(limitNum);
-    setOffset(0);
+    setState({
+      type: +activeKey,
+      limit: limitNum,
+      offset: 0
+    });
   };
+
+  const jumpToPlay = (text: string): void => {
+
+  }
 
   const tabPanel1 = (type: number) => {
     let columns;
@@ -67,12 +78,10 @@ const Search = ({search = {}, dispatch, history}: any) => {
         {
           title: "歌曲",
           dataIndex: "name",
-          render: (text: string) => <span className="hover-column" onClick={() => {
-            setIptValue(text);
-            setKeywords(text)
-          }}>
-            <KeywordFormat text={text} keywords={keywords}/>
-          </span>
+          render: (text: string, record: any) =>
+            <span className="hover-column" onClick={() => utils.jumpToPlay(history, record.id, true)}>
+              <KeywordFormat text={text} keywords={keywordsState.keywords}/>
+            </span>
         },
         {
           title: "歌手",
@@ -81,14 +90,14 @@ const Search = ({search = {}, dispatch, history}: any) => {
             return <div>
               {text.map((v: any, i: number) => {
                 return i === text.length - 1 ?
-                  <span className="hover-column" key={v.id} onClick={() => hotListClick(v.name)}>
-                    <KeywordFormat text={v.name} keywords={keywords}/>
-                </span> :
+                  <span key={v.id} onClick={() => hotListClick(v.name)}>
+                    <KeywordFormat text={v.name} keywords={keywordsState.keywords}/>
+                  </span> :
                   <span
                     onClick={() => hotListClick(v.name)}
-                    className="hover-column" key={v.id}
+                    key={v.id}
                   >
-                    <KeywordFormat text={v.name} keywords={keywords}/> /
+                    <KeywordFormat text={v.name} keywords={keywordsState.keywords}/> /
                   </span>
               })}
             </div>
@@ -97,12 +106,17 @@ const Search = ({search = {}, dispatch, history}: any) => {
         {
           title: "专辑",
           dataIndex: "album.name",
-          render: (text: any) => <span className="hover-column"
-                                       onClick={() => {
-                                         setIptValue(text);
-                                         setType(10);
-                                         setKeywords(text)
-                                       }}>{text}</span>
+          render: (text: any) =>
+            <span className="hover-column"
+                  onClick={() => {
+                    setKeywordsState({
+                      keywords: text,
+                      iptValue: text
+                    });
+                    setState({...state, ...{type: 10}});
+                  }}>
+              {text}
+            </span>
         }, {
           title: "时长",
           dataIndex: "duration",
@@ -118,7 +132,7 @@ const Search = ({search = {}, dispatch, history}: any) => {
             return <div className="hover-column">
               <Avatar shape="square" src={record.picUrl}/>
               <span style={{marginLeft: 10}}>
-                <KeywordFormat text={text} keywords={keywords}/>
+                <KeywordFormat text={text} keywords={keywordsState.keywords}/>
               </span>
             </div>
           }
@@ -131,10 +145,10 @@ const Search = ({search = {}, dispatch, history}: any) => {
               {(text || []).map((v: any, i: number) => {
                 return i === text.length - 1 ?
                   <span key={v.id}>
-                    <KeywordFormat text={v.name} keywords={keywords}/>
+                    <KeywordFormat text={v.name} keywords={keywordsState.keywords}/>
                 </span> :
                   <span className="hover-column" key={v.id}>
-                    <KeywordFormat text={v.name} keywords={keywords}/> /
+                    <KeywordFormat text={v.name} keywords={keywordsState.keywords}/> /
                 </span>
               })}
             </div>
@@ -155,7 +169,7 @@ const Search = ({search = {}, dispatch, history}: any) => {
             return <div className="hover-column">
               <Avatar shape="square" src={record.coverImgUrl}/>
               <span style={{marginLeft: 10}}>
-                <KeywordFormat text={text} keywords={keywords}/>
+                <KeywordFormat text={text} keywords={keywordsState.keywords}/>
               </span>
             </div>
           }
@@ -186,11 +200,15 @@ const Search = ({search = {}, dispatch, history}: any) => {
   };
 
   const searchHandle = (value: string) => {
-    setLimit(10);
-    setOffset(0);
-    setType(1);
-    setKeywords(value);
-    setIptValue(value)
+    setState({
+      type: 1,
+      limit: 10,
+      offset: 0
+    });
+    setKeywordsState({
+      keywords: value,
+      iptValue: value
+    });
   };
 
   const mvContent = () => {
@@ -205,7 +223,7 @@ const Search = ({search = {}, dispatch, history}: any) => {
         <div className="slideContent-bot">
           <a href="">{mv.name}</a>
           <p>
-            <KeywordFormat text={mv.artistName} keywords={keywords}/>
+            <KeywordFormat text={mv.artistName || ""} keywords={keywordsState.keywords}/>
           </p>
         </div>
       </div>
@@ -218,8 +236,8 @@ const Search = ({search = {}, dispatch, history}: any) => {
         <div className="search-content">
           <Input.Search
             placeholder="搜索音乐、歌单、MV"
-            value={iptValue}
-            onChange={(e) => setIptValue(e.target.value)}
+            value={keywordsState.iptValue}
+            onChange={(e) => setKeywordsState({...keywordsState, ...{iptValue: e.target.value}})}
             style={{
               height: "50px",
               fontSize: "16px"
@@ -229,8 +247,12 @@ const Search = ({search = {}, dispatch, history}: any) => {
           <div className="search-hot">
             <span>热门搜索：</span>
             <p>
-              {hots.slice(0, 5).map((value: any) => <span onClick={() => hotListClick(value.first)}
-                                                          key={value.first}>{value.first}</span>)}
+              {hots.slice(0, 5).map((value: any) =>
+                <span onClick={() => hotListClick(value.first)}
+                      key={value.first}>
+                  {value.first}
+                </span>
+              )}
             </p>
 
           </div>
@@ -241,18 +263,18 @@ const Search = ({search = {}, dispatch, history}: any) => {
         <Tabs
           size={"large"}
           defaultActiveKey="1"
-          activeKey={`${type}`}
+          activeKey={`${state.type}`}
           onChange={(activeKey) => changeTabs(activeKey)}>
           {searchTab.map((value: any) =>
             <TabPane tab={value.name} key={value.id}>
-              {type === 1004 ?
+              {state.type === 1004 ?
                 <div style={{display: "flex", alignItems: "center", flexDirection: "column"}}>
                   <div className="search-container-mv">
                     {mvContent()}
                   </div>
                   <Pagination {...pagination} style={{padding: "30px 0 50px 0"}} showSizeChanger={false}
                               onChange={(pageNumber) => changePagination(pageNumber, true)}/>
-                </div> : tabPanel1(type)}
+                </div> : tabPanel1(state.type)}
             </TabPane>
           )}
         </Tabs>

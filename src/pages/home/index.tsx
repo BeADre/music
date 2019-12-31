@@ -84,17 +84,6 @@ const Home = ({home = {}, history, dispatch}: any) => {
     </div>
   };
 
-  const jumpToPlay = (id: string, isSong: boolean, isAlbum?: boolean): void => {
-    history.push({
-      pathname: "/playMusic",
-      state: {
-        isAlbum,
-        isSong,
-        id
-      }
-    })
-  };
-
   // 第一部分遍历的歌单推荐内容
   const playTabCarousel = () => {
     const copyPlaylist = [...playlist];
@@ -106,7 +95,7 @@ const Home = ({home = {}, history, dispatch}: any) => {
         <div className="slide" key={key}>
           {copyPlaylist.splice(0, 5).map((value, index) => (
             <div key={index} className="slideContent">
-              <div className="slideContent-top" onClick={() => jumpToPlay(value.id, false)}>
+              <div className="slideContent-top" onClick={() => utils.jumpToPlay(history, value.id, false)}>
                 <div className="slide-keep">
                   <span className="iconfont icon-ziyuan"/>
                 </div>
@@ -135,7 +124,7 @@ const Home = ({home = {}, history, dispatch}: any) => {
         <div className="slide" key={key}>
           {copyNewSong.splice(0, 9).map((value) =>
             <div className="slideContent2" key={value.id}>
-              <div className="slideContent-left" onClick={() => jumpToPlay(value.id, true)}>
+              <div className="slideContent-left" onClick={() => utils.jumpToPlay(history, value.id, true)}>
                 <div className="slide-keep">
                   <span className="iconfont icon-ziyuan"/>
                 </div>
@@ -144,7 +133,7 @@ const Home = ({home = {}, history, dispatch}: any) => {
               <div className="slideContent-right">
                 <div className="right-detail">
                   <p>
-                    <span onClick={() => jumpToPlay(value.id, true)}>{value.name}</span>
+                    <span onClick={() => utils.jumpToPlay(history, value.id, true)}>{value.name}</span>
                   </p>
                   <p>
                     {value.artists.map((artist: any, index: number) =>
@@ -176,7 +165,7 @@ const Home = ({home = {}, history, dispatch}: any) => {
         <div className="slide" key={key}>
           {copyNewPlate.splice(0, 10).map(value => (
             <div key={value.id} className="slideContent" style={{marginBottom: "20px"}}>
-              <div className="slideContent-top" onClick={() => jumpToPlay(value.id, false, true)}>
+              <div className="slideContent-top" onClick={() => utils.jumpToPlay(history, value.id, false, true)}>
                 <div className="slide-keep">
                   <span className="iconfont icon-ziyuan"/>
                 </div>
@@ -184,7 +173,7 @@ const Home = ({home = {}, history, dispatch}: any) => {
               </div>
               <div className="slideContent-bot">
                 <span
-                  onClick={() => jumpToPlay(value.id, false, true)}
+                  onClick={() => utils.jumpToPlay(history, value.id, false, true)}
                   className="section-three-name"
                 >
                   {value.name}
