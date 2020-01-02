@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, Fragment, useMemo} from "react";
+import React, {useState, useEffect, useRef, Fragment, useMemo, ReactNode} from "react";
 import {Carousel, Icon} from "antd";
 import {useSelector, useDispatch} from "react-redux";
 import utils from "../../utils";
@@ -236,11 +236,11 @@ function Home({history}: any) {
     return slideElementArr
   }, [JSON.stringify(mv)]);
 
-  const slideContainer = (refEle: any, mapFn: any) => {
+  const slideContainer = (refEle: any, mapArr: Array<ReactNode | null>) => {
     return <div className="slide-container">
       <ChangeCarousel refEle={refEle}/>
       <Carousel ref={refEle}>
-        {mapFn}
+        {mapArr}
       </Carousel>
     </div>
   };

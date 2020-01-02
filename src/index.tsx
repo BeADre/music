@@ -23,7 +23,7 @@ ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
       <ConfigProvider locale={zhCN}>
-        <Main/>
+        <Main />
       </ConfigProvider>
     </BrowserRouter>
   </Provider>,
