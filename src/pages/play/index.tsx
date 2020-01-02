@@ -24,7 +24,7 @@ const Play = ({dispatch, playmusic = {}, history}: any) => {
   const lrcTimeArr: Array<number> = []; // 存放歌词时间的数组
   const minUnitTime = audio.current ? audio.current.duration / 100 : 0; // 第一次渲染时audio标签并未绑定上
 
-  const memoizedLyric = useMemo(() => {
+  const memorizedLyric = useMemo(() => {
     if (!lyric) return null;
     const lyricArr: Array<any> = [];
     lyric.split("\n").forEach((value: string) => {
@@ -95,10 +95,10 @@ const Play = ({dispatch, playmusic = {}, history}: any) => {
 
   // 格式化歌词
   const formatLyric = (): null | Array<ReactNode> => {
-    if (!memoizedLyric) return null;
-    return Object.keys(memoizedLyric).map((value, index) => {
+    if (!memorizedLyric) return null;
+    return Object.keys(memorizedLyric).map((value, index) => {
       lrcTimeArr.push(parseFloat(value.substr(1, 3)) * 60 + parseFloat(value.substring(4, 10)));
-      return <p key={value} className={songProps.activeLine === `lyric${index}` ? "on" : ""}>{memoizedLyric[value]}</p>;
+      return <p key={value} className={songProps.activeLine === `lyric${index}` ? "on" : ""}>{memorizedLyric[value]}</p>;
     })
   };
 

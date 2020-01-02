@@ -1,4 +1,4 @@
-import React,{RefObject} from "react";
+import React,{RefObject, memo} from "react";
 import "./index.scss";
 import Carousel from "antd/lib/carousel"
 
@@ -19,4 +19,4 @@ const ChangeCarousel =  ({refEle}: Props) => {
   )
 };
 
-export default ChangeCarousel
+export default memo(ChangeCarousel)
