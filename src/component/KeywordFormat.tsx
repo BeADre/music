@@ -1,4 +1,4 @@
-import React from "react";
+import React,{memo} from "react";
 
 type Props = {
   text: string;
@@ -15,4 +15,4 @@ const KeywordFormat = ({text = "", keywords = ""}: Props) => {
     <span>{text}</span>
 };
 
-export default KeywordFormat
+export default memo(KeywordFormat)

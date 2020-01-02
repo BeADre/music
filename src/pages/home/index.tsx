@@ -1,12 +1,14 @@
-import React, {useState, useEffect, useRef, Fragment} from "react";
+import React, {useState, useEffect, useRef, Fragment, useMemo} from "react";
 import {Carousel, Icon} from "antd";
-import {connect} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
 import utils from "../../utils";
 import {newSongTab, mvTab} from "../../staticData/home";
 import ChangeCarousel from "../../component/ChangeCarousel";
 import "./index.scss"
 
-const Home = ({home = {}, history, dispatch}: any) => {
+function Home({history}: any) {
+  const dispatch = useDispatch();
+  const home = useSelector(({home}: any) => home)
   const {playTab = [], playlist = [], newSong = [], newPlate = [], mv = []} = home;
   const choosePlaylist = useRef<HTMLElement | null>(null);
   const chooseNewSong = useRef<HTMLElement | null>(null);
@@ -85,7 +87,7 @@ const Home = ({home = {}, history, dispatch}: any) => {
   };
 
   // 第一部分遍历的歌单推荐内容
-  const playTabCarousel = () => {
+  const memorizedPlay = useMemo(() => {
     const copyPlaylist = [...playlist];
     const slideElementArr = [];
     let key = 1;
@@ -111,10 +113,10 @@ const Home = ({home = {}, history, dispatch}: any) => {
       )
     }
     return slideElementArr
-  };
+  }, [JSON.stringify(playlist)]);
 
   // 第二部分遍历的新歌内容
-  const newSongCarousel = () => {
+  const memorizedSong = useMemo(() => {
     const copyNewSong = [...newSong].splice(0, 45);
     const slideElementArr = [];
     let key = 1;
@@ -152,10 +154,10 @@ const Home = ({home = {}, history, dispatch}: any) => {
       )
     }
     return slideElementArr
-  };
+  }, [JSON.stringify(newSong)]);
 
   // 第三部分遍历的歌单推荐内容
-  const newPlateCarousel = () => {
+  const memorizedPlate = useMemo(() => {
     const copyNewPlate = [...newPlate];
     const slideElementArr = [];
     let key = 1;
@@ -192,10 +194,10 @@ const Home = ({home = {}, history, dispatch}: any) => {
       )
     }
     return slideElementArr
-  };
+  }, [JSON.stringify(newPlate)]);
 
   // 第四部分遍历的歌单推荐内容
-  const mvCarousel = () => {
+  const memorizedMv = useMemo(() => {
     const copyMv = [...mv];
     const slideElementArr = [];
     let key = 1;
@@ -232,45 +234,43 @@ const Home = ({home = {}, history, dispatch}: any) => {
       </div>)
     }
     return slideElementArr
-  };
+  }, [JSON.stringify(mv)]);
 
-  const slideContainer = (refEle: any, mapFn: Function) => {
+  const slideContainer = (refEle: any, mapFn: any) => {
     return <div className="slide-container">
       <ChangeCarousel refEle={refEle}/>
       <Carousel ref={refEle}>
-        {mapFn()}
+        {mapFn}
       </Carousel>
     </div>
-
   };
+
   return (
     <div className="home-container">
       <div className="recommend-playlist">
         <h1>歌单推荐</h1>
         {tab(playTab, ["tabColorIndexPlaylist", "playlistCat", "name"])}
-        {slideContainer(choosePlaylist, playTabCarousel)}
+        {slideContainer(choosePlaylist, memorizedPlay)}
       </div>
 
       <div className="new-song">
         <h1>新歌首发</h1>
         {tab(newSongTab, ["tabColorIndexNewSong", "newSongCat", "id"])}
-        {slideContainer(chooseNewSong, newSongCarousel)}
+        {slideContainer(chooseNewSong, memorizedSong)}
       </div>
 
       <div className="new-plate">
         <h1>新碟首发</h1>
-        {slideContainer(chooseNewPlate, newPlateCarousel)}
+        {slideContainer(chooseNewPlate, memorizedPlate)}
       </div>
 
       <div className="new-MV">
         <h1>MV</h1>
         {tab(mvTab, ["tabColorIndexMV", "mvCat", "name"])}
-        {slideContainer(chooseMV, mvCarousel)}
+        {slideContainer(chooseMV, memorizedMv)}
       </div>
     </div>
   )
 };
 
-const mapState = (state: any) => (state);
-
-export default connect(mapState)(Home);
+export default Home;
