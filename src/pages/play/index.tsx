@@ -1,10 +1,12 @@
 import React, {useState, useEffect, useRef, useMemo, SyntheticEvent, ReactNode} from "react";
 import {Icon, Slider, message} from "antd";
-import {connect} from "react-redux"
+import {useDispatch, useSelector} from "react-redux"
 import utils from "../../utils"
 import "./index.scss"
 
-const Play = ({dispatch, playmusic = {}, history}: any) => {
+function Play({history}: any) {
+  const dispatch = useDispatch();
+  const playmusic = useSelector(({playmusic}: any) => playmusic)
   const {songDetail = {}, lyric = "", playlist = []} = playmusic; // lyric 歌词文本
   const [controlProps, setControlProps] = useState({
     isPause: false, // 是否暂停
@@ -98,7 +100,8 @@ const Play = ({dispatch, playmusic = {}, history}: any) => {
     if (!memorizedLyric) return null;
     return Object.keys(memorizedLyric).map((value, index) => {
       lrcTimeArr.push(parseFloat(value.substr(1, 3)) * 60 + parseFloat(value.substring(4, 10)));
-      return <p key={value} className={songProps.activeLine === `lyric${index}` ? "on" : ""}>{memorizedLyric[value]}</p>;
+      return <p key={value}
+                className={songProps.activeLine === `lyric${index}` ? "on" : ""}>{memorizedLyric[value]}</p>;
     })
   };
 
@@ -272,6 +275,4 @@ const Play = ({dispatch, playmusic = {}, history}: any) => {
   )
 };
 
-const mapState = (state: any) => (state);
-
-export default connect(mapState)(Play);
+export default Play;

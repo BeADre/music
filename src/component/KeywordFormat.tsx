@@ -1,11 +1,11 @@
-import React,{memo} from "react";
+import React, {memo} from "react";
 
 type Props = {
   text: string;
   keywords: string;
 };
 
-const KeywordFormat = ({text = "", keywords = ""}: Props) => {
+function KeywordFormat({text = "", keywords = ""}: Props) {
   return text.includes(keywords) ?
     <span>
       {text.slice(0, text.indexOf(keywords))}

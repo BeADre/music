@@ -1,4 +1,4 @@
-import React,{RefObject, memo} from "react";
+import React, {RefObject, memo} from "react";
 import "./index.scss";
 import Carousel from "antd/lib/carousel"
 
@@ -6,7 +6,7 @@ type Props = {
   refEle: RefObject<Carousel>
 }
 
-const ChangeCarousel =  ({refEle}: Props) => {
+function ChangeCarousel({refEle}: Props) {
   return (
     <>
       <div className="prev-button" onClick={() => (refEle.current as Carousel).prev()}>
