@@ -1,0 +1,33 @@
+.mv-container{
+  min-width: 1200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  position: relative;
+  .mv-bg{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50%;
+    background-image: url(http://p1.music.126.net/ijUg7s_2S8GMbTNsYiepJA==/18676304511774727.jpg);
+    filter: blur(65px);
+    z-index: 1;
+  }
+  .video-box{
+    position: absolute;
+    width: 55%;
+    height: 792px;
+    z-index: 5;
+    border: solid black;
+    border-width: 155px 20px;
+  }
+  video{
+    z-index: 2;
+    width: 55%;
+  }
+}

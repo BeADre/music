@@ -14,7 +14,7 @@ const routerArr: Array<Router> = [
   // {path: "/newDisc", component: lazy(() => import("../pages/newDisc")), title: "新碟"},
   // {path: "/rank", component: lazy(() => import("../pages/rank")), title: "排行榜"},
   // {path: "/playlist", component: lazy(() => import("../pages/playlist")), title: "分类歌单"},
-  {path: "/MV", component: lazy(() => import("../pages/MV")), title: "MV"},
+  {path: "/MV", component: lazy(() => import("../pages/MV")), title: "MV", hidden: true},
   {path: "/playMusic", component: lazy(() => import("../pages/play")), title: "播放页", hidden: true},
   {path: "/search", component: lazy(() => import("../pages/search")), title: "搜索页", hidden: true},
 ];
