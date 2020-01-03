@@ -1,17 +1,17 @@
-import React, {useState, useEffect} from "react"
+import React, {useState, useEffect} from "react";
 import {Input, Tabs, Table, Spin, Avatar, Pagination, Icon} from "antd";
-import {useSelector, useDispatch} from "react-redux"
-import {searchTab} from "../../staticData/search"
-import KeywordFormat from "../../component/KeywordFormat"
-import moment from "moment"
-import utils from "../../utils"
-import "./index.scss"
+import {useSelector, useDispatch} from "react-redux";
+import {searchTab} from "../../staticData/search";
+import KeywordFormat from "../../component/KeywordFormat";
+import moment from "moment";
+import utils from "../../utils";
+import "./index.scss";
 
 const {TabPane} = Tabs;
 
 function Search({history}: any) {
   const dispatch = useDispatch();
-  const search = useSelector(({search}: any) => search)
+  const search = useSelector(({search}: any) => search);
   const {hots = [], pagination, list = [], isLoading} = search;
   const initSearch = decodeURI(window.location.search.split("=")[1]);
   const [keywordsState, setKeywordsState] = useState({
@@ -281,6 +281,6 @@ function Search({history}: any) {
       </div>
     </div>
   )
-};
+}
 
 export default Search

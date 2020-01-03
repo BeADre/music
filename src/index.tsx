@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Main from "./pages"
+import Main from "./pages";
 import zhCN from 'antd/es/locale/zh_CN';
 import { ConfigProvider } from 'antd';
-import {createStore, applyMiddleware} from 'redux'
-import createSagaMiddleware from 'redux-saga'
-import {Provider} from "react-redux"
-import reducer from './store/processor/reducer'
-import rootSaga from './store/processor/sagas'
+import {createStore, applyMiddleware} from 'redux';
+import createSagaMiddleware from 'redux-saga';
+import {Provider} from "react-redux";
+import reducer from './store/processor/reducer';
+import rootSaga from './store/processor/sagas';
 import {BrowserRouter} from "react-router-dom";
 import * as serviceWorker from './serviceWorker';
 

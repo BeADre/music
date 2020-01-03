@@ -1,12 +1,12 @@
 import React, {useState, useEffect, useRef, useMemo, SyntheticEvent, ReactNode} from "react";
 import {Icon, Slider, message} from "antd";
-import {useDispatch, useSelector} from "react-redux"
-import utils from "../../utils"
-import "./index.scss"
+import {useDispatch, useSelector} from "react-redux";
+import utils from "../../utils";
+import "./index.scss";
 
 function Play({history}: any) {
   const dispatch = useDispatch();
-  const playmusic = useSelector(({playmusic}: any) => playmusic)
+  const playmusic = useSelector(({playmusic}: any) => playmusic);
   const {songDetail = {}, lyric = "", playlist = []} = playmusic; // lyric 歌词文本
   const [controlProps, setControlProps] = useState({
     isPause: false, // 是否暂停
@@ -273,6 +273,6 @@ function Play({history}: any) {
     </div>
 
   )
-};
+}
 
 export default Play;
