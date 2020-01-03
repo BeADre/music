@@ -1,19 +1,19 @@
-import React, {useState, useEffect, useRef, Fragment, useMemo, ReactNode} from "react";
+import React, {useState, useEffect, useRef, Fragment, useMemo, ReactNode, RefObject} from "react";
 import {Carousel, Icon} from "antd";
 import {useSelector, useDispatch} from "react-redux";
 import utils from "../../utils";
 import {newSongTab, mvTab} from "../../staticData/home";
 import ChangeCarousel from "../../component/ChangeCarousel";
-import "./index.scss"
+import "./index.scss";
 
 function Home({history}: any) {
   const dispatch = useDispatch();
-  const home = useSelector(({home}: any) => home)
+  const home = useSelector(({home}: any) => home);
   const {playTab = [], playlist = [], newSong = [], newPlate = [], mv = []} = home;
-  const choosePlaylist = useRef<HTMLElement | null>(null);
-  const chooseNewSong = useRef<HTMLElement | null>(null);
-  const chooseNewPlate = useRef<HTMLElement | null>(null);
-  const chooseMV = useRef<HTMLElement | null>(null);
+  const choosePlaylist = useRef<Carousel>(null);
+  const chooseNewSong = useRef<Carousel>(null);
+  const chooseNewPlate = useRef<Carousel>(null);
+  const chooseMV = useRef<Carousel>(null);
   const [state, setState]: any = useState({
     tabColorIndexPlaylist: 0,
     tabColorIndexNewSong: 0,
@@ -236,7 +236,7 @@ function Home({history}: any) {
     return slideElementArr
   }, [JSON.stringify(mv)]);
 
-  const slideContainer = (refEle: any, mapArr: Array<ReactNode | null>) => {
+  const slideContainer = (refEle: RefObject<Carousel>, mapArr: Array<ReactNode | null>) => {
     return <div className="slide-container">
       <ChangeCarousel refEle={refEle}/>
       <Carousel ref={refEle}>
@@ -271,6 +271,6 @@ function Home({history}: any) {
       </div>
     </div>
   )
-};
+}
 
 export default Home;

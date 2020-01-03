@@ -3,6 +3,7 @@ body{
   padding: 0;
   font-family: poppin,Tahoma,Arial,\5FAE\8F6F\96C5\9ED1,sans-serif;
   font-size: 15px;
+  backface-visibility: hidden;
 }
 body::-webkit-scrollbar {
   /*滚动条整体样式*/

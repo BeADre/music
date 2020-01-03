@@ -1,6 +1,7 @@
 import React, {RefObject, memo} from "react";
 import "./index.scss";
-import Carousel from "antd/lib/carousel"
+import {Carousel} from "antd";
+
 
 type Props = {
   refEle: RefObject<Carousel>
@@ -17,6 +18,6 @@ function ChangeCarousel({refEle}: Props) {
       </div>
     </>
   )
-};
+}
 
 export default memo(ChangeCarousel)

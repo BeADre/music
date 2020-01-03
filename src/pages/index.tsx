@@ -1,7 +1,7 @@
-import React, {Suspense} from "react"
+import React, {Suspense} from "react";
 import {NavLink, Route, Switch, Redirect, withRouter} from "react-router-dom";
-import "./index.scss"
-import Router from "../router"
+import "./index.scss";
+import Router from "../router";
 import {Input, Spin} from 'antd';
 
 const {Search} = Input;
