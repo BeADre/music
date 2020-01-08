@@ -5,8 +5,8 @@ const homeApi = {
   newPlate: "/top/album",
   mv: "/mv/all"
 };
-const aboutApi = {
-
+const mvApi = {
+  mvDetail: "/mv/detail",
 };
 
 const playMusicApi = {
@@ -29,7 +29,7 @@ const singerApi = {
 
 export default {
   homeApi,
-  aboutApi,
+  mvApi,
   playMusicApi,
   searchApi,
   singerApi,

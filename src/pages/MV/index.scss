@@ -1,4 +1,4 @@
-.mv-container{
+.mv-container {
   min-width: 1200px;
   display: flex;
   align-items: center;
@@ -6,7 +6,8 @@
   flex-direction: column;
   min-height: 100vh;
   position: relative;
-  .mv-bg{
+
+  .mv-bg {
     position: absolute;
     left: 0;
     top: 0;
@@ -15,56 +16,91 @@
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 50%;
-    background-image: url(http://p1.music.126.net/ijUg7s_2S8GMbTNsYiepJA==/18676304511774727.jpg);
     filter: blur(65px);
     z-index: 1;
   }
-  video{
+
+  .video-container {
     z-index: 2;
-    width: 60%;
-    border-radius: 20px;
-    box-shadow: 0 0 50px 10px rgba(0, 0, 0, 0.3);
-  }
-  .control-container{
-    z-index: 2;
-    width: 60%;
-    margin-top: 25px;
-    color: #d2d2d2;
-    .title{
+    width: 70%;
+    position: relative;
+
+    video {
+      width: 100%;
+      border-radius: 20px;
+      box-shadow: 0 0 50px 10px rgba(0, 0, 0, .3);
+    }
+
+    .control-container {
+      z-index: 2;
+      opacity: 0;
+      width: 100%;
+      padding: 0 2.5%;
+      background: rgba(0, 0, 0, .3);
+      border-radius: 0 0 20px 20px;
       color: #d2d2d2;
-    }
-    .content{
-      font-size: 25px;
-      display: flex;
-      align-items: center;
-      .pause{
-        font-size: 30px;
-        margin-left: -6px;
-        &:hover{
-          color: white;
+      position: absolute;
+      bottom: 5px;
+      transition: .5s opacity;
+
+      .control-container-left, .control-container-right {
+        display: flex;
+        align-items: center;
+      }
+
+      .control-container-right {
+        width: 15%;
+
+        .voice-container {
+          margin-left: .5%;
+          width: 95%;
+        }
+
+        .icon-shengyin, .icon-jingyin {
+          font-size: 25px;
+          cursor: pointer;
+
+          &:hover {
+            color: white;
+          }
+        }
+
+        .fullscreen {
+          margin-left: 1.5%;
+
+          &:hover {
+            color: white;
+          }
         }
       }
-      .icon-shengyin, .icon-jingyin{
+
+      .title {
+        color: #d2d2d2;
+        margin-top: 15px;
+      }
+
+      .content {
         font-size: 25px;
-        cursor: pointer;
-        margin-left: 70%;
-        &:hover{
-          color: white;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .pause {
+          font-size: 30px;
+          margin-left: -6px;
+
+          &:hover {
+            color: white;
+          }
         }
-      }
-      .time{
-        font-size: 18px;
-      }
-      .fullscreen{
-        margin-left: 1.5%;
-        &:hover{
-          color: white;
+
+        .time {
+          font-size: 18px;
+          margin-left: 5px;
         }
-      }
-      .voice-container{
-        margin-left: 0.5%;
-        width: 13%;
+
       }
     }
+
   }
 }
