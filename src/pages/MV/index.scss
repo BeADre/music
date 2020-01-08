@@ -3,6 +3,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   min-height: 100vh;
   position: relative;
   .mv-bg{
@@ -18,16 +19,52 @@
     filter: blur(65px);
     z-index: 1;
   }
-  .video-box{
-    position: absolute;
-    width: 55%;
-    height: 792px;
-    z-index: 5;
-    border: solid black;
-    border-width: 155px 20px;
-  }
   video{
     z-index: 2;
-    width: 55%;
+    width: 60%;
+    border-radius: 20px;
+    box-shadow: 0 0 50px 10px rgba(0, 0, 0, 0.3);
+  }
+  .control-container{
+    z-index: 2;
+    width: 60%;
+    margin-top: 25px;
+    color: #d2d2d2;
+    .title{
+      color: #d2d2d2;
+    }
+    .content{
+      font-size: 25px;
+      display: flex;
+      align-items: center;
+      .pause{
+        font-size: 30px;
+        margin-left: -6px;
+        &:hover{
+          color: white;
+        }
+      }
+      .icon-shengyin, .icon-jingyin{
+        font-size: 25px;
+        cursor: pointer;
+        margin-left: 70%;
+        &:hover{
+          color: white;
+        }
+      }
+      .time{
+        font-size: 18px;
+      }
+      .fullscreen{
+        margin-left: 1.5%;
+        &:hover{
+          color: white;
+        }
+      }
+      .voice-container{
+        margin-left: 0.5%;
+        width: 13%;
+      }
+    }
   }
 }
