@@ -77,6 +77,7 @@ function Mv({history}: any) {
     const {current} = video;
     const {current: current1} = videoContainer;
     if (current && current1) {
+      console.log(current.buffered.end(0))
       if (controlType === "pause") {
         current.paused ? current.play() : current.pause();
         setVideoState({...videoState, ...{isPause: current.paused}})
