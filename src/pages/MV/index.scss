@@ -6,7 +6,18 @@
   flex-direction: column;
   min-height: 100vh;
   position: relative;
-
+  .return {
+    position: absolute;
+    color: #d2d2d2;
+    font-size: 26px;
+    left: 5%;
+    top: 5%;
+    cursor: pointer;
+    z-index: 10;
+    &:hover {
+      color: white;
+    }
+  }
   .mv-bg {
     position: absolute;
     left: 0;
@@ -24,7 +35,12 @@
     z-index: 2;
     width: 70%;
     position: relative;
-
+    .ant-spin-container::after{
+      background: rgb(0,0,0);
+    }
+    .ant-spin-nested-loading > div > .ant-spin .ant-spin-text{
+      text-shadow: none;
+    }
     video {
       width: 100%;
       border-radius: 20px;
