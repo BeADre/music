@@ -1,19 +1,28 @@
 import InterfaceTab from "./interfaceTab"
 
+enum Tab {
+  全部 = 0,
+  港台 = 3,
+  华语 = 7,
+  日本 = 8,
+  韩国 = 16,
+  欧美 = 96,
+}
+
 export const newSongTab: Array<InterfaceTab> = [
-  {name: "全部", id: 0},
-  {name: "华语", id: 7},
-  {name: "欧美", id: 96},
-  {name: "日本", id: 8},
-  {name: "韩国", id: 16},
+  {name: Tab[0], id: Tab["全部"]},
+  {name: Tab[7], id: Tab["华语"]},
+  {name: Tab[96], id: Tab["欧美"]},
+  {name: Tab[8], id: Tab["日本"]},
+  {name: Tab[16], id: Tab["韩国"]},
 ];
 
 export const mvTab: Array<InterfaceTab> = [
-  {name: "全部", id: 0},
-  {name: "港台", id: 3},
-  {name: "内地", id: 7},
-  {name: "欧美", id: 96},
-  {name: "日本", id: 8},
-  {name: "韩国", id: 16},
+  {name: Tab[0], id: Tab["全部"]},
+  {name: Tab[3], id: Tab["港台"]},
+  {name: Tab[7], id: Tab["华语"]},
+  {name: Tab[96], id: Tab["欧美"]},
+  {name: Tab[8], id: Tab["日本"]},
+  {name: Tab[16], id: Tab["韩国"]},
 ];
 

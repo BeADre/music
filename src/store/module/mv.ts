@@ -3,7 +3,7 @@ import {getDetailReq} from "../../request/mv"
 
 type Payload = {
   payload: {
-    mvid: string
+    mvid: number
   }
 }
 

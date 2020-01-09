@@ -20,7 +20,6 @@ const hiddenRouterArr = Router.reduce((pre: Array<string | undefined>, cur) => {
 const Index = ({location = {}, history}: any) => {
   const {pathname} = location;
   return (
-
     <Suspense
       fallback={
         <div style={{
@@ -55,7 +54,6 @@ const Index = ({location = {}, history}: any) => {
         {Router.map(value => <Route path={value.path} key={value.title} exact component={value.component}/>)}
       </Switch>
     </Suspense>
-
   )
 };
 export default withRouter(Index)

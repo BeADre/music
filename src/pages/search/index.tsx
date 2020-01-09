@@ -214,14 +214,14 @@ function Search({history}: any) {
   const mvContent = () => {
     return list.map((mv: any) => {
       return <div className="search-content-mv" key={mv.id}>
-        <div className="slideContent-top">
+        <div className="slideContent-top" onClick={() => utils.jumpToMv(history, mv.id)}>
           <div className="slide-keep">
             <span className="iconfont icon-ziyuan"/>
           </div>
           <img src={mv.cover} alt=""/>
         </div>
         <div className="slideContent-bot">
-          <a>{mv.name}</a>
+          <a  onClick={() => utils.jumpToMv(history, mv.id)}>{mv.name}</a>
           <p>
             <KeywordFormat text={mv.artistName || ""} keywords={keywordsState.keywords}/>
           </p>
