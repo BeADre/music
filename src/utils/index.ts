@@ -38,7 +38,6 @@ const unitCount = (count: number): string | number => {
 };
 
 // 跳转到播放页
-
 const jumpToPlay = (history: History<LocationState>, id: string, isSong: boolean, isAlbum?: boolean): void => {
   history.push({
     pathname: "/playMusic",
@@ -47,12 +46,23 @@ const jumpToPlay = (history: History<LocationState>, id: string, isSong: boolean
       isSong,
       id
     }
-  })
+  });
 };
+
+// 跳转到MV页
+const jumpToMv = (history: History<LocationState>, mvid: number) => {
+  history.push({
+    pathname: "/mv",
+    state: {
+      mvid
+    }
+  });
+}
 
 export default {
   unitTime,
   formatTime,
   unitCount,
-  jumpToPlay
+  jumpToPlay,
+  jumpToMv
 }

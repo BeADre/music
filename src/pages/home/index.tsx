@@ -206,14 +206,14 @@ function Home({history}: any) {
       slideElementArr.push(<div className="slide" key={key}>
         {copyMv.splice(0, 10).map(value =>
           <div className="slideContent" key={value.id} style={{marginBottom: "20px"}}>
-            <div className="slideContent-top">
+            <div className="slideContent-top" onClick={() => utils.jumpToMv(history, value.id)}>
               <div className="slide-keep">
                 <span className="iconfont icon-ziyuan"/>
               </div>
               <img src={value.cover} alt=""/>
             </div>
             <div className="slideContent-bot">
-              <span className="section-four-name">{value.name}</span>
+              <span className="section-four-name" onClick={() => utils.jumpToMv(history, value.id)}>{value.name}</span>
               <p className="section-four-art">{value.artistName}</p>
               <p style={{marginTop: 20}}>
                 <Icon type="video-camera"/>

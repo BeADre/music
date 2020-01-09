@@ -2,7 +2,7 @@ import axios from "./index"
 import API from "./API"
 
 type Payload = {
-  mvid: string
+  mvid: number
 }
 
 export function getDetailReq(payload: Payload) {

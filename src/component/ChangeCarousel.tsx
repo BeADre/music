@@ -2,7 +2,6 @@ import React, {RefObject, memo} from "react";
 import "./index.scss";
 import {Carousel} from "antd";
 
-
 type Props = {
   refEle: RefObject<Carousel>
 }

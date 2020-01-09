@@ -1,10 +1,17 @@
 import InterfaceTab from "./interfaceTab"
 
+enum Tab {
+  单曲 = 1,
+  专辑 = 10,
+  歌单 = 1000,
+  MV = 1004
+}
+
 export const searchTab: Array<InterfaceTab> = [
-  {name: "单曲", id: 1},
-  {name: "专辑", id: 10},
-  {name: "歌单", id: 1000},
-  {name: "MV", id: 1004},
+  {name: Tab[1], id: Tab["单曲"]},
+  {name: Tab[10], id: Tab["专辑"]},
+  {name: Tab[1000], id: Tab["歌单"]},
+  {name: Tab[1004], id: Tab["MV"]},
 ];
 
 // SSNI-338 SSNI-198  ipx-176 ipz-921 坂道美琉 ipx-416

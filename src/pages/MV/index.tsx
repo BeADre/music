@@ -1,88 +1,95 @@
-import React, {useState, useEffect, useRef, MutableRefObject} from "react"
+import React, {useState, useEffect, useRef} from "react"
 import {useSelector, useDispatch} from "react-redux";
-import {Slider, Icon} from "antd";
+import {Slider, Icon, Modal} from "antd";
 import "./index.scss"
 import utils from "../../utils";
 
-function Mv() {
+function Mv({history}: any) {
   const dispatch = useDispatch();
   const mv = useSelector(({mv}: any) => mv);
   const {mvDetail = {}} = mv;
-  const {artists = []} = mvDetail
-  console.log(mvDetail)
+  const {artists = [], brs = {}} = mvDetail;
   const [videoState, setVideoState] = useState({
     isMute: false,
     isPause: false,
     isFullscreen: false
-  })
-  const timer = useRef<any>(null);
+  });
+  const [currentTime, setCurrentTime] = useState(0);
+  const timer = useRef<number>(); // timeout的id
   const video = useRef<HTMLVideoElement>(null);
   const control = useRef<HTMLDivElement>(null); // audio标签
-  const videoContainer: any = useRef(null);
-  const mvid = 10910157
+  const videoContainer = useRef<HTMLDivElement>(null);
+  const {mvid = null} = history.location.state ? history.location.state : {};
+  const minUnitTime = video.current ? video.current.duration / 100 : 0; // 第一次渲染时video标签并未绑定上
+
 
   useEffect(() => {
     if (video.current) video.current.volume = 0.5; // 设置初始播放器音量为50
-    dispatch({
-      type: "mv/getDetail",
-      payload: {
-        mvid
-      }
-    })
+    if(mvid){
+      dispatch({
+        type: "mv/getDetail",
+        payload: {
+          mvid
+        }
+      });
+    }else{
+      Modal.error({
+        title: '提示',
+        content: '求求惹了，别直接从url地址跳过来，拿不到id',
+      });
+    }
   }, []);
 
   useEffect(() => {
-    const changeScreenState = (): void => {
-      setVideoState({...videoState, ...{isFullscreen: !!document.fullscreenElement}})
-    }
+    if(mvid){
+      const changeScreenState = (): void => {
+        setVideoState({...videoState, ...{isFullscreen: !!document.fullscreenElement}});
+      };
+      const mouseMove = (): void => {
+        let {style} = (control.current as HTMLDivElement)
+        if (timer.current) {
+          window.clearTimeout(timer.current);
+          if(!style.opacity || style.opacity === "0"){
+            style.opacity = "1";
+          }
+        }
+        timer.current = window.setTimeout((): void => {
+          style.opacity = "0";
+        }, 1500);
+      };
 
-    const mouseMove = (): void => {
-      if (timer.current !== null) {
-        window.clearTimeout(timer.current);
-        (control.current as HTMLDivElement).style.opacity = "1";
-      }
-      timer.current = window.setTimeout((): void => {
-        (control.current as HTMLDivElement).style.opacity = "0";
-      }, 1500);
+      document.addEventListener("fullscreenchange", changeScreenState);
+      (videoContainer.current as HTMLDivElement).addEventListener("mousemove", mouseMove);
+      return () => {
+        document.removeEventListener("fullscreenchange", changeScreenState);
+        (videoContainer.current as HTMLDivElement).removeEventListener("mousemove", mouseMove);
+      };
     }
-
-    document.addEventListener("fullscreenchange", changeScreenState);
-    videoContainer.current.addEventListener("mousemove", mouseMove);
-    return () => {
-      document.removeEventListener("fullscreenchange", changeScreenState);
-      videoContainer.current.removeEventListener("mousemove", mouseMove);
-    };
   }, [videoState.isFullscreen]);
 
-
   // 改变播放时间
-  const changeTime = (value: number): void | boolean => {
+  const changeTime = (value: number): void => {
     const {current} = video;
-
-
+    (current as HTMLVideoElement).currentTime = parseInt(`${minUnitTime * value}`);
   };
 
   const videoControl = (controlType: string): void => {
     const {current} = video;
-    if (controlType === "pause") {
-      (current as HTMLVideoElement).paused ? (current as HTMLVideoElement).play() : (current as HTMLVideoElement).pause();
-      setVideoState({...videoState, ...{isPause: (current as HTMLVideoElement).paused}})
-    } else if (controlType === "mute") {
-      (current as HTMLVideoElement).muted = !(current as HTMLVideoElement).muted;
-      setVideoState({...videoState, ...{isMute: (current as HTMLVideoElement).muted}})
-    } else {
-      if (videoState.isFullscreen) {
-        document.exitFullscreen();
-        // console.log(window)
+    const {current: current1} = videoContainer;
+    if (current && current1) {
+      if (controlType === "pause") {
+        current.paused ? current.play() : current.pause();
+        setVideoState({...videoState, ...{isPause: current.paused}})
+      } else if (controlType === "mute") {
+        current.muted = !current.muted;
+        setVideoState({...videoState, ...{isMute: current.muted}})
       } else {
-        if (videoContainer.current.requestFullscreen) {
-          videoContainer.current.requestFullscreen();
-        } else if (videoContainer.current.webkitRequestFullScreen) {
-          videoContainer.current.webkitRequestFullScreen();
-        } else if (videoContainer.current.mozRequestFullScreen) {
-          videoContainer.current.mozRequestFullScreen();
+        if (videoState.isFullscreen) {
+          document.exitFullscreen();
         } else {
-          videoContainer.current.msRequestFullscreen();
+          if (current1.requestFullscreen) {
+            current1.requestFullscreen();
+          }
         }
       }
     }
@@ -91,9 +98,11 @@ function Mv() {
   // 改变音量大小
   const changeVoice = (value: number): void => {
     const {current} = video;
-    (current as HTMLVideoElement).volume = value / 100;
-    (current as HTMLVideoElement).muted = false;
-    setVideoState({...videoState, ...{isMute: false}});
+    if (current) {
+      current.volume = value / 100;
+      current.muted = false;
+      setVideoState({...videoState, ...{isMute: false}});
+    }
   };
 
   return (
@@ -103,7 +112,9 @@ function Mv() {
         <video
           ref={video}
           autoPlay={true}
-          src="http://vodkgeyttp8.vod.126.net/cloudmusic/obj/core/984441863/43f11466aba6dd787f367b0c0155fe6c.mp4?wsSecret=e386f9118449508340382e296bf5226d&wsTime=1578490939"/>
+          onEnded={() => setVideoState({...videoState, ...{isPause: true}})}
+          onTimeUpdate={e => setCurrentTime(e.currentTarget.currentTime)}
+          src={brs["1080"] || brs["720"] || brs["480"] || brs["240"]}/>
         <div className="control-container" ref={control}>
           <h2 className="title">
             {mvDetail.name}
@@ -120,8 +131,7 @@ function Mv() {
                 <Icon type="caret-right" className="pause" onClick={() => videoControl("pause")}/> :
                 <Icon type="pause" className="pause" onClick={() => videoControl("pause")}/>
               }
-
-              <span className="time">02:38 / {utils.unitTime(mvDetail.duration)}</span>
+              <span className="time">{utils.formatTime(currentTime)} / {utils.unitTime(mvDetail.duration)}</span>
             </div>
             <div className="control-container-right">
               {videoState.isMute ?
@@ -140,19 +150,15 @@ function Mv() {
                 />
               }
             </div>
-
-
           </div>
           <div className="slider-container">
             <Slider defaultValue={0}
-              // value={Math.ceil(songProps.currentTime / minUnitTime)}
-                    value={0}
+                    value={Math.ceil(currentTime / minUnitTime)}
                     tooltipVisible={false}
                     onChange={value => changeTime(value as number)}/>
           </div>
         </div>
       </div>
-
     </div>
   )
 }

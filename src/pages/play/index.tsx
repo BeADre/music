@@ -150,8 +150,6 @@ function Play({history}: any) {
       message.error("亲爱的,暂无版权");
       return false
     }
-    let minUnitTime: number = (current as HTMLAudioElement).duration / 100;
-    if (isNaN(minUnitTime)) minUnitTime = 0;
     (current as HTMLAudioElement).currentTime = parseInt(`${minUnitTime * value}`)
   };
 
@@ -178,9 +176,7 @@ function Play({history}: any) {
         setSongId(playlist[playIndex - 1].id)
       }
     }
-
   };
-
 
   return (
     <div className="play-main-container">
