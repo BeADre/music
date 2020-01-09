@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef} from "react"
 import {useSelector, useDispatch} from "react-redux";
-import {Slider, Icon, Modal} from "antd";
+import {Slider, Icon, Modal, Spin} from "antd";
 import "./index.scss"
 import utils from "../../utils";
 
@@ -9,12 +9,15 @@ function Mv({history}: any) {
   const mv = useSelector(({mv}: any) => mv);
   const {mvDetail = {}} = mv;
   const {artists = [], brs = {}} = mvDetail;
-  const [videoState, setVideoState] = useState({
+  const [controlState, setControlState] = useState({
     isMute: false,
     isPause: false,
     isFullscreen: false
   });
-  const [currentTime, setCurrentTime] = useState(0);
+  const [videoState, setVideoState] = useState({
+    currentTime: 0,
+    isWaiting: false
+  });
   const timer = useRef<number>(); // timeout的id
   const video = useRef<HTMLVideoElement>(null);
   const control = useRef<HTMLDivElement>(null); // audio标签
@@ -25,14 +28,14 @@ function Mv({history}: any) {
 
   useEffect(() => {
     if (video.current) video.current.volume = 0.5; // 设置初始播放器音量为50
-    if(mvid){
+    if (mvid) {
       dispatch({
         type: "mv/getDetail",
         payload: {
           mvid
         }
       });
-    }else{
+    } else {
       Modal.error({
         title: '提示',
         content: '求求惹了，别直接从url地址跳过来，拿不到id',
@@ -41,15 +44,15 @@ function Mv({history}: any) {
   }, []);
 
   useEffect(() => {
-    if(mvid){
+    if (mvid) {
       const changeScreenState = (): void => {
-        setVideoState({...videoState, ...{isFullscreen: !!document.fullscreenElement}});
+        setControlState({...controlState, ...{isFullscreen: !!document.fullscreenElement}});
       };
       const mouseMove = (): void => {
         let {style} = (control.current as HTMLDivElement)
         if (timer.current) {
           window.clearTimeout(timer.current);
-          if(!style.opacity || style.opacity === "0"){
+          if (!style.opacity || style.opacity === "0") {
             style.opacity = "1";
           }
         }
@@ -58,14 +61,31 @@ function Mv({history}: any) {
         }, 1500);
       };
 
+      const setSpin = (state: string): void => {
+        const isWaiting = state === "waiting";
+        setVideoState({...videoState, ...{isWaiting}});
+      }
+
       document.addEventListener("fullscreenchange", changeScreenState);
       (videoContainer.current as HTMLDivElement).addEventListener("mousemove", mouseMove);
+      (video.current as HTMLVideoElement).addEventListener('waiting', () => {
+        setSpin("waiting");
+      });
+      (video.current as HTMLVideoElement).addEventListener('playing', () => {
+        setSpin("playing");
+      });
       return () => {
         document.removeEventListener("fullscreenchange", changeScreenState);
         (videoContainer.current as HTMLDivElement).removeEventListener("mousemove", mouseMove);
+        (video.current as HTMLVideoElement).removeEventListener('waiting', () => {
+          setSpin("waiting");
+        });
+        (video.current as HTMLVideoElement).removeEventListener('playing', () => {
+          setSpin("playing");
+        });
       };
     }
-  }, [videoState.isFullscreen]);
+  }, [controlState.isFullscreen]);
 
   // 改变播放时间
   const changeTime = (value: number): void => {
@@ -80,12 +100,12 @@ function Mv({history}: any) {
       console.log(current.buffered.end(0))
       if (controlType === "pause") {
         current.paused ? current.play() : current.pause();
-        setVideoState({...videoState, ...{isPause: current.paused}})
+        setControlState({...controlState, ...{isPause: current.paused}})
       } else if (controlType === "mute") {
         current.muted = !current.muted;
-        setVideoState({...videoState, ...{isMute: current.muted}})
+        setControlState({...controlState, ...{isMute: current.muted}})
       } else {
-        if (videoState.isFullscreen) {
+        if (controlState.isFullscreen) {
           document.exitFullscreen();
         } else {
           if (current1.requestFullscreen) {
@@ -102,20 +122,24 @@ function Mv({history}: any) {
     if (current) {
       current.volume = value / 100;
       current.muted = false;
-      setVideoState({...videoState, ...{isMute: false}});
+      setControlState({...controlState, ...{isMute: false}});
     }
   };
 
   return (
     <div className="mv-container">
       <div className="mv-bg" style={{backgroundImage: `url(${mvDetail.cover})`}}/>
+      <Icon type="left" className="return" onClick={history.goBack}/>
       <div className="video-container" ref={videoContainer}>
-        <video
-          ref={video}
-          autoPlay={true}
-          onEnded={() => setVideoState({...videoState, ...{isPause: true}})}
-          onTimeUpdate={e => setCurrentTime(e.currentTarget.currentTime)}
-          src={brs["1080"] || brs["720"] || brs["480"] || brs["240"]}/>
+        <Spin spinning={videoState.isWaiting} tip={"加载中..."}>
+          <video
+            ref={video}
+            autoPlay={true}
+            onEnded={() => setControlState({...controlState, ...{isPause: true}})}
+            onTimeUpdate={e => setVideoState({...videoState, ...{currentTime: e.currentTarget.currentTime}})}
+            src={brs["1080"] || brs["720"] || brs["480"] || brs["240"]}
+          />
+        </Spin>
         <div className="control-container" ref={control}>
           <h2 className="title">
             {mvDetail.name}
@@ -128,21 +152,22 @@ function Mv({history}: any) {
           </h2>
           <div className="content">
             <div className="control-container-left">
-              {videoState.isPause ?
+              {controlState.isPause ?
                 <Icon type="caret-right" className="pause" onClick={() => videoControl("pause")}/> :
                 <Icon type="pause" className="pause" onClick={() => videoControl("pause")}/>
               }
-              <span className="time">{utils.formatTime(currentTime)} / {utils.unitTime(mvDetail.duration)}</span>
+              <span
+                className="time">{utils.formatTime(videoState.currentTime)} / {utils.unitTime(mvDetail.duration)}</span>
             </div>
             <div className="control-container-right">
-              {videoState.isMute ?
+              {controlState.isMute ?
                 <i className="iconfont icon-jingyin" onClick={() => videoControl("mute")}/> :
                 <i className="iconfont icon-shengyin" onClick={() => videoControl("mute")}/>
               }
               <div className="voice-container">
                 <Slider defaultValue={50} disabled={false} onChange={value => changeVoice(value as number)}/>
               </div>
-              {videoState.isFullscreen ?
+              {controlState.isFullscreen ?
                 <Icon type="fullscreen-exit" className="fullscreen"
                       onClick={() => videoControl("fullscreen")}
                 /> :
@@ -154,7 +179,7 @@ function Mv({history}: any) {
           </div>
           <div className="slider-container">
             <Slider defaultValue={0}
-                    value={Math.ceil(currentTime / minUnitTime)}
+                    value={Math.ceil(videoState.currentTime / minUnitTime)}
                     tooltipVisible={false}
                     onChange={value => changeTime(value as number)}/>
           </div>
