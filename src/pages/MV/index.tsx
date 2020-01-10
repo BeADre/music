@@ -49,7 +49,7 @@ function Mv({history}: any) {
         setControlState({...controlState, ...{isFullscreen: !!document.fullscreenElement}});
       };
       const mouseMove = (): void => {
-        let {style} = (control.current as HTMLDivElement)
+        let {style} = (control.current as HTMLDivElement);
         if (timer.current) {
           window.clearTimeout(timer.current);
           if (!style.opacity || style.opacity === "0") {
@@ -64,7 +64,7 @@ function Mv({history}: any) {
       const setSpin = (state: string): void => {
         const isWaiting = state === "waiting";
         setVideoState({...videoState, ...{isWaiting}});
-      }
+      };
 
       document.addEventListener("fullscreenchange", changeScreenState);
       (videoContainer.current as HTMLDivElement).addEventListener("mousemove", mouseMove);
