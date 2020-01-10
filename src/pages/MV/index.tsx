@@ -180,10 +180,6 @@ function Mv({history}: any) {
             </div>
           </div>
           <div className="slider-container">
-            {/*<Slider defaultValue={0}*/}
-            {/*        value={Math.ceil(videoState.currentTime / minUnitTime)}*/}
-            {/*        tooltipVisible={false}*/}
-            {/*        onChange={value => changeTime(value as number)}/>*/}
             <PlaySlider
               bufferTimeValue={videoState.bufferTimeValue}
               playWidth={(videoState.currentTime / minUnitTime).toFixed(2)}
