@@ -2,7 +2,9 @@ import React, {useState, useEffect, useRef} from "react"
 import {useSelector, useDispatch} from "react-redux";
 import {Slider, Icon, Modal, Spin} from "antd";
 import "./index.scss"
+import PlaySlider from "../../component/PlaySlider"
 import utils from "../../utils";
+
 
 function Mv({history}: any) {
   const dispatch = useDispatch();
@@ -16,16 +18,15 @@ function Mv({history}: any) {
   });
   const [videoState, setVideoState] = useState({
     currentTime: 0,
-    isWaiting: false
+    isWaiting: false,
+    bufferTimeValue: 0 // 缓冲时长比例
   });
   const timer = useRef<number>(); // timeout的id
-  const video = useRef<HTMLVideoElement>(null);
+  const video = useRef<HTMLVideoElement>(null); // audio标签
   const control = useRef<HTMLDivElement>(null); // audio标签
-  const videoContainer = useRef<HTMLDivElement>(null);
+  const videoContainer = useRef<HTMLDivElement>(null); // control-container
   const {mvid = null} = history.location.state ? history.location.state : {};
-  const minUnitTime = video.current ? video.current.duration / 100 : 0; // 第一次渲染时video标签并未绑定上
-
-
+  const minUnitTime = video.current ? video.current.duration / 100 : 0; // 最小段的播放时间
   useEffect(() => {
     if (video.current) video.current.volume = 0.5; // 设置初始播放器音量为50
     if (mvid) {
@@ -48,44 +49,33 @@ function Mv({history}: any) {
       const changeScreenState = (): void => {
         setControlState({...controlState, ...{isFullscreen: !!document.fullscreenElement}});
       };
-      const mouseMove = (): void => {
-        let {style} = (control.current as HTMLDivElement);
-        if (timer.current) {
-          window.clearTimeout(timer.current);
-          if (!style.opacity || style.opacity === "0") {
-            style.opacity = "1";
-          }
-        }
-        timer.current = window.setTimeout((): void => {
-          style.opacity = "0";
-        }, 1500);
-      };
-
-      const setSpin = (state: string): void => {
-        const isWaiting = state === "waiting";
-        setVideoState({...videoState, ...{isWaiting}});
-      };
-
       document.addEventListener("fullscreenchange", changeScreenState);
-      (videoContainer.current as HTMLDivElement).addEventListener("mousemove", mouseMove);
-      (video.current as HTMLVideoElement).addEventListener('waiting', () => {
-        setSpin("waiting");
-      });
-      (video.current as HTMLVideoElement).addEventListener('playing', () => {
-        setSpin("playing");
-      });
       return () => {
         document.removeEventListener("fullscreenchange", changeScreenState);
-        (videoContainer.current as HTMLDivElement).removeEventListener("mousemove", mouseMove);
-        (video.current as HTMLVideoElement).removeEventListener('waiting', () => {
-          setSpin("waiting");
-        });
-        (video.current as HTMLVideoElement).removeEventListener('playing', () => {
-          setSpin("playing");
-        });
       };
     }
   }, [controlState.isFullscreen]);
+
+  const mouseMove = (): void => {
+    let {style} = (control.current as HTMLDivElement);
+    if (timer.current) {
+      window.clearTimeout(timer.current);
+      console.log(style.visibility )
+      if (!style.visibility || style.visibility === "hidden") {
+        style.visibility = "visible";
+        style.opacity = "1";
+      }
+    }
+    timer.current = window.setTimeout((): void => {
+      style.visibility = "hidden";
+      style.opacity = "0";
+    }, 1500);
+  };
+
+  const setSpin = (state: string): void => {
+    const isWaiting = state === "waiting";
+    setVideoState({...videoState, ...{isWaiting}});
+  };
 
   // 改变播放时间
   const changeTime = (value: number): void => {
@@ -97,7 +87,6 @@ function Mv({history}: any) {
     const {current} = video;
     const {current: current1} = videoContainer;
     if (current && current1) {
-      console.log(current.buffered.end(0))
       if (controlType === "pause") {
         current.paused ? current.play() : current.pause();
         setControlState({...controlState, ...{isPause: current.paused}})
@@ -126,17 +115,30 @@ function Mv({history}: any) {
     }
   };
 
+  const bufferEvent = () => {
+    const {current} = video;
+    if (current) {
+      const bufferTimeValue = Math.ceil(current.buffered.end(0) / current.duration * 100);
+      setVideoState({...videoState, ...{bufferTimeValue}});
+    }
+  };
+
   return (
     <div className="mv-container">
       <div className="mv-bg" style={{backgroundImage: `url(${mvDetail.cover})`}}/>
       <Icon type="left" className="return" onClick={history.goBack}/>
-      <div className="video-container" ref={videoContainer}>
+      <div className="video-container" ref={videoContainer} onMouseMove={mouseMove}>
         <Spin spinning={videoState.isWaiting} tip={"加载中..."}>
           <video
             ref={video}
+            onWaiting={() => setSpin("waiting")}
             autoPlay={true}
+            onProgress={() => bufferEvent()}
+            onPlaying={() => setSpin("playing")}
             onEnded={() => setControlState({...controlState, ...{isPause: true}})}
-            onTimeUpdate={e => setVideoState({...videoState, ...{currentTime: e.currentTarget.currentTime}})}
+            onTimeUpdate={e => {
+              setVideoState({...videoState, ...{currentTime: e.currentTarget.currentTime}})
+            }}
             src={brs["1080"] || brs["720"] || brs["480"] || brs["240"]}
           />
         </Spin>
@@ -178,10 +180,15 @@ function Mv({history}: any) {
             </div>
           </div>
           <div className="slider-container">
-            <Slider defaultValue={0}
-                    value={Math.ceil(videoState.currentTime / minUnitTime)}
-                    tooltipVisible={false}
-                    onChange={value => changeTime(value as number)}/>
+            {/*<Slider defaultValue={0}*/}
+            {/*        value={Math.ceil(videoState.currentTime / minUnitTime)}*/}
+            {/*        tooltipVisible={false}*/}
+            {/*        onChange={value => changeTime(value as number)}/>*/}
+            <PlaySlider
+              bufferTimeValue={videoState.bufferTimeValue}
+              playWidth={(videoState.currentTime / minUnitTime).toFixed(2)}
+              onChange={changeTime}
+            />
           </div>
         </div>
       </div>

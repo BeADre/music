@@ -49,7 +49,7 @@
 
     .control-container {
       z-index: 2;
-      opacity: 0;
+      //opacity: 0;
       width: 100%;
       padding: 0 2.5%;
       background: rgba(0, 0, 0, .3);
@@ -57,7 +57,7 @@
       color: #d2d2d2;
       position: absolute;
       bottom: 5px;
-      transition: .5s opacity;
+      transition: all .5s linear;
 
       .control-container-left, .control-container-right {
         display: flex;
