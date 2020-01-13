@@ -64,21 +64,23 @@ function Play({history}: any) {
     }
   }, []);
   useEffect(() => {
-    // 请求歌曲详情
     if (hasCopyright === false) {
       message.error("亲爱的,暂无版权");
+    }else if (songId && hasCopyright === undefined) {
+      dispatch({
+        type: "playmusic/check",
+        payload: {
+          id: songId
+        },
+        setState: setHasCopyright
+      });
     }
-    if (songId) {
-      if (hasCopyright === undefined) {
-        dispatch({
-          type: "playmusic/check",
-          payload: {
-            id: songId
-          },
-          setState: setHasCopyright
-        });
-      }
 
+  },[songId, hasCopyright]);
+  useEffect(() => {
+    // 请求歌曲详情
+    if (songId) {
+      setHasCopyright(undefined);
       dispatch({
         type: "playmusic/songDetail",
         payload: {
@@ -93,7 +95,7 @@ function Play({history}: any) {
         }
       });
     }
-  }, [songId, hasCopyright]);
+  }, [songId]);
 
   // 格式化歌词
   const formatLyric = (): null | Array<ReactNode> => {
@@ -165,6 +167,7 @@ function Play({history}: any) {
       return false
     }
     const playIndex = playlist.findIndex((value: any) => value.id === songId);
+    setHasCopyright(undefined);
     if (order === "next") {
       if (playIndex === playlist.length - 1) {
         setSongId(playlist[0].id)
@@ -238,6 +241,7 @@ function Play({history}: any) {
           {playlist.map((value: any, index: number) =>
             <div className="songItem" key={value.id}
                  onClick={() => {
+                   setHasCopyright(undefined)
                    setSongId(value.id);
                    setSongProps({...songProps, ...{currentTime: 0}})
                  }}
