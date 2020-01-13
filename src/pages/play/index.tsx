@@ -21,7 +21,7 @@ function Play({history}: any) {
   const audio = useRef<HTMLAudioElement>(null); // audio标签
   const lyricContent = useRef<HTMLDivElement>(null); // 歌词容器
 
-  const {id, isSong, isAlbum} = history.location.state;
+  const {id, isSong, isAlbum} = history.location.state || {};
   const {al = {}, ar = []} = songDetail;
   const lrcTimeArr: Array<number> = []; // 存放歌词时间的数组
   const minUnitTime = audio.current ? audio.current.duration / 100 : 0; // 第一次渲染时audio标签并未绑定上
@@ -53,7 +53,7 @@ function Play({history}: any) {
         },
         setState: setSongId
       })
-    } else {
+    } else if(id){
       dispatch({
         type: "playmusic/playlistDetail",
         payload: {
@@ -121,6 +121,7 @@ function Play({history}: any) {
    * @param hasCopyright {boolean} 歌曲是否授权
    */
   const musicControl = (controlType: string, hasCopyright?: boolean): void | boolean => {
+    if(!history.location.state) return false;
     const {current} = audio;
     if (controlType === "pause") {
       if (!hasCopyright) {
@@ -155,6 +156,7 @@ function Play({history}: any) {
 
   // 切换下一曲
   const checkSong = (order: string): void | false => {
+    if(!history.location.state) return false;
     if (isSong) {
       setSongProps({...songProps, ...{currentTime: 0}});
       const {current} = audio;
@@ -210,7 +212,7 @@ function Play({history}: any) {
           <Icon type="step-forward" onClick={() => checkSong("next")}/>
           <div className="slider-container">
             <Slider defaultValue={0}
-                    disabled={hasCopyright === false}
+                    disabled={hasCopyright === false || !history.location.state}
                     value={Math.ceil(songProps.currentTime / minUnitTime)}
                     tooltipVisible={false}
                     onChange={value => changeTime(value as number)}/>

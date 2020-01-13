@@ -57,7 +57,7 @@ const jumpToMv = (history: History<LocationState>, mvid: number) => {
       mvid
     }
   });
-}
+};
 
 export default {
   unitTime,
