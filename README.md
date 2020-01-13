@@ -11,7 +11,7 @@
 [网易云音乐 NodeJS 版 API](https://github.com/Binaryify/NeteaseCloudMusicApi)
 
 ### 安装运行
-
+启动前先启动后端项目
 ```shell
 $ git clone git@github.com:BeADre/music.git
 $ npm install
