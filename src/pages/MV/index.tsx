@@ -60,7 +60,6 @@ function Mv({history}: any) {
     let {style} = (control.current as HTMLDivElement);
     if (timer.current) {
       window.clearTimeout(timer.current);
-      console.log(style.visibility )
       if (!style.visibility || style.visibility === "hidden") {
         style.visibility = "visible";
         style.opacity = "1";
@@ -124,7 +123,7 @@ function Mv({history}: any) {
   };
 
   return (
-    <div className="mv-container">
+    <div className="mv-container" onDragOver={(e)=> e.preventDefault()}>
       <div className="mv-bg" style={{backgroundImage: `url(${mvDetail.cover})`}}/>
       <Icon type="left" className="return" onClick={history.goBack}/>
       <div className="video-container" ref={videoContainer} onMouseMove={mouseMove}>
@@ -184,6 +183,7 @@ function Mv({history}: any) {
               bufferTimeValue={videoState.bufferTimeValue}
               playWidth={(videoState.currentTime / minUnitTime).toFixed(2)}
               onChange={changeTime}
+              control={control}
             />
           </div>
         </div>

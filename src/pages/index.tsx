@@ -5,20 +5,21 @@ import Router from "../router";
 import {Input, Spin} from 'antd';
 
 const {Search} = Input;
-const searchHandel = (value: string, history: Array<string>) => {
-  if (!value) return false;
-  history.push(`/search?s=${value}`);
-};
-
-const hiddenRouterArr = Router.reduce((pre: Array<string | undefined>, cur) => {
-  if (cur.hidden) {
-    pre.push(cur.path);
-  }
-  return pre
-}, []);
 
 const Index = ({location = {}, history}: any) => {
   const {pathname} = location;
+  const hiddenRouterArr = Router.reduce((pre: Array<string | undefined>, cur) => {
+    if (cur.hidden) {
+      pre.push(cur.path);
+    }
+    return pre
+  }, []);
+
+  const searchHandel = (value: string) => {
+    if (!value) return false;
+    history.push(`/search?s=${value}`);
+  };
+
   return (
     <Suspense
       fallback={
@@ -45,7 +46,7 @@ const Index = ({location = {}, history}: any) => {
           <div className="search">
             <Search
               placeholder="搜索"
-              onSearch={value => searchHandel(value, history)}
+              onSearch={value => searchHandel(value)}
             />
           </div>
         </div>}
