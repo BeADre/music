@@ -23,7 +23,7 @@ function Mv({history}: any) {
   });
   const timer = useRef<number>(); // timeout的id
   const video = useRef<HTMLVideoElement>(null); // audio标签
-  const control = useRef<HTMLDivElement>(null); // audio标签
+  const control = useRef<HTMLDivElement>(null); // audio控制器标签
   const videoContainer = useRef<HTMLDivElement>(null); // control-container
   const {mvid = null} = history.location.state ? history.location.state : {};
   const minUnitTime = video.current ? video.current.duration / 100 : 0; // 最小段的播放时间
