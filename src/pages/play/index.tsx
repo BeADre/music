@@ -149,7 +149,7 @@ function Play({history}: any) {
   // 改变播放时间
   const changeTime = (value: number): void | boolean => {
     const {current} = audio;
-    if (!hasCopyright) {
+    if (!hasCopyright || isNaN(minUnitTime)) {
       message.error("亲爱的,暂无版权");
       return false
     }
@@ -215,7 +215,7 @@ function Play({history}: any) {
           <Icon type="step-forward" onClick={() => checkSong("next")}/>
           <div className="slider-container">
             <Slider defaultValue={0}
-                    disabled={hasCopyright === false || !history.location.state}
+                    // disabled={hasCopyright === false || !history.location.state}
                     value={Math.ceil(songProps.currentTime / minUnitTime)}
                     tooltipVisible={false}
                     onChange={value => changeTime(value as number)}/>
