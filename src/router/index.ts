@@ -17,5 +17,6 @@ const routerArr: Array<Router> = [
   {path: "/mv", component: lazy(() => import("../pages/MV")), title: "MV", hidden: true},
   {path: "/playMusic", component: lazy(() => import("../pages/play")), title: "播放页", hidden: true},
   {path: "/search", component: lazy(() => import("../pages/search")), title: "搜索页", hidden: true},
+  {path: "*", component: lazy(() => import("../pages/notFind")), title: "404", hidden: true},
 ];
 export default routerArr
