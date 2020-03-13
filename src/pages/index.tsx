@@ -9,8 +9,8 @@ const {Search} = Input;
 
 const Index = ({location = {}, history}: any) => {
   const {pathname} = location;
-  const hiddenRouterArr = Router.reduce((pre: Array<string | undefined>, cur) => {
-    if (cur.hidden) {
+  const showRouterArr = Router.reduce((pre: Array<string | undefined>, cur) => {
+    if (cur.show) {
       pre.push(cur.path);
     }
     return pre
@@ -35,7 +35,7 @@ const Index = ({location = {}, history}: any) => {
         </div>
       }
     >
-      {hiddenRouterArr.includes(pathname) || hiddenRouterArr.includes("*") ? null :
+      {!showRouterArr.includes(pathname)? null :
         <div className="main-tab">
           {/*<ul>*/}
           {/*  {Router.map(value => {*/}
