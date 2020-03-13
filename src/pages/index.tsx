@@ -1,8 +1,9 @@
 import React, {Suspense} from "react";
 import {NavLink, Route, Switch, Redirect, withRouter} from "react-router-dom";
-import "./index.scss";
 import Router from "../router";
 import {Input, Spin} from 'antd';
+import "./index.scss";
+
 
 const {Search} = Input;
 
@@ -34,7 +35,7 @@ const Index = ({location = {}, history}: any) => {
         </div>
       }
     >
-      {hiddenRouterArr.includes(pathname) ? null :
+      {hiddenRouterArr.includes(pathname) || hiddenRouterArr.includes("*") ? null :
         <div className="main-tab">
           {/*<ul>*/}
           {/*  {Router.map(value => {*/}
