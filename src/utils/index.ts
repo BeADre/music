@@ -1,8 +1,17 @@
 import { History, LocationState } from "history"
+import { type } from "os";
+
+type time =  number | null | {
+  start: number,
+  end: number
+}
 
 // 歌曲时长的时间戳转化函数
-const unitTime = (time: number): string => {
+const unitTime = (time: time): string => {
   if (!time) return `00:00`;
+  if (typeof time === 'object') {
+    return formatTime(time.end - time.start);
+  }
   let minute: string | number = new Date(time).getMinutes();
   let second: string | number = new Date(time).getSeconds();
   minute = minute < 10 ? `0${minute}` : `${minute}`;
@@ -59,10 +68,25 @@ const jumpToMv = (history: History<LocationState>, mvid: number) => {
   });
 };
 
+// 节流函数
+const throttle = (fn: Function, time: number): Function => {
+  let isRun = false;
+  return function (...rest: any) {
+    if (isRun) return;
+    isRun = true; 
+    setTimeout(() => {
+      fn.apply(this, rest);
+      isRun = false;
+    }, time);
+  }
+}
+
+
 export default {
   unitTime,
   formatTime,
   unitCount,
   jumpToPlay,
-  jumpToMv
+  jumpToMv,
+  throttle
 }

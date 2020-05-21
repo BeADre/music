@@ -6,19 +6,6 @@ type Params = {
   id: string
 }
 
-export function songDetailReq({ids}: Partial<Params>) {
-  const params = {
-    ids
-  };
-  return axios.getData(API.playMusicApi.songDetail, params)
-}
-
-export function getLyricReq({id}: Partial<Params>) {
-  const params = {
-    id
-  };
-  return axios.getData(API.playMusicApi.lyric, params)
-}
 
 export function getDetailReq({id}: Partial<Params>) {
   const params = {
@@ -27,11 +14,11 @@ export function getDetailReq({id}: Partial<Params>) {
   return axios.getData(API.playMusicApi.playlistDetail, params)
 }
 
-export function checkReq({id}: Partial<Params>) {
+export function getSongReq({id}: Partial<Params>) {
   const params = {
     id
   };
-  return axios.getData(API.playMusicApi.checkMusic, params)
+  return axios.getData(API.playMusicApi.getSong, params)
 }
 
 export function getAlbumList({id}: Partial<Params>) {

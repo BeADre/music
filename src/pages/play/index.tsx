@@ -4,10 +4,12 @@ import {useDispatch, useSelector} from "react-redux";
 import utils from "../../utils";
 import "./index.scss";
 
+
 function Play({history}: any) {
   const dispatch = useDispatch();
   const playmusic = useSelector(({playmusic}: any) => playmusic);
-  const {songDetail = {}, lyric = "", playlist = []} = playmusic; // lyric 歌词文本
+  const {song = {}, playlist = []} = playmusic;
+  const {lyric, detail: songDetail = {}, urlData = {}} = song;
   const [controlProps, setControlProps] = useState({
     isPause: false, // 是否暂停
     isMute: false // 是否静音
@@ -17,7 +19,6 @@ function Play({history}: any) {
     currentTime: 0, // 当前播放时间
   });
   const [songId, setSongId] = useState(""); // 播放歌曲的ID
-  const [hasCopyright, setHasCopyright] = useState(undefined); // 播放歌曲是否有版权
   const audio = useRef<HTMLAudioElement>(null); // audio标签
   const lyricContent = useRef<HTMLDivElement>(null); // 歌词容器
 
@@ -41,60 +42,45 @@ function Play({history}: any) {
     return Object.fromEntries(lyricArr);
   }, [lyric]); // 缓存歌词
 
+  const throttledFn = useMemo(() => utils.throttle(message.error, 3000), []);
+
   useEffect(() => {
-    if (audio.current) audio.current.volume = 0.5; // 设置初始播放器音量为50
+    if (audio.current) audio.current.volume = 0.1; // 设置初始播放器音量为50
     if (isSong) {
       setSongId(id);
-    } else if (isAlbum) {
+    } 
+    if(isAlbum || id) {
+      const type = isAlbum ? 'albumList' : 'playlistDetail' ;
       dispatch({
-        type: "playmusic/albumList",
+        type: `playmusic/${type}`,
         payload: {
           id
         },
-        setState: setSongId
-      })
-    } else if(id){
-      dispatch({
-        type: "playmusic/playlistDetail",
-        payload: {
-          id
-        },
-        setState: setSongId
+        getDataTrick: (id: string) => {
+          setSongId(id)
+        }
       })
     }
   }, []);
+  
   useEffect(() => {
-    if (hasCopyright === false) {
-      message.error("亲爱的,暂无版权");
-    }else if (songId && hasCopyright === undefined) {
+    if(songId){
       dispatch({
-        type: "playmusic/check",
+        type: "playmusic/getSong",
         payload: {
           id: songId
         },
-        setState: setHasCopyright
+        getDataTrick: () => {
+          setControlProps({...controlProps, ...{isPause: false}});
+          setSongProps({
+            activeLine: "lyric0",
+            currentTime: 0,
+          });
+          (lyricContent.current as HTMLDivElement).style.transform = `translateY(250px)`;
+        },
       });
     }
-
-  },[songId, hasCopyright]);
-  useEffect(() => {
-    // 请求歌曲详情
-    if (songId) {
-      setHasCopyright(undefined);
-      dispatch({
-        type: "playmusic/songDetail",
-        payload: {
-          ids: songId
-        }
-      });
-      // 请求歌词
-      dispatch({
-        type: "playmusic/getLyric",
-        payload: {
-          id: songId
-        }
-      });
-    }
+   
   }, [songId]);
 
   // 格式化歌词
@@ -110,24 +96,26 @@ function Play({history}: any) {
   // 改变播放时间
   const timeUpdate = (e: SyntheticEvent<HTMLAudioElement>): void => {
     const {currentTime} = e.currentTarget;
-    lrcTimeArr.forEach((value, index, arr) => {
-      if ((currentTime > value && currentTime < arr[index + 1]) || currentTime > arr[arr.length - 1]) {
-        (lyricContent.current as HTMLDivElement).style.transform = `translateY(${250 - 75 * index}px)`;
-        setSongProps({activeLine: `lyric${index}`, currentTime});
+    for(let i = 0; i < lrcTimeArr.length; i++){
+      if ((currentTime > lrcTimeArr[i] && currentTime < lrcTimeArr[i + 1]) || currentTime > lrcTimeArr[lrcTimeArr.length - 1]) {
+        (lyricContent.current as HTMLDivElement).style.transform = `translateY(${250 - 75 * i}px)`;
+        setSongProps({activeLine: `lyric${i}`, currentTime});
+        break;
+      } else {
+        setSongProps({...songProps, ...{currentTime}});
       }
-    });
+    }
   };
 
   /**
    * @param controlType {String} 需要改变的control类型
-   * @param hasCopyright {boolean} 歌曲是否授权
    */
-  const musicControl = (controlType: string, hasCopyright?: boolean): void | boolean => {
+  const musicControl = (controlType: string): void | boolean => {
     if(!history.location.state) return false;
     const {current} = audio;
     if (controlType === "pause") {
-      if (!hasCopyright) {
-        message.error("亲爱的,暂无版权");
+      if (!urlData.playable) {
+        throttledFn("亲爱的,暂无版权");
         return false
       }
       (current as HTMLAudioElement).paused ? (current as HTMLAudioElement).play() : (current as HTMLAudioElement).pause();
@@ -149,40 +137,42 @@ function Play({history}: any) {
   // 改变播放时间
   const changeTime = (value: number): void | boolean => {
     const {current} = audio;
-    if (!hasCopyright || isNaN(minUnitTime)) {
-      message.error("亲爱的,暂无版权");
+    if (!urlData.playable || isNaN(minUnitTime)) {
+      throttledFn("亲爱的,暂无版权");
       return false
     }
     (current as HTMLAudioElement).currentTime = parseInt(`${minUnitTime * value}`)
   };
-
+  const chooseSong = (value: any): void => {
+    (audio.current as HTMLAudioElement).pause();
+    setControlProps({...controlProps, ...{isPause: true}});
+    setSongId(value.id);
+  }
   // 切换下一曲
   const checkSong = (order: string): void | false => {
     if(!history.location.state) return false;
     if (isSong) {
-      setSongProps({...songProps, ...{currentTime: 0}});
       const {current} = audio;
       (current as HTMLAudioElement).currentTime = 0;
       (current as HTMLAudioElement).play();
       return false
     }
     const playIndex = playlist.findIndex((value: any) => value.id === songId);
-    setHasCopyright(undefined);
     if (order === "next") {
       if (playIndex === playlist.length - 1) {
-        setSongId(playlist[0].id)
+        chooseSong(playlist[0])
       } else {
-        setSongId(playlist[playIndex + 1].id)
+        chooseSong(playlist[playIndex + 1])
       }
     } else {
       if (playIndex === 0) {
-        setSongId(playlist[playlist.length - 1].id)
+        chooseSong(playlist[playlist.length - 1])
       } else {
-        setSongId(playlist[playIndex - 1].id)
+        chooseSong(playlist[playIndex - 1])
       }
     }
   };
-
+  
   return (
     <div className="play-main-container">
       <div className="play-container">
@@ -209,19 +199,23 @@ function Play({history}: any) {
         </div>
         <div className="player">
           <Icon type="step-backward" onClick={() => checkSong("last")}/>
-          {(controlProps.isPause || !hasCopyright) ?
-            <Icon type="caret-right" onClick={() => musicControl("pause", hasCopyright)}/> :
-            <Icon type="pause" onClick={() => musicControl("pause", hasCopyright)}/>}
+          {(controlProps.isPause || !urlData.playable) ?
+            <Icon type="caret-right" onClick={() => musicControl("pause")}/> :
+            <Icon type="pause" onClick={() => musicControl("pause")}/>}
           <Icon type="step-forward" onClick={() => checkSong("next")}/>
           <div className="slider-container">
             <Slider defaultValue={0}
-                    // disabled={hasCopyright === false || !history.location.state}
                     value={Math.ceil(songProps.currentTime / minUnitTime)}
                     tooltipVisible={false}
                     onChange={value => changeTime(value as number)}/>
           </div>
           <div className="time-container">
-            <span>{utils.formatTime(songProps.currentTime)} / {utils.unitTime(songDetail.dt)}</span>
+            <span>
+              {utils.formatTime(songProps.currentTime)} / 
+              {urlData.freeTrialInfo? 
+                utils.unitTime(urlData.freeTrialInfo) : 
+                utils.unitTime(songDetail.dt)}
+            </span>
           </div>
           {controlProps.isMute ?
             <i className="iconfont icon-jingyin" onClick={() => musicControl("mute")}/> :
@@ -231,7 +225,7 @@ function Play({history}: any) {
             <Slider defaultValue={50} disabled={false} onChange={value => changeVoice(value as number)}/>
           </div>
         </div>
-        <audio src={`https://music.163.com/song/media/outer/url?id=${songId}.mp3`}
+        <audio src={urlData.url}
                autoPlay={true}
                ref={audio}
                onEnded={() => checkSong("next")}
@@ -240,11 +234,7 @@ function Play({history}: any) {
           <div style={{height: 84}}/>
           {playlist.map((value: any, index: number) =>
             <div className="songItem" key={value.id}
-                 onClick={() => {
-                   setHasCopyright(undefined)
-                   setSongId(value.id);
-                   setSongProps({...songProps, ...{currentTime: 0}})
-                 }}
+                 onClick={() => chooseSong(value)}
             >
               <div className="songItemLeft">
                 <span style={{width: 33}}>{index + 1}</span>

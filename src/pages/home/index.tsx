@@ -1,20 +1,19 @@
 import React, {useState, useEffect, Fragment, useMemo} from "react";
-import {Icon} from "antd";
+import {Icon, Select} from "antd";
 import {useSelector, useDispatch} from "react-redux";
 import utils from "../../utils";
 import {newSongTab, mvTab} from "../../staticData/home";
 import "./index.scss";
+
+const {Option} = Select;
 
 function Home({history}: any) {
   const dispatch = useDispatch();
   const home = useSelector(({home}: any) => home);
   const {playTab = [], playlist = [], newSong = [], newPlate = [], mv = []} = home;
   const [state, setState]: any = useState({
-    tabColorIndexPlaylist: 0,
-    tabColorIndexNewSong: 0,
-    tabColorIndexMV: 0,
     newSongCat: 0,
-    playlistCat: "",
+    playlistCat: "全部",
     mvCat: "全部",
   });
 
@@ -57,11 +56,10 @@ function Home({history}: any) {
     })
   }, [state.mvCat]);
 
-  const getPlaylist = (colorName: string, catName: string, i: number, name: string): void => {
+  const getPlaylist = (catName: string, name: string): void => {
     setState({
       ...state,
       ...{
-        [colorName]: i,
         [catName]: name
       }
     })
@@ -69,21 +67,33 @@ function Home({history}: any) {
 
   const tab = (tabName: Array<any>, stateProps: Array<string>, isFirst?: boolean) => {
     return <div className="tab" id={isFirst ? "tab" : ""}>
-      {tabName.map((value, index) =>
+      {tabName.map(value =>
         <span
-          key={value.id || index}
-          onClick={() => getPlaylist(stateProps[0], stateProps[1], index, value[stateProps[2]])}
-          style={{color: index === state[stateProps[0]] ? "#31c27c" : ""}}
+          key={value.id}
+          onClick={() => getPlaylist(stateProps[0], value[stateProps[1]])}
+          style={{color: value[stateProps[1]] === state[stateProps[0]] ? "#31c27c" : ""}}
         >
-            {value.name || value.title}
+            {value.name}
           </span>)
       }
     </div>
   };
+  const selectTab = (tabName: Array<any>, stateProps: Array<string>) => {
+    return(
+      <Select 
+        value={state.playlistCat} 
+        className="select-tab" 
+        onChange={(value: any) => getPlaylist(stateProps[0], value)}
+      >
+        {tabName.map(value => 
+          <Option value={value[stateProps[1]]} key={value.id}>{value.name}</Option>
+        )}
+      </Select>
+    )};
 
   // 第二部分遍历的新歌内容
   const memorizedSong = useMemo(() => {
-    const copyNewSong = [...newSong].splice(0, 45);
+    const copyNewSong = [...newSong].splice(0, 30);
     const slideElementArr = [];
     let key = 1;
     while (copyNewSong.length) {
@@ -91,7 +101,7 @@ function Home({history}: any) {
       slideElementArr.push(
         <div style={{display: "inline-block", whiteSpace: 'nowrap'}} key={key}>
           <div className="slide">
-            {copyNewSong.splice(0, 9).map((value) =>
+            {copyNewSong.splice(0, 6).map((value) =>
               <div className="slideContent2" key={value.id}>
                 <div className="slideContent-left" onClick={() => utils.jumpToPlay(history, value.id, true)}>
                   <div className="slide-keep">
@@ -213,8 +223,14 @@ function Home({history}: any) {
   return (
     <div className="home-container">
       <div className="recommend-playlist">
-        <h1>歌单推荐</h1>
-        {tab(playTab, ["tabColorIndexPlaylist", "playlistCat", "name"], true)}
+        <div className="sm-tab-container">
+          <h3>歌单推荐</h3>
+          {selectTab(playTab, ["playlistCat", "name"])}
+        </div>
+        <div className="lg-tab-container">
+          <h1>歌单推荐</h1>
+          {tab(playTab, ["playlistCat", "name"], true)}
+        </div>
         <div className="slide-container">
           {playlist.map((value: any, index: number) => (
             <div key={index} className="slideContent">
@@ -234,8 +250,14 @@ function Home({history}: any) {
       </div>
 
       <div className="new-song">
-        <h1>新歌首发</h1>
-        {tab(newSongTab, ["tabColorIndexNewSong", "newSongCat", "id"])}
+        <div className="sm-tab-container">
+          <h3>新歌首发</h3>
+          {selectTab(newSongTab, ["newSongTab", "id"])}
+        </div>
+        <div className="lg-tab-container">
+          <h1>新歌首发</h1>
+          {tab(newSongTab, ["newSongTab", "id"])}
+        </div>
         <div className="slide-container">
           {memorizedSong}
         </div>
@@ -249,8 +271,14 @@ function Home({history}: any) {
       </div>
 
       <div className="new-MV">
-        <h1>MV</h1>
-        {tab(mvTab, ["tabColorIndexMV", "mvCat", "name"])}
+        <div className="sm-tab-container">
+          <h3>MV</h3>
+          {selectTab(mvTab, ["mvCat", "name"])}
+        </div>
+        <div className="lg-tab-container">
+          <h1>MV</h1>
+          {tab(mvTab, ["mvCat", "name"])}
+        </div>
         <div className="slide-container">
           {memorizedMv}
         </div>

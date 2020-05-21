@@ -7,7 +7,7 @@ export default {
     * getPlaylistTab() {
       const data = yield call(getPlaylistTabReq);
       if (data) {
-        data.data.tags.unshift({name: "", title: "全部"});
+        data.data.tags.unshift({name: "全部", id: "d_1"});
         yield put({type: "home/changeState", payload: {playTab: data.data.tags}});
       }
     },
