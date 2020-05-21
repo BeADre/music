@@ -1,14 +1,14 @@
 import {call, put} from "redux-saga/effects"
 import {message} from "antd";
-import {songDetailReq, getLyricReq, getDetailReq, checkReq, getAlbumList} from "../../request/playmusic"
+import { getDetailReq, getSongReq, getAlbumList} from "../../request/playmusic"
 
 type Action = {
   type: string,
   payload: {
     id?: string,
     ids?: string
-  }
-  setState: Function
+  },
+  getDataTrick: Function
 }
 
 export default {
@@ -16,42 +16,33 @@ export default {
     playlist: []
   },
   effect: {
-    * songDetail({payload}: Action) {
-      const data = yield call(songDetailReq, payload);
+    * getSong({payload, getDataTrick}: Action) {
+      const data = yield call(getSongReq, payload);
       if (data) {
-        yield put({type: "playmusic/changeState", payload: {songDetail: data.data.songs[0]}});
+        if(data.data.urlData.playable){
+          getDataTrick();
+        }
+        yield put({type: "playmusic/changeState", payload: {song: data.data}});
       }
     },
-    * getLyric({payload}: Action) {
-      const data = yield call(getLyricReq, payload);
-      if (data) {
-        yield put({type: "playmusic/changeState", payload: {lyric: data.data.lrc ? data.data.lrc.lyric : ""}});
-      }
-    },
-    * check({payload, setState}: Action) {
-      const data = yield call(checkReq, payload);
-      if (data) {
-        setState(data.data.success)
-      }
-    },
-    * playlistDetail({payload, setState}: Action) {
+    * playlistDetail({payload, getDataTrick}: Action) {
       const data = yield call(getDetailReq, payload);
       if (data) {
         const playlist = data.data.playlist.tracks;
         if (playlist.length) {
-          setState(playlist[0].id)
+          getDataTrick(playlist[0].id)
         } else {
           message.error("无法获取当前歌单歌曲")
         }
         yield put({type: "playmusic/changeState", payload: {playlist}});
       }
     },
-    * albumList({payload, setState}: Action) {
+    * albumList({payload, getDataTrick}: Action) {
       const data = yield call(getAlbumList, payload);
       if (data) {
         const playlist = data.data.songs;
         if (playlist.length) {
-          setState(playlist[0].id)
+          getDataTrick(playlist[0].id)
         } else {
           message.error("无法获取当前歌单歌曲")
         }
