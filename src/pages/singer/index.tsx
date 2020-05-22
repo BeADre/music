@@ -71,7 +71,7 @@ const Singer = ({dispatch, singer = {}}: any) => {
             {playerTab.map(value =>
               <span className="singer"
                     style={{color: type === value.id ? "#31c27c" : "rgba(0, 0, 0, 0.65)"}}
-                    onClick={() => setType(value.id)} key={value.id}>{value.name}</span>)
+                    onClick={() => setType((value.id as number))} key={value.id}>{value.name}</span>)
             }
           </div>
         </div>

@@ -17,6 +17,14 @@ export const newSongTab: Array<InterfaceTab> = [
   {name: Tab[16], id: Tab["韩国"]},
 ];
 
+export const albumTab: Array<InterfaceTab> = [
+  {name: '全部', id: 'ALL'},
+  {name: '华语', id: 'ZH'},
+  {name: '欧美', id: 'EA'},
+  {name: '日本', id: 'JP'},
+  {name: '韩国', id: 'KR'},
+];
+
 export const mvTab: Array<InterfaceTab> = [
   {name: Tab[0], id: Tab["全部"]},
   {name: Tab[3], id: Tab["港台"]},

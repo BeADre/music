@@ -31,10 +31,10 @@ export function getNewSongReq({cat}: Partial<HomeParams>) {
   return axios.getData(API.homeApi.newSong, params)
 }
 
-export function getNewPlateReq({offset, limit}: Partial<HomeParams>) {
+export function getNewPlateReq({type, limit}: Partial<HomeParams>) {
   const params = {
-    offset,
-    limit
+    limit,
+    type
   };
   return axios.getData(API.homeApi.newPlate, params)
 }
@@ -43,7 +43,7 @@ export function getMvReq({cat}: Partial<HomeParams>) {
   const params = {
     order: "最热",
     area: cat,
-    limit: 50
+    limit: 10
   };
   return axios.getData(API.homeApi.mv, params)
 }
