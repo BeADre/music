@@ -1,4 +1,4 @@
 export default interface InterfaceTab {
   name: string,
-  id: number
+  id: number | string
 }
