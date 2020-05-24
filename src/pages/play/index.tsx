@@ -88,23 +88,38 @@ function Play({history}: any) {
     if (!memorizedLyric) return null;
     return Object.keys(memorizedLyric).map((value, index) => {
       lrcTimeArr.push(parseFloat(value.substr(1, 3)) * 60 + parseFloat(value.substring(4, 10)));
-      return <p key={value}
-                className={songProps.activeLine === `lyric${index}` ? "on" : ""}>{memorizedLyric[value]}</p>;
+      return (
+        <p 
+          id={index === 0 ? "pEl" : undefined}
+          key={value}
+          className={songProps.activeLine === `lyric${index}` ? "on" : ""}
+        >
+            {memorizedLyric[value]}
+        </p>
+      )
     })
   };
 
   // 改变播放时间
   const timeUpdate = (e: SyntheticEvent<HTMLAudioElement>): void => {
     const {currentTime} = e.currentTarget;
-    for(let i = 0; i < lrcTimeArr.length; i++){
-      if ((currentTime > lrcTimeArr[i] && currentTime < lrcTimeArr[i + 1]) || currentTime > lrcTimeArr[lrcTimeArr.length - 1]) {
-        (lyricContent.current as HTMLDivElement).style.transform = `translateY(${250 - 75 * i}px)`;
-        setSongProps({activeLine: `lyric${i}`, currentTime});
-        break;
-      } else {
-        setSongProps({...songProps, ...{currentTime}});
+    if(currentTime < lrcTimeArr[0]){
+      setSongProps({activeLine: `lyric0`, currentTime});
+    } else if(currentTime > lrcTimeArr[lrcTimeArr.length - 1]){
+      setSongProps({activeLine: `lyric${lrcTimeArr.length - 1}`, currentTime});
+    } else {
+      const pEl = document.getElementById("pEl");
+      const { height, marginBottom } = getComputedStyle((pEl as HTMLParagraphElement));
+      for(let i = 0; i < lrcTimeArr.length; i++){
+        if ((currentTime > lrcTimeArr[i] && currentTime < lrcTimeArr[i + 1])) {
+          const distanceNum = parseFloat(((parseFloat(height) + parseFloat(marginBottom)) * i).toFixed(2));
+          (lyricContent.current as HTMLDivElement).style.transform = `translateY(${250 - distanceNum}px)`;
+          setSongProps({activeLine: `lyric${i}`, currentTime});
+          break;
+        }
       }
     }
+    
   };
 
   /**
@@ -172,7 +187,12 @@ function Play({history}: any) {
       }
     }
   };
-  
+  const clickMenu = () => {
+    const songListEl = document.getElementById("songList");
+     (songListEl as HTMLDivElement).style.right = 
+      (songListEl as HTMLDivElement).style.right === "0px" ? "-350px" : "0px";
+  }
+
   return (
     <div className="play-main-container">
       <div className="play-container">
@@ -198,40 +218,46 @@ function Play({history}: any) {
           </div>
         </div>
         <div className="player">
-          <Icon type="step-backward" onClick={() => checkSong("last")}/>
-          {(controlProps.isPause || !urlData.playable) ?
-            <Icon type="caret-right" onClick={() => musicControl("pause")}/> :
-            <Icon type="pause" onClick={() => musicControl("pause")}/>}
-          <Icon type="step-forward" onClick={() => checkSong("next")}/>
-          <div className="slider-container">
-            <Slider defaultValue={0}
-                    value={Math.ceil(songProps.currentTime / minUnitTime)}
-                    tooltipVisible={false}
-                    onChange={value => changeTime(value as number)}/>
+          <div className="music-ctrl-container">
+            <Icon type="step-backward" onClick={() => checkSong("last")}/>
+            {(controlProps.isPause || !urlData.playable) ?
+              <Icon type="caret-right" onClick={() => musicControl("pause")}/> :
+              <Icon type="pause" onClick={() => musicControl("pause")}/>}
+            <Icon type="step-forward" onClick={() => checkSong("next")}/>
           </div>
-          <div className="time-container">
-            <span>
-              {utils.formatTime(songProps.currentTime)} / 
-              {urlData.freeTrialInfo? 
-                utils.unitTime(urlData.freeTrialInfo) : 
-                utils.unitTime(songDetail.dt)}
-            </span>
+          <div className="playing-container">
+            <div className="slider-container">
+              <Slider defaultValue={0}
+                      value={Math.ceil(songProps.currentTime / minUnitTime)}
+                      tooltipVisible={false}
+                      onChange={value => changeTime(value as number)}/>
+            </div>
+            <div className="time-container">
+              <span>
+                {utils.formatTime(songProps.currentTime)} / 
+                {urlData.freeTrialInfo? 
+                  utils.unitTime(urlData.freeTrialInfo) : 
+                  utils.unitTime(songDetail.dt)}
+              </span>
+            </div>
           </div>
-          {controlProps.isMute ?
-            <i className="iconfont icon-jingyin" onClick={() => musicControl("mute")}/> :
-            <i className="iconfont icon-shengyin" onClick={() => musicControl("mute")}/>
-          }
-          <div className="voice-container">
-            <Slider defaultValue={50} disabled={false} onChange={value => changeVoice(value as number)}/>
+          <div className="voice-ctrl-container">
+            {controlProps.isMute ?
+              <i className="iconfont icon-jingyin" onClick={() => musicControl("mute")}/> :
+              <i className="iconfont icon-shengyin" onClick={() => musicControl("mute")}/>
+            }
+            <div className="voice-container">
+              <Slider defaultValue={50} disabled={false} onChange={value => changeVoice(value as number)}/>
+            </div>
           </div>
+          <Icon type="menu-unfold" onClick={clickMenu} />
         </div>
         <audio src={urlData.url}
                autoPlay={true}
                ref={audio}
                onEnded={() => checkSong("next")}
                onTimeUpdate={e => timeUpdate(e)}/>
-        {isSong ? null : <div className="songList">
-          <div style={{height: 84}}/>
+        {isSong ? null : <div className="songList" id="songList">
           {playlist.map((value: any, index: number) =>
             <div className="songItem" key={value.id}
                  onClick={() => chooseSong(value)}
@@ -254,11 +280,9 @@ function Play({history}: any) {
                   style={{marginRight: 10, visibility: songId === value.id ? "visible" : "hidden"}}
                   alt=""
                 />
-                {/*<Icon type="delete" className="songItemDelete"/>*/}
               </div>
             </div>
           )}
-          <div style={{height: 84}}/>
         </div>}
       </div>
       <div className="bg-play" style={{backgroundImage: `url(${al.picUrl})`}}/>
