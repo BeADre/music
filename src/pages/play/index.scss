@@ -3,21 +3,19 @@
   position: relative;
   .play-container{
     width: 100vw;
-    min-width: 1200px;
     padding: 1px;
     min-height: 100vh;
     background: rgba(27,27,28,.3);
     z-index: 2;
     position: relative;
+    overflow: hidden;
     .artist-info-container{
       display: flex;
       position: relative;
       .return{
-        position: absolute;
         color: rgb(210,210,210);
         font-size: 26px;
-        left: 2%;
-        top: 15%;
+        margin: 30px 0 0 40px;
         cursor: pointer;
         &:hover{
           color: white;
@@ -26,7 +24,7 @@
       .img{
         overflow: hidden;
         border-radius: 50%;
-        margin: 50px 0 0 100px;
+        margin: 50px 0 0 60px;
         animation:rotateAni 18s linear infinite;
         img{
           width: 150px;
@@ -71,14 +69,17 @@
       }
     }
     .player{
-      margin-top: 5%;
       width: 86%;
-      margin-left: 7%;
       font-size: 40px;
       color: rgb(210,210,210);
       display: flex;
       align-items: center;
-      height: 60px;
+      transition: .5s width;
+      margin: {
+        top: 5%;
+        left: 7%;
+      }
+
       i{
         cursor: pointer;
         margin-right: 15px;
@@ -96,15 +97,17 @@
       :nth-child(2){
         font-size: 50px;
       }
-      :nth-child(3){
-        margin-right: 50px;
+      .anticon-menu-unfold{
+          font-size: 25px;
+          display: none;
+      }
+      .playing-container{
+        width: 65%;
+        display: flex;
+        align-items: center;
       }
       .slider-container,.voice-container{
-        width: 60%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
+        width: 100%;
         .ant-slider{
           margin: 14px 6px 14px;
         }
@@ -118,7 +121,7 @@
         height: 100%;
         display: flex;
         align-items: center;
-        margin: 0 30px 0 15px;
+        margin: 0 15px;
         min-width: 110px;
         span{
           font-size: 18px;
@@ -129,8 +132,14 @@
         margin-right: 5px;
       }
 
-      .voice-container{
-        width: 10%;
+      .voice-ctrl-container{
+        width: 15%;
+        display: flex;
+        align-items: center;
+      }
+      .music-ctrl-container{
+        display: flex;
+        align-items: center;
       }
     }
     .songList{
@@ -138,10 +147,13 @@
       position: absolute;
       height: 500px;
       color: #b9b8b8;
-      width: 350px;
+      width: 300px;
       right: 0;
       top: 180px;
       overflow-y: auto;
+      transition: .5s right;
+      padding: 84px 0;
+      border-radius: 10px 0px 0px 10px;
       .songItem{
         display: flex;
         align-items: center;
@@ -195,6 +207,76 @@
   }
   .on{
     color: #1DA57A
+  }
+
+  @media (min-width: 769px) and (max-width: 1200px) {
+    .play-container{
+      .songList{
+        right: -300px;
+        -webkit-mask-image: initial;
+        background: rgb(31, 24, 29);
+        padding: 0px 0px 0px 12px;
+      }
+      .player{
+        width: 100%;
+        margin-left: 0;
+        .voice-ctrl-container{
+          width: 25%;
+        }
+      }
+      .anticon-menu-unfold{
+        display: block !important;
+      }
+    }
+  }
+  @media (min-width: 640px) and (max-width: 1200px) {
+    .play-container{
+      .lyrics-display-box .lyrics-content {
+        font-size: calc(100vw * 0.025);
+      }
+    }
+  }
+  @media (max-width: 639px) {
+    .play-container{
+      .lyrics-display-box .lyrics-content {
+        font-size: 16px;
+      }
+    }
+  }
+  @media (min-width: 576px) and (max-width: 768px) {
+    .play-container{
+      .songList{
+        right: -300px;
+        -webkit-mask-image: initial;
+        background: rgb(31, 24, 29);
+        padding: 0px 0px 0px 12px;
+      }
+      .player{
+        width: 100%;
+        margin-left: 0;
+        flex-wrap: wrap;
+        .playing-container{
+          order: -2;
+          width: 100%;
+          padding: 0 5%;
+          .time-container{
+            margin: 0 0 0 15px;
+          }
+        }
+        .music-ctrl-container{
+          margin-right: 10%;
+        }
+        .voice-ctrl-container{
+          order: -1;
+          margin: 0 5% 0 10%;
+          width: 25%;
+        }
+      }
+      .anticon-menu-unfold{
+        display: block !important;
+        margin: 0 !important;
+      }
+    }
   }
 }
 
