@@ -113,16 +113,19 @@ function Home({ history }: any) {
   };
 
   const handleScroll = (e: any) => {
-    const { scrollWidth, scrollLeft, clientWidth } = e.target;
-    console.log({ scrollWidth, scrollLeft, clientWidth })
-
-    // if (scrollTop + clientHeight >= scrollHeight - 300) {
-    //     if (page * 30 >= total.current) return;
-    //     setLoadingState({ 
-    //         isLoading: true
-    //     });
-    //     setPage(page + 1);
-    // }
+    const {scrollLeft} = e.target;
+    const slideContentNodeList = document.getElementsByClassName("slide-content2");
+    const {width} = getComputedStyle(slideContentNodeList[0]);
+    const slideBlockCol = Math.ceil(scrollLeft / parseFloat(width));
+    const simplifyCol = slideBlockCol % 3;
+    const slideBlock = slideBlockCol > 3 ? 3 : 2;
+    const imgOrderArr = simplifyCol === 1 ? [1, 4, 7, 10] : 
+      simplifyCol === 2 ? [2, 5, 8, 11] : [3, 6, 9, 12];
+    imgOrderArr.forEach(value => {
+      const imgEl = document.getElementById(`${slideBlock}${value}`);
+      (imgEl as HTMLImageElement).src = 
+        (imgEl as HTMLImageElement).getAttribute('data-src') || "";
+    })
   }
   
   const throttleScroll = utils.throttle(handleScroll, 500);
@@ -135,16 +138,17 @@ function Home({ history }: any) {
   const memorizedSong = useMemo(() => {
     const copyNewSong = [...newSong].splice(0, 36);
     const slideElementArr = [];
-    let key = 1;
+    let key = 0;
     while (copyNewSong.length) {
       key++;
-      slideElementArr.push(
+      const element = (
         <div
           style={{ display: "inline-block", whiteSpace: "nowrap" }}
           key={key}
         >
           <div className="slide">
-            {copyNewSong.splice(0, 12).map((value) => (
+            {/* eslint-disable-next-line no-loop-func */}
+            {copyNewSong.splice(0, 12).map((value,index) => (
               <div className="slide-content2" key={value.id}>
                 <div
                   className="slide-content-left"
@@ -153,7 +157,12 @@ function Home({ history }: any) {
                   <div className="slide-keep">
                     <span className="iconfont icon-ziyuan" />
                   </div>
-                  <img src={value.album.picUrl} alt="" />
+                  <img 
+                    src={key === 1 ? value.album.picUrl : ""} 
+                    id={`${key}${index + 1}`}
+                    data-src={value.album.picUrl}
+                    alt="" 
+                  />
                 </div>
                 <div className="slide-content-right">
                   <div className="right-detail">
@@ -187,7 +196,8 @@ function Home({ history }: any) {
             ))}
           </div>
         </div>
-      );
+      )
+      slideElementArr.push(element);
     }
     return slideElementArr;
   }, [JSON.stringify(newSong)]);
