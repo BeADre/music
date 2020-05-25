@@ -48,8 +48,7 @@ function Play({history}: any) {
     if (audio.current) audio.current.volume = 0.1; // 设置初始播放器音量为50
     if (isSong) {
       setSongId(id);
-    } 
-    if(isAlbum || id) {
+    } else if(isAlbum || id) {
       const type = isAlbum ? 'albumList' : 'playlistDetail' ;
       dispatch({
         type: `playmusic/${type}`,
@@ -250,7 +249,7 @@ function Play({history}: any) {
               <Slider defaultValue={50} disabled={false} onChange={value => changeVoice(value as number)}/>
             </div>
           </div>
-          <Icon type="menu-unfold" onClick={clickMenu} />
+          {isSong ? null : <Icon type="menu-unfold" onClick={clickMenu} />}
         </div>
         <audio src={urlData.url}
                autoPlay={true}
