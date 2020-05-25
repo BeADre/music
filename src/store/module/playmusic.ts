@@ -18,28 +18,18 @@ export default {
   effect: {
     * getSong({payload, getDataTrick}: Action) {
       const data = yield call(getSongReq, payload);
-      if (data) {
+      if (data && data.status === 200) {
         if(data.data.urlData.playable){
           getDataTrick();
         }
         yield put({type: "playmusic/changeState", payload: {song: data.data}});
+      }else {
+        message.error(data.statusText)
       }
     },
     * playlistDetail({payload, getDataTrick}: Action) {
       const data = yield call(getDetailReq, payload);
-      if (data) {
-        const playlist = data.data.playlist.tracks;
-        if (playlist.length) {
-          getDataTrick(playlist[0].id)
-        } else {
-          message.error("无法获取当前歌单歌曲")
-        }
-        yield put({type: "playmusic/changeState", payload: {playlist}});
-      }
-    },
-    * albumList({payload, getDataTrick}: Action) {
-      const data = yield call(getAlbumList, payload);
-      if (data) {
+      if (data && data.status === 200) {
         const playlist = data.data.songs;
         if (playlist.length) {
           getDataTrick(playlist[0].id)
@@ -47,6 +37,22 @@ export default {
           message.error("无法获取当前歌单歌曲")
         }
         yield put({type: "playmusic/changeState", payload: {playlist}});
+      }else {
+        message.error(data.statusText)
+      }
+    },
+    * albumList({payload, getDataTrick}: Action) {
+      const data = yield call(getAlbumList, payload);
+      if (data && data.status === 200) {
+        const playlist = data.data.songs;
+        if (playlist.length) {
+          getDataTrick(playlist[0].id)
+        } else {
+          message.error("无法获取当前歌单歌曲")
+        }
+        yield put({type: "playmusic/changeState", payload: {playlist}});
+      }else {
+        message.error(data.statusText)
       }
     }
   },

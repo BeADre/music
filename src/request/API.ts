@@ -10,7 +10,7 @@ const mvApi = {
 };
 
 const playMusicApi = {
-  playlistDetail: "/playlist/detail",
+  playlistDetail: "/custom/get/playlist",
   getSong: "/custom/get/song",
   albumList: "/album",
 };
