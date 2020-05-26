@@ -64,6 +64,9 @@ function Play({history}: any) {
   
   useEffect(() => {
     if(songId){
+      const lyricsBoxEl = document.getElementsByClassName("lyrics-display-box")[0];
+      const { height } = getComputedStyle((lyricsBoxEl as HTMLDivElement));
+      const offset = parseInt(height) / 2;
       dispatch({
         type: "playmusic/getSong",
         payload: {
@@ -75,7 +78,7 @@ function Play({history}: any) {
             activeLine: "lyric0",
             currentTime: 0,
           });
-          (lyricContent.current as HTMLDivElement).style.transform = `translateY(250px)`;
+          (lyricContent.current as HTMLDivElement).style.transform = `translateY(${offset}px)`;
         },
       });
     }
@@ -108,11 +111,14 @@ function Play({history}: any) {
       setSongProps({activeLine: `lyric${lrcTimeArr.length - 1}`, currentTime});
     } else {
       const pEl = document.getElementById("pEl");
-      const { height, marginBottom } = getComputedStyle((pEl as HTMLParagraphElement));
+      const lyricsBoxEl = document.getElementsByClassName("lyrics-display-box")[0];
+      const { height: pHeight, marginBottom } = getComputedStyle((pEl as HTMLParagraphElement));
+      const { height: boxHeight } = getComputedStyle((lyricsBoxEl as HTMLDivElement));
+      const offset = parseInt(boxHeight) / 2;
       for(let i = 0; i < lrcTimeArr.length; i++){
         if ((currentTime > lrcTimeArr[i] && currentTime < lrcTimeArr[i + 1])) {
-          const distanceNum = parseFloat(((parseFloat(height) + parseFloat(marginBottom)) * i).toFixed(2));
-          (lyricContent.current as HTMLDivElement).style.transform = `translateY(${250 - distanceNum}px)`;
+          const distanceNum = parseFloat(((parseFloat(pHeight) + parseFloat(marginBottom)) * i).toFixed(2));
+          (lyricContent.current as HTMLDivElement).style.transform = `translateY(${offset - distanceNum}px)`;
           setSongProps({activeLine: `lyric${i}`, currentTime});
           break;
         }
