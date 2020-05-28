@@ -21,6 +21,9 @@ export default {
       if (data && data.status === 200) {
         if(data.data.urlData.playable){
           getDataTrick();
+        }else {
+          getDataTrick();
+          message.error("当前歌曲暂无版权")
         }
         yield put({type: "playmusic/changeState", payload: {song: data.data}});
       }else {
