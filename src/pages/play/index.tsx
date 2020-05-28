@@ -65,10 +65,7 @@ function Play({history}: any) {
   
   useEffect(() => {
     if(songId){
-<<<<<<< HEAD
       setIsLoading(true);
-=======
->>>>>>> 07229e09d61ebd6bd03b75da513513dd37e0bc5d
       const lyricsBoxEl = document.getElementsByClassName("lyrics-display-box")[0];
       const { height } = getComputedStyle((lyricsBoxEl as HTMLDivElement));
       const offset = parseInt(height) / 2;
@@ -121,11 +118,7 @@ function Play({history}: any) {
       const { height: boxHeight } = getComputedStyle((lyricsBoxEl as HTMLDivElement));
       const offset = parseInt(boxHeight) / 2;
       for(let i = 0; i < lrcTimeArr.length; i++){
-<<<<<<< HEAD
         if ((lyricTime > lrcTimeArr[i] && lyricTime < lrcTimeArr[i + 1])) {
-=======
-        if ((currentTime > lrcTimeArr[i] && currentTime < lrcTimeArr[i + 1])) {
->>>>>>> 07229e09d61ebd6bd03b75da513513dd37e0bc5d
           const distanceNum = parseFloat(((parseFloat(pHeight) + parseFloat(marginBottom)) * i).toFixed(2));
           (lyricContent.current as HTMLDivElement).style.transform = `translateY(${offset - distanceNum}px)`;
           setSongProps({activeLine: `lyric${i}`, currentTime});
@@ -271,6 +264,7 @@ function Play({history}: any) {
           </div>
           {isSong ? null : <Icon type="menu-unfold" onClick={clickMenu} />}
         </div>
+        
         <audio src={urlData.url}
                autoPlay={true}
                ref={audio}
