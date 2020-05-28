@@ -18,6 +18,7 @@ function Play({history}: any) {
     activeLine: "lyric0", //  当前正在播放的歌词的类名(行数)
     currentTime: 0, // 当前播放时间
   });
+  const [isLoading, setIsLoading] = useState(false)
   const [songId, setSongId] = useState(""); // 播放歌曲的ID
   const audio = useRef<HTMLAudioElement>(null); // audio标签
   const lyricContent = useRef<HTMLDivElement>(null); // 歌词容器
@@ -64,6 +65,10 @@ function Play({history}: any) {
   
   useEffect(() => {
     if(songId){
+      setIsLoading(true);
+      const lyricsBoxEl = document.getElementsByClassName("lyrics-display-box")[0];
+      const { height } = getComputedStyle((lyricsBoxEl as HTMLDivElement));
+      const offset = parseInt(height) / 2;
       dispatch({
         type: "playmusic/getSong",
         payload: {
@@ -75,11 +80,10 @@ function Play({history}: any) {
             activeLine: "lyric0",
             currentTime: 0,
           });
-          (lyricContent.current as HTMLDivElement).style.transform = `translateY(250px)`;
+          (lyricContent.current as HTMLDivElement).style.transform = `translateY(${offset}px)`;
         },
       });
     }
-   
   }, [songId]);
 
   // 格式化歌词
@@ -102,17 +106,21 @@ function Play({history}: any) {
   // 改变播放时间
   const timeUpdate = (e: SyntheticEvent<HTMLAudioElement>): void => {
     const {currentTime} = e.currentTarget;
-    if(currentTime < lrcTimeArr[0]){
+    const lyricTime = urlData.freeTrialInfo ? currentTime + urlData.freeTrialInfo.start : currentTime;
+    if(lyricTime < lrcTimeArr[0]){
       setSongProps({activeLine: `lyric0`, currentTime});
-    } else if(currentTime > lrcTimeArr[lrcTimeArr.length - 1]){
+    } else if(lyricTime > lrcTimeArr[lrcTimeArr.length - 1]){
       setSongProps({activeLine: `lyric${lrcTimeArr.length - 1}`, currentTime});
     } else {
       const pEl = document.getElementById("pEl");
-      const { height, marginBottom } = getComputedStyle((pEl as HTMLParagraphElement));
+      const lyricsBoxEl = document.getElementsByClassName("lyrics-display-box")[0];
+      const { height: pHeight, marginBottom } = getComputedStyle((pEl as HTMLParagraphElement));
+      const { height: boxHeight } = getComputedStyle((lyricsBoxEl as HTMLDivElement));
+      const offset = parseInt(boxHeight) / 2;
       for(let i = 0; i < lrcTimeArr.length; i++){
-        if ((currentTime > lrcTimeArr[i] && currentTime < lrcTimeArr[i + 1])) {
-          const distanceNum = parseFloat(((parseFloat(height) + parseFloat(marginBottom)) * i).toFixed(2));
-          (lyricContent.current as HTMLDivElement).style.transform = `translateY(${250 - distanceNum}px)`;
+        if ((lyricTime > lrcTimeArr[i] && lyricTime < lrcTimeArr[i + 1])) {
+          const distanceNum = parseFloat(((parseFloat(pHeight) + parseFloat(marginBottom)) * i).toFixed(2));
+          (lyricContent.current as HTMLDivElement).style.transform = `translateY(${offset - distanceNum}px)`;
           setSongProps({activeLine: `lyric${i}`, currentTime});
           break;
         }
@@ -150,6 +158,7 @@ function Play({history}: any) {
 
   // 改变播放时间
   const changeTime = (value: number): void | boolean => {
+    if(isLoading) return;
     const {current} = audio;
     if (!urlData.playable || isNaN(minUnitTime)) {
       throttledFn("亲爱的,暂无版权");
@@ -219,9 +228,13 @@ function Play({history}: any) {
         <div className="player">
           <div className="music-ctrl-container">
             <Icon type="step-backward" onClick={() => checkSong("last")}/>
-            {(controlProps.isPause || !urlData.playable) ?
-              <Icon type="caret-right" onClick={() => musicControl("pause")}/> :
-              <Icon type="pause" onClick={() => musicControl("pause")}/>}
+            {isLoading ?
+              <Icon type="loading" />
+              :
+              (controlProps.isPause || !urlData.playable) ?
+                <Icon type="caret-right" onClick={() => musicControl("pause")}/> :
+                <Icon type="pause" onClick={() => musicControl("pause")}/>
+            }
             <Icon type="step-forward" onClick={() => checkSong("next")}/>
           </div>
           <div className="playing-container">
@@ -254,6 +267,7 @@ function Play({history}: any) {
         <audio src={urlData.url}
                autoPlay={true}
                ref={audio}
+               onCanPlay={() => setIsLoading(false)}
                onEnded={() => checkSong("next")}
                onTimeUpdate={e => timeUpdate(e)}/>
         {isSong ? null : <div className="songList" id="songList">

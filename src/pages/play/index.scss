@@ -247,6 +247,11 @@
   }
   @media (min-width: 576px) and (max-width: 768px) {
     .play-container{
+      min-height: initial;
+      height: 100vh;
+      .lyrics-display-box{
+        height: 60vh
+      }
       .songList{
         right: -300px;
         -webkit-mask-image: initial;
@@ -255,8 +260,10 @@
       }
       .player{
         width: 100%;
-        margin-left: 0;
         flex-wrap: wrap;
+        padding-top: 6%;
+        max-height: 20vh;
+        margin: 0;
         .playing-container{
           order: -2;
           width: 100%;
@@ -281,7 +288,7 @@
       .artist-info-container {
         align-items: center;
         justify-content: center;
-        height: 150px;
+        height: 20vh;
         margin: 0 2%;
         .return{
           margin: 0;
@@ -304,11 +311,74 @@
           }
         }
       }
+    }
+  }
+  @media (max-width: 575px) {
+    .play-container{
+      min-height: initial;
+      height: 100vh;
       .lyrics-display-box{
-        height: 550px;
+        height: 60vh
+      }
+      .songList{
+        right: -300px;
+        -webkit-mask-image: initial;
+        background: rgb(31, 24, 29);
+        padding: 0px 0px 0px 12px;
+      }
+      .player{
+        width: 100%;
+        margin: 0;
+        padding-top: 6%;
+        max-height: 20vh;
+        flex-wrap: wrap;
+        justify-content: center;
+        .playing-container{
+          order: -2;
+          width: 100%;
+          padding: 0 5%;
+          .time-container{
+            margin: 0 0 0 15px;
+          }
+        }
+        .music-ctrl-container{
+          margin-right: 0;
+        }
+        .voice-ctrl-container{
+          display: none;
+        }
+      }
+      .anticon-menu-unfold{
+        display: block !important;
+        margin: 0 !important;
+      }
+      .artist-info-container {
+        align-items: center;
+        justify-content: center;
+        height: 20vh;
+        margin: 0 2%;
+        .return{
+          margin: 0;
+          position: absolute;
+          left: 0;
+        }
+        .img{
+          width: 40px;
+          height: 40px;
+          margin: 0 2% 0 0;
+        }
+        .info{
+          margin: 0;
+          h2{
+            font-size: 18px;
+            margin: 0;
+          }
+          h3{
+            font-size: 14px;
+          }
+        }
       }
     }
   }
 }
-
 
