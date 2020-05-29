@@ -69,9 +69,9 @@ function Search({history}: any) {
     });
   };
 
-  const tabPanel1 = (type: number) => {
+  const tabPanel1 = () => {
     let columns;
-    if (type === 1) {
+    if (state.type === 1) {
       columns = [
         {
           title: "歌曲",
@@ -86,7 +86,7 @@ function Search({history}: any) {
           dataIndex: "artists",
           render: (text: Array<any>) => {
             return <div>
-              {text.map((v: any, i: number) => {
+              {(text || []).map((v: any, i: number) => {
                 return i === text.length - 1 ?
                   <span key={v.id} onClick={() => hotListClick(v.name)}>
                     <KeywordFormat text={v.name} keywords={keywordsState.keywords}/>
@@ -121,7 +121,7 @@ function Search({history}: any) {
           render: (text: number) => <span>{utils.unitTime(text)}</span>
         },
       ];
-    } else if (type === 10) {
+    } else if (state.type === 10) {
       columns = [
         {
           title: "专辑",
@@ -160,7 +160,7 @@ function Search({history}: any) {
           render: (text: number) => <span>{moment(text).format('YYYY-MM-DD')}</span>
         }
       ];
-    } else if (type === 1000) {
+    } else if (state.type === 1000) {
       columns = [
         {
           title: "歌单",
@@ -274,7 +274,7 @@ function Search({history}: any) {
                   </div>
                   <Pagination {...pagination} style={{padding: "30px 0 50px 0"}} showSizeChanger={false}
                               onChange={(pageNumber) => changePagination(pageNumber, true)}/>
-                </div> : tabPanel1(state.type)}
+                </div> : tabPanel1()}
             </TabPane>
           )}
         </Tabs>
