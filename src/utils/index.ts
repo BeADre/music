@@ -74,7 +74,7 @@ const throttle = (fn: Function, time: number): Function => {
   return function (...rest: any) {
     if (isRun) return;
     isRun = true; 
-    fn(rest)
+    fn(...rest)
     setTimeout(() => {
       isRun = false;
     }, time);
