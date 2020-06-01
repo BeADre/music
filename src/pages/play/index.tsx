@@ -106,13 +106,16 @@ function Play({history}: any) {
   // 改变播放时间
   const timeUpdate = (e: SyntheticEvent<HTMLAudioElement>): void => {
     const {currentTime} = e.currentTarget;
+    const pEl = document.getElementById("pEl");
+    let activeLine = `lyric0`;
     const lyricTime = urlData.freeTrialInfo ? currentTime + urlData.freeTrialInfo.start : currentTime;
-    if(lyricTime < lrcTimeArr[0]){
-      setSongProps({activeLine: `lyric0`, currentTime});
-    } else if(lyricTime > lrcTimeArr[lrcTimeArr.length - 1]){
-      setSongProps({activeLine: `lyric${lrcTimeArr.length - 1}`, currentTime});
+    if(!pEl){
+      setSongProps({activeLine, currentTime});
+      return ;
+    }
+    if(lyricTime > lrcTimeArr[lrcTimeArr.length - 1]){
+      activeLine = `lyric${lrcTimeArr.length - 1}`;
     } else {
-      const pEl = document.getElementById("pEl");
       const lyricsBoxEl = document.getElementsByClassName("lyrics-display-box")[0];
       const { height: pHeight, marginBottom } = getComputedStyle((pEl as HTMLParagraphElement));
       const { height: boxHeight } = getComputedStyle((lyricsBoxEl as HTMLDivElement));
@@ -121,12 +124,12 @@ function Play({history}: any) {
         if ((lyricTime > lrcTimeArr[i] && lyricTime < lrcTimeArr[i + 1])) {
           const distanceNum = parseFloat(((parseFloat(pHeight) + parseFloat(marginBottom)) * i).toFixed(2));
           (lyricContent.current as HTMLDivElement).style.transform = `translateY(${offset - distanceNum}px)`;
-          setSongProps({activeLine: `lyric${i}`, currentTime});
+          activeLine = `lyric${i}`;
           break;
         }
       }
     }
-    
+    setSongProps({activeLine, currentTime});
   };
 
   /**
