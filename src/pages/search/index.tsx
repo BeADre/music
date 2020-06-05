@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from "react";
 import {Input, Tabs, Table, Spin, Avatar, Pagination, Icon} from "antd";
 import {useSelector, useDispatch} from "react-redux";
+import moment from "dayjs";
 import {searchTab} from "../../staticData/search";
 import KeywordFormat from "../../component/KeywordFormat";
-import moment from "moment";
+import useWidth from '../../hook/useWidth'
 import utils from "../../utils";
 import "./index.scss";
 
@@ -11,6 +12,7 @@ const {TabPane} = Tabs;
 
 function Search({history}: any) {
   const dispatch = useDispatch();
+  const width = useWidth();
   const search = useSelector(({search}: any) => search);
   const {hots = [], pagination, list = [], isLoading} = search;
   const initSearch = decodeURI(window.location.search.split("=")[1]);
@@ -23,7 +25,11 @@ function Search({history}: any) {
     offset: 0,
     type: 1,
   });
-
+  const assignPagination = {
+    ...pagination,
+    size: 768 < width && width <= 1200 ? "small" : "default",
+    simple: width < 768
+  };
   useEffect(() => {
     dispatch({
       type: "search/hotList"
@@ -185,11 +191,10 @@ function Search({history}: any) {
         }
       ];
     }
-
     return (
       <Spin spinning={isLoading}>
         <Table
-          pagination={pagination}
+          pagination={assignPagination}
           onChange={pagination => changePagination(pagination)}
           rowKey={rowData => rowData.id}
           columns={columns}
