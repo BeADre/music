@@ -336,15 +336,7 @@ function Home({ history }: any) {
                 </span>
                 <p className="section-four-art">{value.artistName}</p>
                 <p style={{ marginTop: 20 }}>
-<<<<<<< HEAD
-<<<<<<< HEAD
                   <Icon type="video-camera" />
-=======
-                  <VideoCameraOutlined style={{ display: "inline"}}/>
->>>>>>> dec1202... 修改无歌词报错的问题
-=======
-                  <VideoCameraOutlined style={{ display: "inline"}}/>
->>>>>>> dec1202... 修改无歌词报错的问题
                   <span
                     style={{
                       marginLeft: "5px",

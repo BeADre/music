@@ -6,7 +6,7 @@ type Payload = {
 }
 
 export function getDetailReq(payload: Payload) {
-  return axios.getData(API.mvApi.mvDetail, payload)
+  return axios.get(API.mvApi.mvDetail, { params: payload })
 }
 
 

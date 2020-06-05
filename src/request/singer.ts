@@ -2,11 +2,13 @@ import axios from "./index"
 import API from "./API"
 
 export function hotSingerReq() {
-  return axios.getData(API.singerApi.hotSinger, {offset: 0, limit: 50})
+  const params = {offset: 0, limit: 50}
+  return axios.get(API.singerApi.hotSinger, { params })
 }
 
 export function singerListReq(payload: any) {
-  return axios.getData(API.singerApi.singer, {limit: 70, ...payload})
+  const params = {limit: 70, ...payload};
+  return axios.get(API.singerApi.singer, { params })
 }
 
 

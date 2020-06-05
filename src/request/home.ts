@@ -12,7 +12,7 @@ type HomeParams = {
 }
 
 export function getPlaylistTabReq() {
-  return axios.getData(API.homeApi.playlistTab)
+  return axios.get(API.homeApi.playlistTab)
 }
 
 export function getPlaylistReq({limit, order, cat}: Partial<HomeParams>) {
@@ -21,14 +21,14 @@ export function getPlaylistReq({limit, order, cat}: Partial<HomeParams>) {
     order,
     cat
   };
-  return axios.getData(API.homeApi.playlist, params)
+  return axios.get(API.homeApi.playlist, { params })
 }
 
 export function getNewSongReq({cat}: Partial<HomeParams>) {
   const params = {
     type: cat
   };
-  return axios.getData(API.homeApi.newSong, params)
+  return axios.get(API.homeApi.newSong, { params })
 }
 
 export function getNewPlateReq({type, limit}: Partial<HomeParams>) {
@@ -36,7 +36,7 @@ export function getNewPlateReq({type, limit}: Partial<HomeParams>) {
     limit,
     type
   };
-  return axios.getData(API.homeApi.newPlate, params)
+  return axios.get(API.homeApi.newPlate, { params })
 }
 
 export function getMvReq({cat}: Partial<HomeParams>) {
@@ -45,7 +45,7 @@ export function getMvReq({cat}: Partial<HomeParams>) {
     area: cat,
     limit: 10
   };
-  return axios.getData(API.homeApi.mv, params)
+  return axios.get(API.homeApi.mv, { params })
 }
 
 

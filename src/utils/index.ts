@@ -1,5 +1,4 @@
 import { History, LocationState } from "history"
-import { type } from "os";
 
 type time =  number | null | {
   start: number,
