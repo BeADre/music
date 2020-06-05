@@ -1,5 +1,7 @@
-import { axios } from "castle-haozijunqaq-utils"
+import axios from "axios"
 
-axios.setBaseUrl("/local");
+const instance = axios.create({
+  baseURL: "/local"
+})
 
-export default axios
+export default instance
