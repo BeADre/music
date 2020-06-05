@@ -80,7 +80,6 @@ const throttle = (fn: Function, time: number): Function => {
   }
 }
 
-
 export default {
   unitTime,
   formatTime,
