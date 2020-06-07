@@ -1,5 +1,5 @@
 import React, {RefObject, memo} from "react";
-import "./index.scss";
+import "./index.less";
 import {Carousel} from "antd";
 
 type Props = {

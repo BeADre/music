@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useRef} from "react"
 import {useSelector, useDispatch} from "react-redux";
 import {Slider, Icon, Modal, Spin} from "antd";
-import "./index.scss"
+import "./index.less"
 import PlaySlider from "../../component/PlaySlider"
 import utils from "../../utils";
 
