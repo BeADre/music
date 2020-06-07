@@ -1,5 +1,5 @@
 import React, {MouseEvent, DragEvent, useRef, useEffect, useState, RefObject} from "react";
-import "./slider.scss";
+import "./slider.less";
 
 type Props = {
   bufferTimeValue: number

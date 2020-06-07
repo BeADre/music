@@ -4,7 +4,6 @@ import {hotListReq, searchReq} from "../../request/search"
 export default {
   state: {
     pagination: {
-      showSizeChanger: true,
       showQuickJumper: true,
       showTotal: (total: number) => `共 ${total} 条`,
       current: 1,

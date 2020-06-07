@@ -2,7 +2,7 @@ import React, {useState, useEffect, useRef, useMemo, SyntheticEvent, ReactNode} 
 import {Icon, Slider, message} from "antd";
 import {useDispatch, useSelector} from "react-redux";
 import utils from "../../utils";
-import "./index.scss";
+import "./index.less";
 
 
 function Play({history}: any) {

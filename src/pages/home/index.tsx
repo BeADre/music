@@ -3,7 +3,7 @@ import { Icon, Select } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import utils from "../../utils";
 import { newSongTab, mvTab, albumTab } from "../../staticData/home";
-import "./index.scss";
+import "./index.less";
 
 const { Option } = Select;
 

@@ -3,7 +3,7 @@ import ChangeCarousel from "../../component/ChangeCarousel";
 import {Carousel} from "antd";
 import {connect} from "react-redux";
 import {letterArr, playerTab} from "../../staticData/singer";
-import "./index.scss";
+import "./index.less";
 
 const Singer = ({dispatch, singer = {}}: any) => {
   const {hotSinger = [], list = []} = singer;
