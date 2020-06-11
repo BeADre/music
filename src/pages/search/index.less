@@ -28,8 +28,10 @@
         font-size: 15px;
       }
       i {
-        &:hover {
-          color: #31c27c;
+        @media (min-width: 768px){
+          &:hover {
+            color: #31c27c;
+          }
         }
       }
       .search-hot {
@@ -52,8 +54,10 @@
             margin-right: 5%;
             color: white;
             cursor: pointer;
-            &:hover {
-              color: #31c27c;
+            @media (min-width: 768px){
+              &:hover {
+                color: #31c27c;
+              }
             }
           }
         }
@@ -152,17 +156,19 @@
           -webkit-line-clamp: 1;
         }
       }
-      .slideContent-top:hover,
-      .slideContent-left:hover {
-        .slide-keep {
-          background: rgba(0, 0, 0, 0.2);
-          span {
-            opacity: 1;
-            font-size: 60px;
+      @media (min-width: 768px){
+        .slideContent-top:hover,
+        .slideContent-left:hover {
+          .slide-keep {
+            background: rgba(0, 0, 0, 0.2);
+            span {
+              opacity: 1;
+              font-size: 60px;
+            }
           }
-        }
-        img {
-          transform: scale(1.05);
+          img {
+            transform: scale(1.05);
+          }
         }
       }
       .slideContent-bot {
@@ -219,8 +225,10 @@
 .hover-column {
   cursor: pointer;
   display: flex;
-  &:hover {
-    color: #31c27c;
+  @media (min-width: 768px){
+    &:hover {
+      color: #31c27c;
+    }
   }
 }
 .ant-table-tbody > tr > td {
