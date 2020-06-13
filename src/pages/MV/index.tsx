@@ -5,7 +5,16 @@ import "./index.less"
 import PlaySlider from "../../component/PlaySlider"
 import utils from "../../utils";
 
-
+const mobileFullscreenStyle = {
+  transform: "rotate(90deg)",
+  width: "80vh",
+  display: "none"
+};
+const mobileNormalStyle = {
+  transform: "rotate(0deg)",
+  width: "90%",
+  display: "block"
+};
 function Mv({history}: any) {
   const dispatch = useDispatch();
   const mv = useSelector(({mv}: any) => mv);
@@ -13,7 +22,7 @@ function Mv({history}: any) {
   const {artists = [], brs = {}} = mvDetail;
   const [controlState, setControlState] = useState({
     isMute: false,
-    isPause: false,
+    isPause: true,
     isFullscreen: false
   });
   const [videoState, setVideoState] = useState({
@@ -21,9 +30,8 @@ function Mv({history}: any) {
     isWaiting: false,
     bufferTimeValue: 0 // 缓冲时长比例
   });
-  const timer = useRef<number>(); // timeout的id
-  const video = useRef<HTMLVideoElement>(null); // audio标签
-  const control = useRef<HTMLDivElement>(null); // audio控制器标签
+  const video = useRef<HTMLVideoElement>(null); // video标签
+  const control = useRef<HTMLDivElement>(null); // video控制器标签
   const videoContainer = useRef<HTMLDivElement>(null); // control-container
   const {mvid = null} = history.location.state ? history.location.state : {};
   const minUnitTime = video.current ? video.current.duration / 100 : 0; // 最小段的播放时间
@@ -54,21 +62,13 @@ function Mv({history}: any) {
         document.removeEventListener("fullscreenchange", changeScreenState);
       };
     }
-  }, [controlState.isFullscreen]);
+  }, [controlState.isMute, controlState.isPause, controlState.isFullscreen]);
 
-  const mouseMove = (): void => {
+  const handleClick = (event: any): void => {
+    if(event.target.className) return;
     let {style} = (control.current as HTMLDivElement);
-    if (timer.current) {
-      window.clearTimeout(timer.current);
-      if (!style.visibility || style.visibility === "hidden") {
-        style.visibility = "visible";
-        style.opacity = "1";
-      }
-    }
-    timer.current = window.setTimeout((): void => {
-      style.visibility = "hidden";
-      style.opacity = "0";
-    }, 1500);
+    style.visibility = style.visibility === "visible" ? "hidden" : "visible";
+    style.opacity = style.opacity === "1" ? "0" : "1";
   };
 
   const setSpin = (state: string): void => {
@@ -81,25 +81,37 @@ function Mv({history}: any) {
     const {current} = video;
     (current as HTMLVideoElement).currentTime = parseInt(`${minUnitTime * value}`);
   };
+  const fullScreen = (): void => {
+    const width = document.body.offsetWidth;
+    const {current} = videoContainer;
 
+    if (width <= 768) {
+      const returnEl = document.querySelector(".anticon-left");
+      const style = controlState.isFullscreen ? mobileNormalStyle : mobileFullscreenStyle;
+      (current as HTMLDivElement).style.transform = style.transform;
+      (current as HTMLDivElement).style.width = style.width;
+      (returnEl as HTMLBaseElement).style.display = style.display;
+      setControlState({...controlState, ...{isFullscreen: !controlState.isFullscreen}});
+    } else {
+      if (controlState.isFullscreen) {
+        document.exitFullscreen();
+      } else {
+        (current as HTMLDivElement).requestFullscreen && (current as HTMLDivElement).requestFullscreen();
+      }
+    }
+  }
   const videoControl = (controlType: string): void => {
     const {current} = video;
     const {current: current1} = videoContainer;
     if (current && current1) {
       if (controlType === "pause") {
         current.paused ? current.play() : current.pause();
-        setControlState({...controlState, ...{isPause: current.paused}})
+        setControlState({...controlState, ...{isPause: current.paused}});
       } else if (controlType === "mute") {
         current.muted = !current.muted;
-        setControlState({...controlState, ...{isMute: current.muted}})
+        setControlState({...controlState, ...{isMute: current.muted}});
       } else {
-        if (controlState.isFullscreen) {
-          document.exitFullscreen();
-        } else {
-          if (current1.requestFullscreen) {
-            current1.requestFullscreen();
-          }
-        }
+        fullScreen()
       }
     }
   };
@@ -117,21 +129,26 @@ function Mv({history}: any) {
   const bufferEvent = () => {
     const {current} = video;
     if (current) {
-      const bufferTimeValue = Math.ceil(current.buffered.end(0) / current.duration * 100);
-      setVideoState({...videoState, ...{bufferTimeValue}});
+      try {
+        const bufferTimeValue = Math.ceil(current.buffered.end(0) / current.duration * 100);
+        setVideoState({...videoState, ...{bufferTimeValue}});
+      } catch (e) {
+
+      }
     }
   };
 
   return (
-    <div className="mv-container" onDragOver={(e)=> e.preventDefault()}>
+    <div className="mv-container" onDragOver={(e) => e.preventDefault()}>
       <div className="mv-bg" style={{backgroundImage: `url(${mvDetail.cover})`}}/>
-      <Icon type="left" className="return" onClick={history.goBack}/>
-      <div className="video-container" ref={videoContainer} onMouseMove={mouseMove}>
+      <Icon type="left" className="return" onClick={history.goBack} />
+      <div className="video-container" ref={videoContainer} onClick={handleClick}>
         <Spin spinning={videoState.isWaiting} tip={"加载中..."}>
           <video
             ref={video}
             onWaiting={() => setSpin("waiting")}
-            autoPlay={true}
+            playsInline={true}
+            preload={"auto"}
             onProgress={() => bufferEvent()}
             onPlaying={() => setSpin("playing")}
             onEnded={() => setControlState({...controlState, ...{isPause: true}})}
@@ -183,6 +200,8 @@ function Mv({history}: any) {
               bufferTimeValue={videoState.bufferTimeValue}
               playWidth={(videoState.currentTime / minUnitTime).toFixed(2)}
               onChange={changeTime}
+              video={video.current}
+              isFullscreen={controlState.isFullscreen}
               control={control}
             />
           </div>
