@@ -1,11 +1,14 @@
+#root{
+  height: 100%;
+}
 .mv-container {
-  min-width: 1200px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100%;
   position: relative;
+
   .return {
     position: absolute;
     color: #d2d2d2;
@@ -14,10 +17,12 @@
     top: 5%;
     cursor: pointer;
     z-index: 10;
+
     &:hover {
       color: white;
     }
   }
+
   .mv-bg {
     position: absolute;
     left: 0;
@@ -35,12 +40,16 @@
     z-index: 2;
     width: 70%;
     position: relative;
-    .ant-spin-container::after{
-      background: rgb(0,0,0);
+    transition: transform .3s;
+
+    .ant-spin-container::after {
+      background: rgb(0, 0, 0);
     }
-    .ant-spin-nested-loading > div > .ant-spin .ant-spin-text{
+
+    .ant-spin-nested-loading > div > .ant-spin .ant-spin-text {
       text-shadow: none;
     }
+
     video {
       width: 100%;
       border-radius: 20px;
@@ -62,8 +71,11 @@
       .control-container-left, .control-container-right {
         display: flex;
         align-items: center;
+        justify-content: flex-end;
       }
-
+      .control-container-left{
+        margin-left: -0.5%;
+      }
       .control-container-right {
         width: 15%;
 
@@ -103,7 +115,6 @@
 
         .pause {
           font-size: 30px;
-          margin-left: -6px;
 
           &:hover {
             color: white;
@@ -114,9 +125,61 @@
           font-size: 18px;
           margin-left: 5px;
         }
-
       }
     }
+  }
 
+  @media (max-width: 992px) {
+    .video-container {
+      width: 90%;
+      .control-container{
+        .control-container-right{
+          .icon-shengyin, .voice-container{
+            display: none;
+          }
+        }
+      }
+    }
+  }
+  @media (min-width: 768px) and (max-width: 992px){
+    .video-container .control-container {
+      .title{
+        margin: 10px 0;
+        font-size: 18px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .content {
+        .pause{
+          font-size: 24px;
+        }
+        .time{
+          font-size: 15px;
+        }
+      }
+      .control-container-right .fullscreen{
+        font-size: 24px;
+      }
+    }
+  }
+  @media (max-width: 767px){
+    .video-container .control-container {
+      .title{
+        margin: 5px 0;
+        font-size: 14px;
+      }
+      .content {
+        .pause{
+          font-size: 16px;
+        }
+        .time{
+          font-size: 12px;
+        }
+      }
+      .control-container-right .fullscreen{
+        font-size: 16px;
+      }
+    }
   }
 }
