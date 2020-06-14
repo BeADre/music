@@ -10,7 +10,7 @@ interface Router {
 
 const routerArr: Array<Router> = [
   {path: "/home", component: lazy(() => import("../pages/home")), title: "首页", show: true},
-  {path: "/singer", component: lazy(() => import("../pages/singer")), title: "歌手", show: true},
+  // {path: "/singer", component: lazy(() => import("../pages/singer")), title: "歌手", show: true},
   // {path: "/newDisc", component: lazy(() => import("../pages/newDisc")), title: "新碟",show: true},
   // {path: "/rank", component: lazy(() => import("../pages/rank")), title: "排行榜",show: true},
   // {path: "/playlist", component: lazy(() => import("../pages/playlist")), title: "分类歌单",show: true},
