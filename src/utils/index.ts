@@ -68,11 +68,11 @@ const jumpToMv = (history: History<LocationState>, mvid: number) => {
 };
 
 // 节流函数
-const throttle = (fn: Function, time: number): Function => {
+const throttle = (fn: Function, time: number) => {
   let isRun = false;
   return function (...rest: any) {
     if (isRun) return;
-    isRun = true; 
+    isRun = true;
     fn(...rest)
     setTimeout(() => {
       isRun = false;
