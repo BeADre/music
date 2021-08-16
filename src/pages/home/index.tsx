@@ -119,21 +119,21 @@ function Home({ history }: any) {
     const slideBlockCol = Math.ceil(scrollLeft / parseFloat(width));
     const simplifyCol = slideBlockCol % 3;
     const slideBlock = slideBlockCol > 3 ? 3 : 2;
-    const imgOrderArr = simplifyCol === 1 ? [1, 4, 7, 10] : 
+    const imgOrderArr = simplifyCol === 1 ? [1, 4, 7, 10] :
       simplifyCol === 2 ? [2, 5, 8, 11] : [3, 6, 9, 12];
     imgOrderArr.forEach(value => {
       const imgEl = document.getElementById(`${slideBlock}${value}`);
-      (imgEl as HTMLImageElement).src = 
+      (imgEl as HTMLImageElement).src =
         (imgEl as HTMLImageElement).getAttribute('data-src') || "";
     })
   }
-  
+
   const throttleScroll = utils.throttle(handleScroll, 500);
   const printScroll = (e: React.UIEvent<HTMLDivElement>) => {
       e.persist();
       throttleScroll(e);
   };
-  
+
   // 第二部分遍历的新歌内容
   const memorizedSong = useMemo(() => {
     const copyNewSong = [...newSong].splice(0, 36);
@@ -147,7 +147,6 @@ function Home({ history }: any) {
           key={key}
         >
           <div className="slide">
-            {/* eslint-disable-next-line no-loop-func */}
             {copyNewSong.splice(0, 12).map((value,index) => (
               <div className="slide-content2" key={value.id}>
                 <div
@@ -157,11 +156,11 @@ function Home({ history }: any) {
                   <div className="slide-keep">
                     <span className="iconfont icon-ziyuan" />
                   </div>
-                  <img 
-                    src={key === 1 ? value.album.picUrl : ""} 
+                  <img
+                    src={key === 1 ? value.album.picUrl : ""}
                     id={`${key}${index + 1}`}
                     data-src={value.album.picUrl}
-                    alt="" 
+                    alt=""
                   />
                 </div>
                 <div className="slide-content-right">
@@ -243,7 +242,7 @@ function Home({ history }: any) {
           <h1>新歌首发</h1>
           {tab(newSongTab, ["newSongTab", "id"])}
         </div>
-        <div 
+        <div
           className="slide-container slide-container-2"
           onScroll={printScroll}
         >

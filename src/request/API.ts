@@ -5,6 +5,7 @@ const homeApi = {
   newPlate: "/top/album",
   mv: "/mv/all"
 };
+
 const mvApi = {
   mvDetail: "/mv/detail",
 };

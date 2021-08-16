@@ -14,4 +14,3 @@ export const searchTab: Array<InterfaceTab> = [
   {name: Tab[1004], id: Tab["MV"]},
 ];
 
-// SSNI-338 SSNI-198  ipx-176 ipz-921 坂道美琉 ipx-416
